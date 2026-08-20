@@ -1,0 +1,130 @@
+"use client";
+import { css } from "@/lib/css";
+import { useApp } from "@/lib/app-context";
+import { arbolGeometria } from "@/lib/arbol";
+import { COL } from "@/lib/tree";
+import { recorta } from "@/lib/format";
+
+export default function SeccionArbol() {
+  const { r, verArcano } = useApp();
+  if (!r) return null;
+  const { senderos, sefirot, marcasCamino } = arbolGeometria(r);
+
+  const camDef = [
+    { k: "origen" as const, etapa: "Origen", c: r.caminos.origen, rango: "0 – " + r.caminos.edadCambio + " años" },
+    { k: "transformacion" as const, etapa: "Transformación", c: r.caminos.transformacion, rango: "toda la vida" },
+    { k: "destino" as const, etapa: "Destino", c: r.caminos.destino, rango: "desde los " + (r.turbulencias ? r.caminos.edadCambio + 10 : r.caminos.edadCambio) + " años" },
+  ];
+
+  const caminos = camDef.map((d) => {
+    const carta = d.c.carta || ({} as NonNullable<typeof d.c.carta>);
+    return {
+      ...d,
+      nombre: carta.nombre || "",
+      lema: carta.lema || "",
+      extracto: recorta((carta.texto || "").replace(/^[“"][^”"]*[”"]\.?\s*/, ""), 400),
+    };
+  });
+
+  return (
+    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:start;")}>
+      <div style={css("background:linear-gradient(180deg,rgba(76,143,224,.05),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.16);border-radius:4px;padding:clamp(15px,2vw,20px);")}>
+        <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:#8A7F68;text-transform:uppercase;margin-bottom:6px;")}>Árbol de la Vida</div>
+        <svg viewBox="0 0 380 660" style={css("width:100%;height:auto;display:block;")}>
+          {senderos.map((s, i) => (
+            <line
+              key={i}
+              pathLength={1}
+              x1={s.x1}
+              y1={s.y1}
+              x2={s.x2}
+              y2={s.y2}
+              stroke={s.color}
+              strokeWidth={s.w}
+              strokeOpacity={s.o}
+              strokeLinecap="round"
+              style={css(`stroke-dasharray:1;stroke-dashoffset:1;animation:es33-draw ${s.w > 2 ? ".9s" : ".55s"} cubic-bezier(.4,0,.2,1) forwards;animation-delay:${s.delay.toFixed(2)}s;`)}
+            />
+          ))}
+          {sefirot.map((p, i) => (
+            <g key={i}>
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r={19}
+                fill={p.fill}
+                stroke="rgba(255,255,255,.28)"
+                strokeWidth={1}
+                style={css(`transform-box:fill-box;transform-origin:center;opacity:0;animation:es33-pop .62s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:${p.delay.toFixed(2)}s;`)}
+              />
+              <text x={p.tx} y={p.ty} fill="#8A7F68" fontSize={10} fontFamily="Karla, sans-serif" letterSpacing={1.4} textAnchor={p.anchor} style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${p.delayT.toFixed(2)}s;`)}>
+                {p.nombre}
+              </text>
+            </g>
+          ))}
+          {marcasCamino.map((m, i) => (
+            <text key={i} x={m.x} y={m.y} fill={m.color} fontSize={13} fontFamily="Cinzel, serif" textAnchor="middle" style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${m.delay.toFixed(2)}s;`)}>
+              {m.n}
+            </text>
+          ))}
+        </svg>
+        <div style={css("display:flex;flex-direction:column;gap:7px;margin-top:14px;border-top:1px solid rgba(201,168,76,.12);padding-top:14px;")}>
+          {camDef.map((d, i) => (
+            <div key={i} style={css("display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#A99C82;")}>
+              <span style={css("width:22px;height:3px;border-radius:2px;background:" + COL[d.k] + ";")} />
+              {d.etapa} · arcano {d.c.arcano}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={css("display:flex;flex-direction:column;gap:16px;")}>
+        {caminos.map((c, ci) => (
+          <article
+            key={ci}
+            style={css(
+              "border:1px solid " +
+                COL[c.k] +
+                "33;background:linear-gradient(150deg," +
+                COL[c.k] +
+                "0D,rgba(18,20,31,.8));border-left:3px solid " +
+                COL[c.k] +
+                ";border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
+                (0.6 + ci * 0.16).toFixed(2) +
+                "s;"
+            )}
+          >
+            <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
+              <span style={css("font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:" + COL[c.k] + ";")}>{c.etapa}</span>
+              <span style={css("font-family:'Cinzel',serif;font-size:23px;line-height:1.25;color:#F2E6C6;letter-spacing:.03em;")}>
+                {c.c.arcano} · {c.nombre}
+              </span>
+              <span style={css("margin-left:auto;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;")}>{c.rango}</span>
+            </div>
+            <div style={css("font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:#C9A84C;margin-top:6px;")}>{c.lema}</div>
+            <p style={css("font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.62;color:#C8BEA6;margin:12px 0 0;text-wrap:pretty;")}>{c.extracto}</p>
+            <button onClick={() => verArcano(c.c.arcano)} style={css("margin-top:12px;background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:3px;padding:7px 15px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;")}>
+              Texto completo
+            </button>
+          </article>
+        ))}
+
+        {r.turbulencias && (
+          <article style={css("border:1px solid rgba(226,87,76,.34);background:rgba(226,87,76,.06);border-radius:4px;padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);")}>
+            <div style={css("font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E2574C;margin-bottom:10px;")}>
+              Años de turbulencias · {r.turbulencias.desde} – {r.turbulencias.hasta} años
+            </div>
+            {r.turbulencias.lista.map((t, i) => (
+              <div key={i} style={css("margin-bottom:10px;")}>
+                <div style={css("font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#D08A82;margin-bottom:3px;")}>
+                  Turbulencias en {t.tipo} · {t.causa}
+                </div>
+                <p style={css("font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.6;color:#C8BEA6;margin:0;")}>{t.texto}</p>
+              </div>
+            ))}
+          </article>
+        )}
+      </div>
+    </div>
+  );
+}
