@@ -57,6 +57,15 @@
 }
 
 @media print {
+  /* Sin esto los navegadores descartan los fondos al imprimir: el papel
+   * saldría blanco en vez de crema y las casillas sombreadas de la imagen
+   * del alma y de las cuentas abiertas perderían el color, que es
+   * justamente lo que distingue un bloqueo de una casilla libre. */
+  .page,
+  .page * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
   .desk {
     background: none;
     padding: 0;
