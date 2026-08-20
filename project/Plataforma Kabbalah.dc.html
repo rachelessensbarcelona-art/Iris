@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin:0; padding:0; background:#08090F; }
+  * { box-sizing:border-box; }
+  a { color:#C9A84C; text-decoration:none; }
+  a:hover { color:#E9CE84; }
+  input, button, textarea { font-family:inherit; }
+  input:focus { outline:none; }
+  ::selection { background:rgba(201,168,76,.3); }
+  ::-webkit-scrollbar { width:9px; height:9px; }
+  ::-webkit-scrollbar-track { background:#0C0E16; }
+  ::-webkit-scrollbar-thumb { background:#2A2C3A; border-radius:5px; }
+  ::-webkit-scrollbar-thumb:hover { background:#3E4152; }
+  @keyframes es33-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  @keyframes es33-glow { 0%,100% { opacity:.45; } 50% { opacity:1; } }
+  @keyframes es33-draw { from { stroke-dashoffset:1; } to { stroke-dashoffset:0; } }
+  @keyframes es33-pop { 0% { opacity:0; transform:scale(.2); } 62% { transform:scale(1.16); } 100% { opacity:1; transform:scale(1); } }
+  @keyframes es33-rise { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+  @keyframes es33-slide { from { opacity:0; transform:translateX(-10px); } to { opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce) { * { animation-duration:.01ms !important; animation-iteration-count:1 !important; } }
+  [contenteditable]:focus { outline:2px solid rgba(201,168,76,.55); outline-offset:3px; border-radius:2px; }
+  @media print { [data-chrome] { display:none !important; } }
+</style>
+<script src="./kdata.js"></script>
+<script src="./engine.js"></script>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<div style="min-height:100vh;background:#08090F;background-image:radial-gradient(900px 500px at 12% -8%, rgba(201,168,76,.10), transparent 65%),radial-gradient(760px 460px at 92% 4%, rgba(76,143,224,.09), transparent 62%);color:#E8E0CE;font-family:'Karla',system-ui,sans-serif;">
+
+  <header data-chrome="1" style="position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:clamp(12px,2vw,22px);flex-wrap:wrap;padding:12px clamp(14px,3vw,28px);background:rgba(8,9,15,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(201,168,76,.16);">
+    <div style="display:flex;align-items:center;gap:13px;">
+      <img src="assets/logo.jpeg" alt="Escuela de Sabiduría 33" style="width:38px;height:38px;flex:none;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px rgba(201,168,76,.4),0 0 22px rgba(201,168,76,.22);" />
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <div style="font-family:'Cinzel',serif;font-size:clamp(11px,1.4vw,14px);letter-spacing:.16em;color:#E9CE84;line-height:1.1;">ESCUELA DE SABIDURÍA 33</div>
+        <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7E7461;">Estudio de Kábala</div>
+      </div>
+    </div>
+    <nav style="display:flex;gap:4px;flex-wrap:wrap;margin-left:auto;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</button>
+      </sc-for>
+    </nav>
+  </header>
+
+  <sc-if value="{{ esInicio }}" hint-placeholder-val="{{ true }}">
+    <main style="max-width:1120px;margin:0 auto;padding:clamp(26px,5vw,48px) clamp(14px,3vw,28px) 80px;animation:es33-in .5s ease both;">
+      <div style="text-align:center;margin-bottom:40px;">
+        <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#8A7F68;margin-bottom:14px;">Nueva consulta</div>
+        <h1 style="font-family:'Cinzel',serif;font-weight:600;font-size:clamp(25px,4.6vw,38px);line-height:1.16;letter-spacing:.03em;color:#F2E6C6;margin:0 0 12px;">El nombre es la contraseña del alma</h1>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2vw,19px);line-height:1.55;color:#A99C82;max-width:620px;margin:0 auto;">Escribe el nombre tal y como figura en la partida de nacimiento y la fecha exacta. Todo lo demás se calcula solo.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:26px;align-items:start;">
+
+        <section style="background:linear-gradient(160deg,rgba(201,168,76,.055),rgba(18,20,31,.9));border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:clamp(20px,3vw,30px);position:relative;">
+          <div style="position:absolute;top:-1px;left:44px;right:44px;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);"></div>
+          <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#C9A84C;text-transform:uppercase;margin-bottom:22px;">Datos de nacimiento</div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <label style="display:flex;flex-direction:column;gap:7px;min-width:0;">
+              <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Nombre</span>
+              <input size="4" value="{{ fNombre }}" onInput="{{ setNombre }}" placeholder="Lara María" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:12px 14px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:20px;transition:border-color .25s,box-shadow .25s;" style-focus="border-color:#C9A84C;box-shadow:0 0 0 3px rgba(201,168,76,.14);" />
+            </label>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;">
+              <label style="display:flex;flex-direction:column;gap:7px;min-width:0;">
+                <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">1er apellido</span>
+                <input size="4" value="{{ fAp1 }}" onInput="{{ setAp1 }}" placeholder="Soares" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:12px 14px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:20px;transition:border-color .25s,box-shadow .25s;" style-focus="border-color:#C9A84C;box-shadow:0 0 0 3px rgba(201,168,76,.14);" />
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px;min-width:0;">
+                <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">2º apellido</span>
+                <input size="4" value="{{ fAp2 }}" onInput="{{ setAp2 }}" placeholder="Campos" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:12px 14px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:20px;transition:border-color .25s,box-shadow .25s;" style-focus="border-color:#C9A84C;box-shadow:0 0 0 3px rgba(201,168,76,.14);" />
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;">
+              <label style="display:flex;flex-direction:column;gap:7px;min-width:0;">
+                <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Día</span>
+                <input size="4" value="{{ fDia }}" onInput="{{ setDia }}" placeholder="19" inputmode="numeric" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:12px 14px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:20px;transition:border-color .25s,box-shadow .25s;" style-focus="border-color:#C9A84C;box-shadow:0 0 0 3px rgba(201,168,76,.14);" />
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px;min-width:0;">
+                <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Mes</span>
+                <input size="4" value="{{ fMes }}" onInput="{{ setMes }}" placeholder="7" inputmode="numeric" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:12px 14px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:20px;transition:border-color .25s,box-shadow .25s;" style-focus="border-color:#C9A84C;box-shadow:0 0 0 3px rgba(201,168,76,.14);" />
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px;min-width:0;">
+                <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Año</span>
+                <input size="4" value="{{ fAnio }}" onInput="{{ setAnio }}" placeholder="1951" inputmode="numeric" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:12px 14px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:20px;transition:border-color .25s,box-shadow .25s;" style-focus="border-color:#C9A84C;box-shadow:0 0 0 3px rgba(201,168,76,.14);" />
+              </label>
+            </div>
+          </div>
+
+          <button onClick="{{ calcular }}" style="{{ btnCalcular }}">Generar el estudio</button>
+          <div style="margin-top:14px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#7E7461;line-height:1.45;text-align:center;">{{ avisoForm }}</div>
+        </section>
+
+        <aside style="display:flex;flex-direction:column;gap:18px;">
+          <div style="background:rgba(18,20,31,.75);border:1px solid rgba(201,168,76,.14);border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);">
+            <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.28em;color:#C9A84C;text-transform:uppercase;margin-bottom:8px;">Valor del nombre</div>
+            <div style="display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 6px;">
+              <sc-for list="{{ vistaLetras }}" as="w" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:7px;">
+                  <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                    <sc-for list="{{ w.letras }}" as="l" hint-placeholder-count="5">
+                      <div style="{{ l.style }}"><span style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1;">{{ l.g }}</span><span style="font-size:9px;letter-spacing:.06em;opacity:.72;">{{ l.v }}</span></div>
+                    </sc-for>
+                  </div>
+                  <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;">{{ w.palabra }} · {{ w.total }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:10px;border-top:1px solid rgba(201,168,76,.14);margin-top:14px;padding-top:14px;">
+              <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Nº de corazón</span>
+              <span style="font-family:'Cinzel',serif;font-size:30px;color:#E9CE84;line-height:1;margin-left:auto;">{{ vistaTotal }}</span>
+            </div>
+            <div style="display:flex;gap:18px;margin-top:10px;">
+              <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;">Esencia</span><span style="font-family:'Cinzel',serif;font-size:17px;color:#B7A57C;">{{ vistaEsencia }}</span></div>
+              <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;">Ego</span><span style="font-family:'Cinzel',serif;font-size:17px;color:#B7A57C;">{{ vistaEgo }}</span></div>
+            </div>
+          </div>
+
+          <div style="background:rgba(18,20,31,.75);border:1px solid rgba(201,168,76,.14);border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);">
+            <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.28em;color:#C9A84C;text-transform:uppercase;margin-bottom:14px;">Estudios guardados</div>
+            <div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;">
+              <sc-for list="{{ historial }}" as="h" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid rgba(201,168,76,.1);border-radius:3px;background:rgba(255,255,255,.02);">
+                  <button onClick="{{ h.abrir }}" style="flex:1;text-align:left;background:none;border:none;padding:0;cursor:pointer;color:#E8E0CE;">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.2;color:#EFE3C4;">{{ h.nombre }}</div>
+                    <div style="font-size:10px;letter-spacing:.12em;color:#7E7461;margin-top:2px;">{{ h.fecha }} · corazón {{ h.corazon }}</div>
+                  </button>
+                  <button onClick="{{ h.borrar }}" title="Eliminar" style="background:none;border:1px solid rgba(226,87,76,.28);color:#C8695F;border-radius:3px;width:24px;height:24px;cursor:pointer;font-size:13px;line-height:1;">×</button>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#6E6555;margin-top:10px;">{{ avisoHistorial }}</div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ esPanel }}" hint-placeholder-val="{{ true }}">
+    <main style="max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,30px) clamp(14px,3vw,28px) 80px;animation:es33-in .45s ease both;">
+
+      <div style="display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:1px solid rgba(201,168,76,.16);padding-bottom:18px;margin-bottom:22px;">
+        <div>
+          <div style="font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8A7F68;margin-bottom:6px;">Estudio de Kábala</div>
+          <h1 style="font-family:'Cinzel',serif;font-weight:600;font-size:clamp(22px,3.6vw,31px);letter-spacing:.04em;color:#F2E6C6;margin:0;line-height:1.15;overflow-wrap:anywhere;">{{ pNombre }}</h1>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:#A99C82;margin-top:5px;">{{ pFecha }}</div>
+        </div>
+        <div style="display:flex;gap:clamp(14px,2.4vw,26px);flex-wrap:wrap;margin-left:auto;">
+          <sc-for list="{{ resumen }}" as="k" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;">
+              <span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#7E7461;">{{ k.label }}</span>
+              <span style="{{ k.style }}">{{ k.valor }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <nav style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:28px;">
+        <sc-for list="{{ secciones }}" as="s" hint-placeholder-count="6">
+          <button onClick="{{ s.go }}" style="{{ s.style }}" style-hover="border-color:rgba(201,168,76,.45);color:#D8C79C;">{{ s.label }}</button>
+        </sc-for>
+      </nav>
+
+      <sc-if value="{{ secArbol }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:start;">
+          <div style="background:linear-gradient(180deg,rgba(76,143,224,.05),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.16);border-radius:4px;padding:clamp(15px,2vw,20px);">
+            <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:#8A7F68;text-transform:uppercase;margin-bottom:6px;">Árbol de la Vida</div>
+            <svg viewBox="0 0 380 660" style="width:100%;height:auto;display:block;">
+              <sc-for list="{{ senderos }}" as="s" hint-placeholder-count="22">
+                <line data-anim="1" pathLength="1" x1="{{ s.x1 }}" y1="{{ s.y1 }}" x2="{{ s.x2 }}" y2="{{ s.y2 }}" stroke="{{ s.color }}" stroke-width="{{ s.w }}" stroke-opacity="{{ s.o }}" stroke-linecap="round" style="{{ s.anim }}"></line>
+              </sc-for>
+              <sc-for list="{{ sefirot }}" as="p" hint-placeholder-count="10">
+                <g>
+                  <circle data-anim="1" cx="{{ p.x }}" cy="{{ p.y }}" r="19" fill="{{ p.fill }}" stroke="rgba(255,255,255,.28)" stroke-width="1" style="{{ p.anim }}"></circle>
+                  <text data-anim="1" x="{{ p.tx }}" y="{{ p.ty }}" fill="#8A7F68" font-size="10" font-family="Karla, sans-serif" letter-spacing="1.4" text-anchor="{{ p.anchor }}" style="{{ p.animT }}">{{ p.nombre }}</text>
+                </g>
+              </sc-for>
+              <sc-for list="{{ marcasCamino }}" as="m" hint-placeholder-count="3">
+                <text data-anim="1" x="{{ m.x }}" y="{{ m.y }}" fill="{{ m.color }}" font-size="13" font-family="Cinzel, serif" text-anchor="middle" style="{{ m.anim }}">{{ m.n }}</text>
+              </sc-for>
+            </svg>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-top:14px;border-top:1px solid rgba(201,168,76,.12);padding-top:14px;">
+              <sc-for list="{{ leyendaCaminos }}" as="l" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#A99C82;">
+                  <span style="{{ l.chip }}"></span>{{ l.label }}
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <sc-for list="{{ caminos }}" as="c" hint-placeholder-count="3">
+              <article style="{{ c.card }}">
+                <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+                  <span style="{{ c.badge }}">{{ c.etapa }}</span>
+                  <span style="font-family:'Cinzel',serif;font-size:23px;line-height:1.25;color:#F2E6C6;letter-spacing:.03em;">{{ c.arcano }} · {{ c.nombre }}</span>
+                  <span style="margin-left:auto;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;">{{ c.rango }}</span>
+                </div>
+                <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:#C9A84C;margin-top:6px;">{{ c.lema }}</div>
+                <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.62;color:#C8BEA6;margin:12px 0 0;text-wrap:pretty;">{{ c.extracto }}</p>
+                <button onClick="{{ c.ver }}" style="margin-top:12px;background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:3px;padding:7px 15px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;">Texto completo</button>
+              </article>
+            </sc-for>
+            <sc-if value="{{ hayTurbulencias }}" hint-placeholder-val="{{ false }}">
+              <article style="border:1px solid rgba(226,87,76,.34);background:rgba(226,87,76,.06);border-radius:4px;padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);">
+                <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E2574C;margin-bottom:10px;">Años de turbulencias · {{ turbRango }}</div>
+                <sc-for list="{{ turbulencias }}" as="t" hint-placeholder-count="1">
+                  <div style="margin-bottom:10px;">
+                    <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#D08A82;margin-bottom:3px;">Turbulencias en {{ t.tipo }} · {{ t.causa }}</div>
+                    <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.6;color:#C8BEA6;margin:0;">{{ t.texto }}</p>
+                  </div>
+                </sc-for>
+              </article>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ secNumeros }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <sc-for list="{{ numerosClave }}" as="n" hint-placeholder-count="3">
+            <article style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);">
+              <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;">
+                <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#C9A84C;">{{ n.label }}</span>
+                <span style="font-family:'Cinzel',serif;font-size:42px;line-height:1;color:#F2E6C6;">{{ n.valor }}</span>
+                <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:#A99C82;">{{ n.desc }}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:16px;">
+                <div style="border-left:2px solid rgba(226,87,76,.5);padding:2px 0 2px 12px;">
+                  <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#C8695F;margin-bottom:4px;">En negativo</div>
+                  <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;color:#C0B69F;margin:0;">{{ n.neg }}</p>
+                </div>
+                <div style="border-left:2px solid rgba(76,154,90,.5);padding:2px 0 2px 12px;">
+                  <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#6FAE7C;margin-bottom:4px;">En positivo</div>
+                  <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;color:#C0B69F;margin:0;">{{ n.pos }}</p>
+                </div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+                <sc-for list="{{ n.chips }}" as="c" hint-placeholder-count="3">
+                  <button onClick="{{ c.ver }}" style="{{ c.style }}">{{ c.label }}</button>
+                </sc-for>
+              </div>
+            </article>
+          </sc-for>
+          <article style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);">
+            <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#C9A84C;margin-bottom:12px;">Tus días de fuerza</div>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+              <sc-for list="{{ diasFuerza }}" as="d" hint-placeholder-count="3">
+                <span style="{{ d.style }}">{{ d.n }}</span>
+              </sc-for>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.5;color:#A99C82;margin:0 0 0 8px;flex:1;min-width:240px;">Van del más fuerte al menos fuerte. Aprovecha estos días del mes para firmas y decisiones relevantes.</p>
+            </div>
+          </article>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ secEstructura }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:30px;align-items:start;">
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(15px,2vw,20px);">
+              <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:10px;">Estructura energética · tipo {{ tipoEstructura }}</div>
+              <svg viewBox="0 0 340 340" style="width:100%;height:auto;display:block;">
+                <circle cx="170" cy="170" r="118" fill="none" stroke="rgba(201,168,76,.14)" stroke-width="1"></circle>
+                <sc-for list="{{ portales }}" as="p" hint-placeholder-count="10">
+                  <g>
+                    <circle data-anim="1" cx="{{ p.x }}" cy="{{ p.y }}" r="{{ p.r }}" fill="{{ p.fill }}" stroke="{{ p.stroke }}" stroke-width="{{ p.sw }}" style="{{ p.anim }}"></circle>
+                    <text data-anim="1" x="{{ p.x }}" y="{{ p.ty }}" fill="{{ p.tcolor }}" font-size="13" font-family="Cinzel, serif" text-anchor="middle" style="{{ p.animT }}">{{ p.portal }}</text>
+                    <text data-anim="1" x="{{ p.lx }}" y="{{ p.ly }}" fill="#E2574C" font-size="12" font-family="Karla, sans-serif" text-anchor="middle" style="{{ p.animT }}">{{ p.dinamico }}</text>
+                  </g>
+                </sc-for>
+                <text x="170" y="176" fill="#E9CE84" font-size="30" font-family="Cinzel, serif" text-anchor="middle">{{ tipoEstructura }}</text>
+              </svg>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px;font-size:11px;letter-spacing:.1em;color:#8A7F68;">
+                <div style="display:flex;align-items:center;gap:8px;"><span style="width:11px;height:11px;border-radius:50%;background:rgba(232,185,60,.85);"></span>Portal con aprendizaje</div>
+                <div style="display:flex;align-items:center;gap:8px;"><span style="width:11px;height:11px;border-radius:50%;border:2px solid rgba(76,143,224,.75);"></span>Escudo energético</div>
+                <div style="display:flex;align-items:center;gap:8px;"><span style="color:#E2574C;font-size:13px;">7</span>Número dinámico</div>
+              </div>
+            </div>
+            <div style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(15px,2vw,20px);">
+              <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:10px;">Ejes y planos en tensión</div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <sc-for list="{{ tensiones }}" as="t" hint-placeholder-count="5">
+                  <div style="{{ t.style }}"><span>{{ t.label }}</span><span style="margin-left:auto;font-size:10px;letter-spacing:.16em;text-transform:uppercase;">{{ t.estado }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <article style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);">
+              <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C9A84C;margin-bottom:10px;">Estructura número {{ tipoEstructura }}</div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.62;color:#C8BEA6;margin:0;text-wrap:pretty;">{{ textoEstructura }}</p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:14px;">
+                <div style="border-left:2px solid rgba(226,87,76,.5);padding-left:12px;"><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#C8695F;margin-bottom:4px;">Vivido en negativo</div><p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;">{{ estructuraNeg }}</p></div>
+                <div style="border-left:2px solid rgba(76,154,90,.5);padding-left:12px;"><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#6FAE7C;margin-bottom:4px;">Vivido en positivo</div><p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;">{{ estructuraPos }}</p></div>
+              </div>
+            </article>
+            <sc-for list="{{ aprendizajes }}" as="a" hint-placeholder-count="3">
+              <article style="{{ a.card }}">
+                <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+                  <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#E9CE84;">Aprendizaje {{ a.portal }}{{ a.intensidad }}</span>
+                  <span style="font-family:'Cinzel',serif;font-size:21px;color:#F2E6C6;">{{ a.nombre }}</span>
+                  <span style="margin-left:auto;font-size:11px;letter-spacing:.18em;color:#8A7F68;">viene del número {{ a.numero }}</span>
+                </div>
+                <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.6;color:#C8BEA6;margin:12px 0 0;text-wrap:pretty;">{{ a.extracto }}</p>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;">
+                  <sc-for list="{{ a.chips }}" as="c" hint-placeholder-count="3">
+                    <button onClick="{{ c.ver }}" style="{{ c.style }}">{{ c.label }}</button>
+                  </sc-for>
+                </div>
+                <div style="margin-top:14px;border-top:1px solid rgba(201,168,76,.14);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;">
+                  <div><div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8A7F68;margin-bottom:3px;">Hilo rojo</div><p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;">{{ a.hilo }}</p></div>
+                  <div><div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8A7F68;margin-bottom:3px;">Principio sanador</div><p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;">{{ a.sanador }}</p></div>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ secAlma }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:30px;align-items:start;">
+          <div style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(16px,2.2vw,22px);">
+            <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:14px;">Imagen del alma · nº {{ numeroAlma }}</div>
+            <div style="display:flex;justify-content:center;margin-bottom:8px;">
+              <div style="{{ celda10.style }}">
+                <span style="font-family:'Cinzel',serif;font-size:15px;color:#8A7F68;">10/0</span>
+                <span style="{{ celda10.bStyle }}">{{ celda10.bloqueo }}</span>
+                <span style="{{ celda10.aStyle }}">{{ celda10.ayuda }}</span>
+              </div>
+            </div>
+            <sc-for list="{{ filasAlma }}" as="f" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1;">
+                  <sc-for list="{{ f.celdas }}" as="c" hint-placeholder-count="3">
+                    <div style="{{ c.style }}">
+                      <span style="font-family:'Cinzel',serif;font-size:15px;color:#8A7F68;">{{ c.n }}</span>
+                      <span style="{{ c.bStyle }}">{{ c.bloqueo }}</span>
+                      <span style="{{ c.aStyle }}">{{ c.ayuda }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <span style="width:16px;font-family:'Cinzel',serif;font-size:13px;color:#7E7461;">{{ f.label }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:11px;letter-spacing:.1em;color:#8A7F68;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:11px;height:11px;border-radius:2px;background:rgba(226,87,76,.75);"></span>Bloqueos (estructura fija)</div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:11px;height:11px;border-radius:50%;background:rgba(76,154,90,.8);"></span>Ayudas espirituales (estructura móvil)</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#7E7461;margin-top:4px;">{{ textoProyeccion }}</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <sc-for list="{{ bloqueos }}" as="b" hint-placeholder-count="3">
+              <article style="{{ b.card }}">
+                <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+                  <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#D48BC4;">Bloqueo {{ b.casilla }}{{ b.intensidad }}</span>
+                  <span style="font-family:'Cinzel',serif;font-size:21px;color:#F2E6C6;">{{ b.nombre }}</span>
+                  <span style="margin-left:auto;font-size:11px;letter-spacing:.18em;color:#8A7F68;">se forma con el número {{ b.numero }}</span>
+                </div>
+                <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.6;color:#C8BEA6;margin:12px 0 0;text-wrap:pretty;">{{ b.extracto }}</p>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;">
+                  <sc-for list="{{ b.chips }}" as="c" hint-placeholder-count="3">
+                    <button onClick="{{ c.ver }}" style="{{ c.style }}">{{ c.label }}</button>
+                  </sc-for>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ secCuentas }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:22px;align-items:start;">
+          <div style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);">
+            <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C9A84C;margin-bottom:16px;">Cuentas abiertas</div>
+            <div style="display:grid;grid-template-columns:26px 1fr 1fr 1fr 1fr;gap:6px;">
+              <sc-for list="{{ tablaCuentas }}" as="c" hint-placeholder-count="20">
+                <div style="{{ c.style }}">{{ c.v }}</div>
+              </sc-for>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.55;color:#A99C82;margin-top:14px;">Cada potencial arcaico ayuda a cerrar la cuenta abierta de su fila: {{ textoPotenciales }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <sc-for list="{{ tarjetasKarma }}" as="k" hint-placeholder-count="4">
+              <article style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);">
+                <div style="display:flex;align-items:baseline;gap:12px;">
+                  <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#C9A84C;">{{ k.label }}</span>
+                  <span style="font-family:'Cinzel',serif;font-size:30px;color:#F2E6C6;line-height:1;margin-left:auto;">{{ k.valor }}</span>
+                </div>
+                <p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.55;color:#B8AE97;margin:8px 0 0;">{{ k.desc }}</p>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+                  <sc-for list="{{ k.chips }}" as="c" hint-placeholder-count="2">
+                    <button onClick="{{ c.ver }}" style="{{ c.style }}">{{ c.label }}</button>
+                  </sc-for>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ secCiclos }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:22px;">
+          <div style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);">
+            <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+              <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C9A84C;">Ciclos vitales</span>
+              <span style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A7F68;">propósito de vida {{ proposito }}</span>
+              <span style="margin-left:auto;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A7F68;">año personal {{ anioUniversal }} · <span style="font-family:'Cinzel',serif;font-size:19px;color:#E9CE84;">{{ anioPersonal }}</span></span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;">
+              <sc-for list="{{ ciclosVitales }}" as="c" hint-placeholder-count="3">
+                <div style="{{ c.style }}">
+                  <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#8A7F68;">{{ c.nombre }}</div>
+                  <div style="font-family:'Cinzel',serif;font-size:34px;color:#F2E6C6;line-height:1.1;margin:4px 0;">{{ c.numero }}</div>
+                  <div style="font-size:11px;letter-spacing:.13em;color:#A99C82;margin-bottom:8px;">{{ c.rango }}</div>
+                  <p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;">{{ c.texto }}</p>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:22px;">
+            <div style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);">
+              <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;">Realizaciones</div>
+              <sc-for list="{{ realizaciones }}" as="r" hint-placeholder-count="4">
+                <div style="display:flex;gap:14px;padding:11px 0;border-bottom:1px solid rgba(201,168,76,.1);">
+                  <span style="font-family:'Cinzel',serif;font-size:24px;color:#E9CE84;min-width:32px;">{{ r.valor }}</span>
+                  <div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#8A7F68;margin-bottom:3px;">Realización {{ r.n }} · {{ r.rango }}</div><p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;">{{ r.texto }}</p></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);">
+              <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;">Desafíos</div>
+              <sc-for list="{{ desafios }}" as="d" hint-placeholder-count="3">
+                <div style="display:flex;gap:14px;padding:11px 0;border-bottom:1px solid rgba(201,168,76,.1);">
+                  <span style="font-family:'Cinzel',serif;font-size:24px;color:#E2574C;min-width:32px;">{{ d.valor }}</span>
+                  <div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#8A7F68;margin-bottom:3px;">{{ d.etiqueta }} · {{ d.rango }}</div><p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;">{{ d.texto }}</p></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ esPareja }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1120px;margin:0 auto;padding:clamp(22px,4vw,38px) clamp(14px,3vw,28px) 80px;animation:es33-in .45s ease both;">
+      <div style="text-align:center;margin-bottom:30px;">
+        <div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#8A7F68;margin-bottom:10px;">Comparativa</div>
+        <h1 style="font-family:'Cinzel',serif;font-weight:600;font-size:clamp(21px,3.4vw,30px);letter-spacing:.04em;color:#F2E6C6;margin:0;line-height:1.2;overflow-wrap:anywhere;">{{ pNombre }} &amp; su pareja</h1>
+      </div>
+
+      <section style="background:linear-gradient(160deg,rgba(201,168,76,.05),rgba(18,20,31,.9));border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:clamp(18px,2.4vw,26px) clamp(18px,2.6vw,28px);margin-bottom:22px;">
+        <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.28em;color:#C9A84C;text-transform:uppercase;margin-bottom:18px;">Datos de la segunda persona</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:12px;align-items:end;">
+          <label style="display:flex;flex-direction:column;gap:6px;min-width:0;"><span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Nombre</span><input size="4" value="{{ qNombre }}" onInput="{{ setQNombre }}" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:10px 12px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:18px;" /></label>
+          <label style="display:flex;flex-direction:column;gap:6px;min-width:0;"><span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">1er apellido</span><input size="4" value="{{ qAp1 }}" onInput="{{ setQAp1 }}" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:10px 12px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:18px;" /></label>
+          <label style="display:flex;flex-direction:column;gap:6px;min-width:0;"><span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">2º apellido</span><input size="4" value="{{ qAp2 }}" onInput="{{ setQAp2 }}" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:10px 12px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:18px;" /></label>
+          <label style="display:flex;flex-direction:column;gap:6px;min-width:0;"><span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Día</span><input size="4" value="{{ qDia }}" onInput="{{ setQDia }}" inputmode="numeric" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:10px 12px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:18px;" /></label>
+          <label style="display:flex;flex-direction:column;gap:6px;min-width:0;"><span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Mes</span><input size="4" value="{{ qMes }}" onInput="{{ setQMes }}" inputmode="numeric" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:10px 12px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:18px;" /></label>
+          <label style="display:flex;flex-direction:column;gap:6px;min-width:0;"><span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;">Año</span><input size="4" value="{{ qAnio }}" onInput="{{ setQAnio }}" inputmode="numeric" style="width:100%;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:10px 12px;color:#F2E6C6;font-family:'Cormorant Garamond',serif;font-size:18px;" /></label>
+        </div>
+        <button onClick="{{ comparar }}" style="{{ btnComparar }}">Comparar</button>
+      </section>
+
+      <sc-if value="{{ hayComparativa }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:18px;align-items:center;justify-items:center;text-align:center;border:1px solid rgba(201,168,76,.18);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);">
+            <div style="text-align:right;">
+              <div style="font-family:'Cinzel',serif;font-size:19px;color:#F2E6C6;line-height:1.25;">{{ nombreA }}</div>
+              <div style="font-size:11px;letter-spacing:.14em;color:#8A7F68;margin-top:4px;">corazón {{ corazonA }} · estructura {{ estructuraA }}</div>
+            </div>
+            <div style="text-align:center;padding:0 10px;">
+              <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#8A7F68;">Camino conjunto</div>
+              <div style="font-family:'Cinzel',serif;font-size:38px;color:#E9CE84;line-height:1.1;">{{ caminoConjunto }}</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#A99C82;">{{ cartaConjunta }}</div>
+            </div>
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:19px;color:#F2E6C6;line-height:1.25;">{{ nombreB }}</div>
+              <div style="font-size:11px;letter-spacing:.14em;color:#8A7F68;margin-top:4px;">corazón {{ corazonB }} · estructura {{ estructuraB }}</div>
+            </div>
+          </div>
+          <sc-for list="{{ comparativa }}" as="c" hint-placeholder-count="4">
+            <article style="border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(15px,2vw,20px) clamp(16px,2.4vw,24px);">
+              <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#C9A84C;margin-bottom:10px;">{{ c.titulo }}</div>
+              <sc-for list="{{ c.items }}" as="i" hint-placeholder-count="2">
+                <div style="display:flex;gap:12px;padding:8px 0;border-top:1px solid rgba(201,168,76,.1);">
+                  <span style="font-family:'Cinzel',serif;font-size:15px;color:#E9CE84;min-width:96px;">{{ i.clave }}</span>
+                  <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;color:#C0B69F;margin:0;flex:1;">{{ i.texto }}</p>
+                </div>
+              </sc-for>
+            </article>
+          </sc-for>
+        </div>
+      </sc-if>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ esEstudio }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:0 0 40px;">
+      <div data-chrome="1" style="position:sticky;top:71px;z-index:30;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px clamp(14px,3vw,28px);background:rgba(8,9,15,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.14);">
+        <span style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#8A7F68;">Estudio · 14 páginas</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#6E6555;">Haz clic en cualquier párrafo para reescribirlo con tus palabras.</span>
+        <div style="margin-left:auto;display:flex;gap:9px;">
+          <button onClick="{{ restablecer }}" style="background:none;border:1px solid rgba(201,168,76,.26);color:#8A7F68;border-radius:3px;padding:9px 16px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;">Restablecer textos</button>
+          <button onClick="{{ imprimir }}" style="background:linear-gradient(140deg,#2A2210,#3A3018);border:1px solid #C9A84C;color:#F2E6C6;border-radius:3px;padding:9px 20px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;">Exportar PDF</button>
+        </div>
+      </div>
+
+      <doc-page size="letter" style="display:block;">
+        <sc-for list="{{ paginas }}" as="pg" hint-placeholder-count="14">
+          <section class="page" data-pagina="1" style="display:flex;flex-direction:column;background:{{ pg.fondo }};color:#282430;padding:{{ pg.padding }};font-family:'Cormorant Garamond',serif;">
+
+            <sc-if value="{{ pg.esPortada }}" hint-placeholder-val="{{ false }}">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0;">
+                <img src="assets/logo.jpeg" alt="" style="width:210px;height:210px;border-radius:50%;object-fit:cover;margin-bottom:34px;" />
+                <div style="font-family:'Cinzel',serif;font-size:13px;letter-spacing:.42em;color:#9A7F32;text-transform:uppercase;">{{ pg.marca }}</div>
+                <div style="width:78px;height:1px;background:#C9A84C;margin:26px 0;"></div>
+                <div style="font-family:'Cinzel',serif;font-size:19px;letter-spacing:.28em;color:#6B6478;text-transform:uppercase;">Estudio de Kábala personal</div>
+                <h1 style="font-family:'Cinzel',serif;font-weight:600;font-size:40px;line-height:1.22;letter-spacing:.03em;color:#241F2E;margin:30px 0 0;max-width:560px;">{{ pg.nombre }}</h1>
+                <div style="font-family:'Cormorant Garamond',serif;font-size:21px;font-style:italic;color:#7A7288;margin-top:14px;">{{ pg.fecha }}</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ pg.esInterior }}" hint-placeholder-val="{{ true }}">
+              <header style="display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(201,168,76,.42);padding-bottom:9px;margin-bottom:22px;">
+                <img src="assets/logo.jpeg" alt="" style="width:26px;height:26px;border-radius:50%;object-fit:cover;" />
+                <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.3em;color:#9A7F32;text-transform:uppercase;">{{ pg.marca }}</span>
+                <span style="margin-left:auto;font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.22em;color:#9B93A8;text-transform:uppercase;">{{ pg.seccion }}</span>
+              </header>
+
+              <div data-cuerpo="1" style="flex:1;min-height:0;overflow:hidden;">
+                <div data-fit="1" style="display:flex;flex-direction:column;gap:13px;">
+                <sc-if value="{{ pg.tieneTitulo }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <div style="font-family:'Karla',sans-serif;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:#B08A2E;margin-bottom:5px;">{{ pg.kicker }}</div>
+                    <h2 style="font-family:'Cinzel',serif;font-weight:600;font-size:25px;line-height:1.2;letter-spacing:.02em;color:#241F2E;margin:0;">{{ pg.titulo }}</h2>
+                  </div>
+                </sc-if>
+
+                <sc-for list="{{ pg.bloques }}" as="b" hint-placeholder-count="4">
+                  <div style="{{ b.wrap }}">
+                    <sc-if value="{{ b.esH }}" hint-placeholder-val="{{ false }}">
+                      <div style="font-family:'Cinzel',serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#9A7F32;border-top:1px solid rgba(201,168,76,.3);padding-top:9px;">{{ b.texto }}</div>
+                    </sc-if>
+                    <sc-if value="{{ b.esLead }}" hint-placeholder-val="{{ false }}">
+                      <p contenteditable="true" onBlur="{{ b.onEdit }}" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;line-height:1.5;color:#5E5670;margin:0;text-wrap:pretty;">{{ b.texto }}</p>
+                    </sc-if>
+                    <sc-if value="{{ b.esP }}" hint-placeholder-val="{{ false }}">
+                      <p contenteditable="true" onBlur="{{ b.onEdit }}" style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.56;color:#37323F;margin:0;text-align:justify;text-wrap:pretty;">{{ b.texto }}</p>
+                    </sc-if>
+                    <sc-if value="{{ b.esDato }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;gap:16px;align-items:flex-start;border-left:2px solid #C9A84C;padding-left:14px;">
+                        <div style="min-width:78px;">
+                          <div style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#9B93A8;">{{ b.label }}</div>
+                          <div style="font-family:'Cinzel',serif;font-size:30px;line-height:1.1;color:#241F2E;">{{ b.valor }}</div>
+                        </div>
+                        <p contenteditable="true" onBlur="{{ b.onEdit }}" style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;color:#37323F;margin:0;flex:1;text-wrap:pretty;">{{ b.texto }}</p>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esPolos }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div style="border-left:2px solid #C0574C;padding-left:12px;">
+                          <div style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#B0564C;margin-bottom:3px;">En negativo</div>
+                          <p contenteditable="true" onBlur="{{ b.onEditNeg }}" style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#413B4B;margin:0;">{{ b.neg }}</p>
+                        </div>
+                        <div style="border-left:2px solid #4C8A5A;padding-left:12px;">
+                          <div style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#40794F;margin-bottom:3px;">En positivo</div>
+                          <p contenteditable="true" onBlur="{{ b.onEditPos }}" style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#413B4B;margin:0;">{{ b.pos }}</p>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esRefs }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;flex-direction:column;gap:8px;">
+                        <sc-for list="{{ b.items }}" as="i" hint-placeholder-count="2">
+                          <div style="{{ i.style }}">
+                            <div style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:{{ i.color }};margin-bottom:3px;">{{ i.label }}</div>
+                            <p style="font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#413B4B;margin:0;">{{ i.texto }}</p>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esArbol }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:210px 1fr;gap:22px;align-items:center;">
+                        <svg viewBox="0 0 380 660" style="width:100%;height:auto;">
+                          <sc-for list="{{ senderosDoc }}" as="s" hint-placeholder-count="22">
+                            <line x1="{{ s.x1 }}" y1="{{ s.y1 }}" x2="{{ s.x2 }}" y2="{{ s.y2 }}" stroke="{{ s.color }}" stroke-width="{{ s.w }}" stroke-opacity="{{ s.o }}" stroke-linecap="round"></line>
+                          </sc-for>
+                          <sc-for list="{{ sefirot }}" as="p" hint-placeholder-count="10">
+                            <circle cx="{{ p.x }}" cy="{{ p.y }}" r="19" fill="{{ p.fill }}" stroke="rgba(40,36,48,.35)" stroke-width="1"></circle>
+                          </sc-for>
+                          <sc-for list="{{ marcasCamino }}" as="m" hint-placeholder-count="3">
+                            <text x="{{ m.x }}" y="{{ m.y }}" fill="{{ m.color }}" font-size="15" font-family="Cinzel, serif" text-anchor="middle">{{ m.n }}</text>
+                          </sc-for>
+                        </svg>
+                        <div style="display:flex;flex-direction:column;gap:11px;">
+                          <sc-for list="{{ caminosDoc }}" as="c" hint-placeholder-count="3">
+                            <div style="{{ c.style }}">
+                              <div style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:{{ c.color }};">{{ c.etapa }} · {{ c.rango }}</div>
+                              <div style="font-family:'Cinzel',serif;font-size:19px;line-height:1.25;color:#241F2E;">{{ c.arcano }} · {{ c.nombre }}</div>
+                              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#6B6478;">{{ c.lema }}</div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esEstructura }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center;">
+                        <svg viewBox="0 0 340 340" style="width:100%;height:auto;">
+                          <circle cx="170" cy="170" r="118" fill="none" stroke="rgba(201,168,76,.35)" stroke-width="1"></circle>
+                          <sc-for list="{{ portalesDoc }}" as="p" hint-placeholder-count="10">
+                            <g>
+                              <circle cx="{{ p.x }}" cy="{{ p.y }}" r="21" fill="{{ p.fill }}" stroke="{{ p.stroke }}" stroke-width="{{ p.sw }}"></circle>
+                              <text x="{{ p.x }}" y="{{ p.ty }}" fill="{{ p.tcolor }}" font-size="14" font-family="Cinzel, serif" text-anchor="middle">{{ p.portal }}</text>
+                              <text x="{{ p.lx }}" y="{{ p.ly }}" fill="#C0574C" font-size="12" font-family="Karla, sans-serif" text-anchor="middle">{{ p.dinamico }}</text>
+                            </g>
+                          </sc-for>
+                          <text x="170" y="178" fill="#9A7F32" font-size="34" font-family="Cinzel, serif" text-anchor="middle">{{ tipoEstructura }}</text>
+                        </svg>
+                        <div style="display:flex;flex-direction:column;gap:7px;">
+                          <sc-for list="{{ tensionesDoc }}" as="t" hint-placeholder-count="5">
+                            <div style="{{ t.style }}">{{ t.label }} — {{ t.estado }}</div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esAlma }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:center;">
+                        <div>
+                          <div style="display:flex;justify-content:center;margin-bottom:7px;"><div style="{{ celda10Doc.style }}"><span style="font-family:'Cinzel',serif;font-size:14px;color:#9B93A8;">10/0</span><span style="{{ celda10Doc.bStyle }}">{{ celda10Doc.bloqueo }}</span><span style="{{ celda10Doc.aStyle }}">{{ celda10Doc.ayuda }}</span></div></div>
+                          <sc-for list="{{ filasAlmaDoc }}" as="f" hint-placeholder-count="3">
+                            <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px;">
+                              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;flex:1;">
+                                <sc-for list="{{ f.celdas }}" as="c" hint-placeholder-count="3">
+                                  <div style="{{ c.style }}"><span style="font-family:'Cinzel',serif;font-size:14px;color:#9B93A8;">{{ c.n }}</span><span style="{{ c.bStyle }}">{{ c.bloqueo }}</span><span style="{{ c.aStyle }}">{{ c.ayuda }}</span></div>
+                                </sc-for>
+                              </div>
+                              <span style="width:12px;font-family:'Cinzel',serif;font-size:12px;color:#9B93A8;">{{ f.label }}</span>
+                            </div>
+                          </sc-for>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:9px;">
+                          <sc-for list="{{ bloqueosDoc }}" as="b2" hint-placeholder-count="3">
+                            <div style="border-left:2px solid #A8449B;padding-left:12px;">
+                              <div style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8E3A83;">Bloqueo {{ b2.casilla }}{{ b2.intensidad }} · número {{ b2.numero }}</div>
+                              <div style="font-family:'Cinzel',serif;font-size:15px;color:#241F2E;line-height:1.3;">{{ b2.nombre }}</div>
+                              <p style="font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.45;color:#4A4356;margin:3px 0 0;">{{ b2.extracto }}</p>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esCuentas }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;">
+                        <div style="display:grid;grid-template-columns:20px 1fr 1fr 1fr 1fr;gap:5px;">
+                          <sc-for list="{{ tablaCuentasDoc }}" as="c" hint-placeholder-count="25">
+                            <div style="{{ c.style }}">{{ c.v }}</div>
+                          </sc-for>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:9px;">
+                          <sc-for list="{{ karmaDoc }}" as="k" hint-placeholder-count="4">
+                            <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid rgba(201,168,76,.25);padding-bottom:7px;">
+                              <span style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#9B93A8;flex:1;">{{ k.label }}</span>
+                              <span style="font-family:'Cinzel',serif;font-size:23px;color:#241F2E;">{{ k.valor }}</span>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esCiclos }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;">
+                        <sc-for list="{{ ciclosDoc }}" as="c" hint-placeholder-count="3">
+                          <div style="border-top:2px solid #C9A84C;padding-top:9px;">
+                            <div style="font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#9B93A8;">{{ c.nombre }} · {{ c.rango }}</div>
+                            <div style="font-family:'Cinzel',serif;font-size:26px;color:#241F2E;line-height:1.2;">{{ c.numero }}</div>
+                            <p style="font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.45;color:#4A4356;margin:3px 0 0;">{{ c.texto }}</p>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ b.esCita }}" hint-placeholder-val="{{ false }}">
+                      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;line-height:1.5;color:#6B6478;text-align:center;border-top:1px solid rgba(201,168,76,.3);border-bottom:1px solid rgba(201,168,76,.3);padding:16px 30px;margin:0;">{{ b.texto }}</p>
+                    </sc-if>
+                  </div>
+                </sc-for>
+                </div>
+              </div>
+
+              <footer style="display:flex;align-items:center;border-top:1px solid rgba(201,168,76,.3);padding-top:8px;margin-top:16px;font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.2em;color:#9B93A8;text-transform:uppercase;">
+                <span>{{ pg.nombre }}</span>
+                <span style="margin-left:auto;">{{ pg.n }} / 14</span>
+              </footer>
+            </sc-if>
+          </section>
+        </sc-for>
+      </doc-page>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hayDetalle }}" hint-placeholder-val="{{ false }}">
+    <div data-chrome="1" onClick="{{ cerrarDetalle }}" style="position:fixed;inset:0;z-index:60;background:rgba(5,6,11,.86);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:clamp(20px,5vw,48px) clamp(12px,3vw,24px);overflow-y:auto;animation:es33-in .25s ease both;">
+      <div onClick="{{ stop }}" style="max-width:760px;width:100%;background:#12141F;border:1px solid rgba(201,168,76,.3);border-radius:4px;padding:clamp(22px,3.4vw,34px) clamp(20px,3.6vw,38px) clamp(26px,4vw,40px);position:relative;">
+        <button onClick="{{ cerrarDetalle }}" style="position:absolute;top:16px;right:16px;background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:3px;width:30px;height:30px;cursor:pointer;font-size:15px;line-height:1;">×</button>
+        <div style="font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8A7F68;margin-bottom:8px;">{{ detalleTipo }}</div>
+        <h2 style="font-family:'Cinzel',serif;font-weight:600;font-size:28px;color:#F2E6C6;margin:0 0 6px;letter-spacing:.03em;">{{ detalleTitulo }}</h2>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:#C9A84C;margin-bottom:18px;">{{ detalleSubtitulo }}</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.68;color:#C8BEA6;margin:0;white-space:pre-line;text-wrap:pretty;">{{ detalleTexto }}</p>
+        <sc-for list="{{ detalleExtras }}" as="e" hint-placeholder-count="2">
+          <div style="margin-top:18px;border-top:1px solid rgba(201,168,76,.14);padding-top:14px;">
+            <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#C9A84C;margin-bottom:6px;">{{ e.label }}</div>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.62;color:#B8AE97;margin:0;">{{ e.texto }}</p>
+          </div>
+        </sc-for>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;">
+          <sc-for list="{{ detalleChips }}" as="c" hint-placeholder-count="2">
+            <button onClick="{{ c.ver }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860},&quot;marca&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Escuela de Sabiduría 33&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estudio&quot;,&quot;label&quot;:&quot;Marca en portada y pie&quot;},&quot;densidad&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Compacto&quot;,&quot;Estándar&quot;,&quot;Extenso&quot;],&quot;default&quot;:&quot;Estándar&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estudio&quot;,&quot;label&quot;:&quot;Extensión de los textos&quot;},&quot;anioUniversal&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2026,&quot;min&quot;:2000,&quot;max&quot;:2100,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Cálculo&quot;,&quot;label&quot;:&quot;Año para el año personal&quot;}}">
+const LS_HIST = 'es33.historial.v1';
+const LS_EDITS = 'es33.edits.v1';
+
+const SEF = {
+  keter:    { x: 190, y: 46,  c: '#F5F2EA', n: 'KETER' },
+  hokmah:   { x: 300, y: 130, c: '#C3C7CE', n: 'HOKMAH' },
+  binah:    { x: 80,  y: 130, c: '#2F333B', n: 'BINAH' },
+  jesed:    { x: 300, y: 266, c: '#3E77C4', n: 'JESED' },
+  gevurah:  { x: 80,  y: 266, c: '#CE4237', n: 'GEVURAH' },
+  tiphereth:{ x: 190, y: 336, c: '#E5B63C', n: 'TIPHERETH' },
+  netsaj:   { x: 300, y: 438, c: '#4C9A5A', n: 'NETSAJ' },
+  hod:      { x: 80,  y: 438, c: '#DE8631', n: 'HOD' },
+  yesod:    { x: 190, y: 510, c: '#A8449B', n: 'YESOD' },
+  malkut:   { x: 190, y: 606, c: '#6C5A38', n: 'MALKUT' }
+};
+const SENDEROS = [
+  ['keter','hokmah'], ['keter','binah'], ['keter','tiphereth'], ['binah','hokmah'],
+  ['hokmah','tiphereth'], ['hokmah','jesed'], ['binah','tiphereth'], ['gevurah','binah'],
+  ['gevurah','jesed'], ['jesed','tiphereth'], ['jesed','netsaj'], ['gevurah','tiphereth'],
+  ['gevurah','hod'], ['tiphereth','netsaj'], ['tiphereth','yesod'], ['tiphereth','hod'],
+  ['hod','netsaj'], ['yesod','netsaj'], ['netsaj','malkut'], ['yesod','hod'],
+  ['hod','malkut'], ['malkut','yesod']
+];
+const COL = { origen: '#E2574C', transformacion: '#E5B63C', destino: '#4C8FE0' };
+const IZQ = { binah: 1, gevurah: 1, hod: 1 };
+
+function recorta(t, n) {
+  if (!t) return '';
+  if (t.length <= n) return t;
+  const corte = t.slice(0, n);
+  const i = corte.lastIndexOf(' ');
+  return corte.slice(0, i > 0 ? i : n) + '…';
+}
+function chipStyle(color) {
+  return 'background:rgba(255,255,255,.03);border:1px solid ' + color + '55;color:' + color +
+    ';border-radius:3px;padding:6px 12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .2s;';
+}
+
+class Component extends DCLogic {
+  state = {
+    ready: false,
+    view: 'inicio',
+    f: { nombre: '', ap1: '', ap2: '', dia: '', mes: '', anio: '' },
+    r: null,
+    id: null,
+    hist: [],
+    edits: {},
+    seccion: 'arbol',
+    detalle: null,
+    p: { nombre: '', ap1: '', ap2: '', dia: '', mes: '', anio: '' },
+    pr: null, comp: null
+  };
+
+  componentDidMount() {
+    const tick = () => {
+      if (window.KEngine && window.KDATA) { this.setState({ ready: true }); return; }
+      this._t = setTimeout(tick, 60);
+    };
+    tick();
+    let hist = [], edits = {};
+    try { hist = JSON.parse(localStorage.getItem(LS_HIST) || '[]'); } catch (e) {}
+    try { edits = JSON.parse(localStorage.getItem(LS_EDITS) || '{}'); } catch (e) {}
+    this.setState({ hist: Array.isArray(hist) ? hist : [], edits: edits || {} });
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  set(k, v) { this.setState(s => ({ f: Object.assign({}, s.f, { [k]: v }) })); }
+  setP(k, v) { this.setState(s => ({ p: Object.assign({}, s.p, { [k]: v }) })); }
+
+  entrada(f) {
+    return {
+      nombre: f.nombre, apellido1: f.ap1, apellido2: f.ap2,
+      dia: +f.dia, mes: +f.mes, anio: +f.anio,
+      anioUniversal: +(this.props.anioUniversal || new Date().getFullYear())
+    };
+  }
+  get marca() { return this.props.marca || 'Escuela de Sabiduría 33'; }
+  get factor() {
+    const d = this.props.densidad || 'Estándar';
+    return d === 'Compacto' ? 0.68 : (d === 'Extenso' ? 1.35 : 1);
+  }
+  cupo(n) { return Math.round(n * this.factor); }
+  valida(f) {
+    const d = +f.dia, m = +f.mes, a = +f.anio;
+    if (!f.nombre.trim()) return 'Falta el nombre.';
+    if (!(d >= 1 && d <= 31)) return 'El día debe estar entre 1 y 31.';
+    if (!(m >= 1 && m <= 12)) return 'El mes debe estar entre 1 y 12.';
+    if (!(a >= 1900 && a <= 2100)) return 'El año debe tener cuatro cifras.';
+    return null;
+  }
+
+  calcular() {
+    if (!window.KEngine) return;
+    const f = this.state.f;
+    if (this.valida(f)) return;
+    const r = window.KEngine.calcula(this.entrada(f));
+    const id = [f.nombre, f.ap1, f.ap2, f.dia, f.mes, f.anio].join('|').toUpperCase();
+    const item = {
+      id, nombre: [f.nombre, f.ap1, f.ap2].filter(Boolean).join(' '),
+      fecha: f.dia + '/' + f.mes + '/' + f.anio, corazon: r.corazon.valor, f: Object.assign({}, f)
+    };
+    this.setState(s => {
+      const hist = [item].concat(s.hist.filter(h => h.id !== id)).slice(0, 40);
+      try { localStorage.setItem(LS_HIST, JSON.stringify(hist)); } catch (e) {}
+      return { r, id, hist, view: 'panel', seccion: 'arbol' };
+    });
+  }
+
+  abrir(h) {
+    const r = window.KEngine.calcula(this.entrada(h.f));
+    this.setState({ f: Object.assign({}, h.f), r, id: h.id, view: 'panel', seccion: 'arbol' });
+  }
+  borrar(h) {
+    this.setState(s => {
+      const hist = s.hist.filter(x => x.id !== h.id);
+      try { localStorage.setItem(LS_HIST, JSON.stringify(hist)); } catch (e) {}
+      return { hist };
+    });
+  }
+
+  guardaEdit(bloqueId, texto) {
+    const id = this.state.id; if (!id) return;
+    this.setState(s => {
+      const edits = Object.assign({}, s.edits);
+      edits[id] = Object.assign({}, edits[id] || {});
+      edits[id][bloqueId] = texto;
+      try { localStorage.setItem(LS_EDITS, JSON.stringify(edits)); } catch (e) {}
+      return { edits };
+    });
+  }
+
+  /* ---------- vista previa del nombre ---------- */
+  previa() {
+    const E = window.KEngine;
+    const f = this.state.f;
+    if (!E) return { palabras: [], total: 0, esencia: 0, ego: 0 };
+    const n = E.analizaNombre([f.nombre, f.ap1, f.ap2].filter(Boolean).join(' '));
+    return n;
+  }
+
+  /* ---------- detalle ---------- */
+  verNumero(n) {
+    const F = window.KEngine.ficha(n); if (!F) return;
+    this.setState({ detalle: { tipo: 'numero', f: F } });
+  }
+  verArcano(a) { this.setState({ detalle: { tipo: 'arcano', a: a } }); }
+  verTexto(tipo, titulo, sub, texto) { this.setState({ detalle: { tipo: 'texto', titulo, sub, texto, etiqueta: tipo } }); }
+  cerrarDetalle() { this.setState({ detalle: null }); }
+
+  chipsDeFicha(F) {
+    if (!F) return [];
+    const out = [];
+    const add = (G, pre) => {
+      if (G.T) out.push({ label: pre + 'te tensa · T' + G.T, n: G.T, color: '#E2574C' });
+      if (G.L) out.push({ label: pre + 'te libera · L' + G.L, n: G.L, color: '#6FAE7C' });
+    };
+    if (F.enDiccionario) add(F, '');
+    else (F.partes || []).forEach(p => {
+      out.push({ label: 'Lectura ' + p.n, n: p.n, color: '#C9A84C' });
+      add(p, p.n + ' ');
+    });
+    return out.map(c => ({ label: c.label, style: chipStyle(c.color), ver: () => this.verNumero(c.n) }));
+  }
+
+  panelVals() {
+    const S = this.state, r = S.r;
+    if (!r) return { esPanel: false, secArbol: false, secNumeros: false, secEstructura: false, secAlma: false, secCuentas: false, secCiclos: false };
+    const K = window.KDATA;
+
+    /* --- árbol --- */
+    const arcos = {};
+    arcos[r.caminos.origen.arcano] = 'origen';
+    if (!arcos[r.caminos.transformacion.arcano]) arcos[r.caminos.transformacion.arcano] = 'transformacion';
+    if (!arcos[r.caminos.destino.arcano]) arcos[r.caminos.destino.arcano] = 'destino';
+    const senderos = SENDEROS.map((s, i) => {
+      const a = SEF[s[0]], b = SEF[s[1]], rol = arcos[i];
+      const d = rol ? (1.15 + Object.keys(arcos).indexOf(String(i)) * 0.28) : (0.06 + i * 0.032);
+      return {
+        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
+        color: rol ? COL[rol] : '#5A5E70', w: rol ? 4 : 1.4, o: rol ? 0.95 : 0.32,
+        anim: 'stroke-dasharray:1;stroke-dashoffset:1;animation:es33-draw ' + (rol ? '.9s' : '.55s') +
+          ' cubic-bezier(.4,0,.2,1) forwards;animation-delay:' + d.toFixed(2) + 's;'
+      };
+    });
+    const sefirot = Object.keys(SEF).map((k, i) => {
+      const p = SEF[k], izq = IZQ[k], centro = p.x === 190;
+      const d = 0.1 + i * 0.075;
+      return {
+        x: p.x, y: p.y, fill: p.c, nombre: p.n,
+        tx: centro ? p.x : (izq ? p.x - 26 : p.x + 26),
+        ty: centro ? p.y - 26 : p.y + 4,
+        anchor: centro ? 'middle' : (izq ? 'end' : 'start'),
+        anim: 'transform-box:fill-box;transform-origin:center;opacity:0;animation:es33-pop .62s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:' + d.toFixed(2) + 's;',
+        animT: 'opacity:0;animation:es33-in .5s ease forwards;animation-delay:' + (d + 0.3).toFixed(2) + 's;'
+      };
+    });
+    const marcasCamino = [];
+    Object.keys(arcos).forEach((a, i) => {
+      const s = SENDEROS[a]; if (!s) return;
+      const p1 = SEF[s[0]], p2 = SEF[s[1]];
+      marcasCamino.push({
+        x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 + 4, n: a, color: COL[arcos[a]],
+        anim: 'opacity:0;animation:es33-in .5s ease forwards;animation-delay:' + (2.0 + i * 0.28).toFixed(2) + 's;'
+      });
+    });
+
+    const camDef = [
+      { k: 'origen', etapa: 'Origen', c: r.caminos.origen, rango: '0 – ' + r.caminos.edadCambio + ' años' },
+      { k: 'transformacion', etapa: 'Transformación', c: r.caminos.transformacion, rango: 'toda la vida' },
+      { k: 'destino', etapa: 'Destino', c: r.caminos.destino, rango: 'desde los ' + (r.turbulencias ? r.caminos.edadCambio + 10 : r.caminos.edadCambio) + ' años' }
+    ];
+    const caminos = camDef.map((d, ci) => {
+      const carta = d.c.carta || {};
+      return {
+        etapa: d.etapa, arcano: d.c.arcano, nombre: carta.nombre || '', lema: carta.lema || '', rango: d.rango,
+        extracto: recorta((carta.texto || '').replace(/^[“"][^”"]*[”"]\.?\s*/, ''), 400),
+        card: 'border:1px solid ' + COL[d.k] + '33;background:linear-gradient(150deg,' + COL[d.k] + '0D,rgba(18,20,31,.8));border-left:3px solid ' + COL[d.k] +
+          ';border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:' +
+          (0.6 + ci * 0.16).toFixed(2) + 's;',
+        badge: 'font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:' + COL[d.k] + ';',
+        ver: () => this.verArcano(d.c.arcano)
+      };
+    });
+    const leyendaCaminos = camDef.map(d => ({
+      label: d.etapa + ' · arcano ' + d.c.arcano,
+      chip: 'width:22px;height:3px;border-radius:2px;background:' + COL[d.k] + ';'
+    }));
+
+    /* --- números --- */
+    const nDef = [
+      { label: 'Número de corazón', o: r.corazon, desc: 'el número pin de tu alma, cómo vibras' },
+      { label: 'Número de esencia', o: r.esencia, desc: 'tus valores internos más profundos' },
+      { label: 'Número de ego', o: r.ego, desc: 'la conexión que tienes con las personas' }
+    ];
+    const numerosClave = nDef.map(d => ({
+      label: d.label, valor: d.o.valor, desc: d.desc,
+      neg: d.o.lectura.negativo, pos: d.o.lectura.positivo,
+      chips: this.chipsDeFicha(d.o.ficha).concat(
+        d.o.ficha && d.o.ficha.enDiccionario ? [{ label: 'Significado ' + d.o.valor, style: chipStyle('#C9A84C'), ver: () => this.verNumero(d.o.valor) }] : []
+      )
+    }));
+    const diasFuerza = r.diasFuerza.dias.map((n, i) => ({
+      n: n,
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:52px;height:52px;border-radius:50%;font-family:\'Cinzel\',serif;font-size:' + (i === 0 ? 26 : 20) + 'px;border:1px solid ' + (i === 0 ? '#C9A84C' : 'rgba(201,168,76,.28)') + ';background:' + (i === 0 ? 'rgba(201,168,76,.14)' : 'rgba(255,255,255,.02)') + ';color:' + (i === 0 ? '#F2E6C6' : '#B7A57C') + ';'
+    }));
+
+    /* --- estructura --- */
+    const est = r.estructura;
+    const portales = [];
+    for (let i = 1; i <= 10; i++) {
+      const ang = (-90 - (i - 1) * 36) * Math.PI / 180;
+      const x = 170 + Math.cos(ang) * 118, y = 170 + Math.sin(ang) * 118;
+      const tieneA = !!est.aprendizajes[i], tieneE = !!est.escudos[i];
+      const d = 0.08 + (i - 1) * 0.085;
+      portales.push({
+        portal: i === 10 ? 0 : i, x: x, y: y, r: 21, ty: y + 5,
+        lx: 170 + Math.cos(ang) * 87, ly: 170 + Math.sin(ang) * 87 + 4,
+        dinamico: est.dinamicos[i],
+        fill: tieneA ? 'rgba(232,185,60,.85)' : 'rgba(255,255,255,.04)',
+        stroke: tieneE ? '#4C8FE0' : 'rgba(201,168,76,.3)',
+        sw: tieneE ? 3 : 1,
+        tcolor: tieneA ? '#1A1508' : '#A99C82',
+        anim: 'transform-box:fill-box;transform-origin:center;opacity:0;animation:es33-pop .58s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:' + d.toFixed(2) + 's;',
+        animT: 'opacity:0;animation:es33-in .45s ease forwards;animation-delay:' + (d + 0.26).toFixed(2) + 's;'
+      });
+    }
+    const tensiones = [].concat(
+      r.ejes.map(e => ({ nombre: e.eje.nombre, a: e.eje.a, b: e.eje.b, activo: e.activo, tipo: 'Eje' })),
+      r.planosTension.map(p => ({ nombre: p.plano.nombre, a: p.plano.a, b: p.plano.b, activo: p.activo, tipo: 'Plano' }))
+    ).map((t, idx) => ({
+      label: t.tipo + ' ' + t.a + '–' + t.b + ' · ' + t.nombre,
+      estado: t.activo ? 'en tensión' : 'libre',
+      style: 'display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:3px;font-size:12px;border:1px solid ' +
+        (t.activo ? 'rgba(226,87,76,.4)' : 'rgba(201,168,76,.1)') + ';background:' +
+        (t.activo ? 'rgba(226,87,76,.08)' : 'rgba(255,255,255,.02)') + ';color:' + (t.activo ? '#DE8B82' : '#8A7F68') +
+        ';opacity:0;animation:es33-slide .45s ease forwards;animation-delay:' + (0.1 + idx * 0.05).toFixed(2) + 's;'
+    }));
+    const aprendizajes = r.aprendizajes.map((a, ai) => ({
+      card: 'border:1px solid rgba(232,185,60,.24);background:rgba(232,185,60,.045);border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .55s cubic-bezier(.22,1,.36,1) forwards;animation-delay:' + (0.18 + ai * 0.13).toFixed(2) + 's;',
+      portal: a.portal === 10 ? 10 : a.portal,
+      intensidad: a.veces > 1 ? ' · ×' + a.veces : '',
+      nombre: (a.tarea && a.tarea.nombre) || '',
+      numero: a.numero,
+      extracto: recorta((a.tarea && a.tarea.texto) || '', 460),
+      hilo: recorta((a.tarea && a.tarea.hiloRojo) || '', 210),
+      sanador: recorta((a.tarea && a.tarea.sanador) || '', 210),
+      chips: [{ label: 'Número ' + a.numero, style: chipStyle('#C9A84C'), ver: () => this.verNumero(a.numero) }]
+        .concat(this.chipsDeFicha(a.ficha))
+        .concat([{ label: 'Tarea completa', style: chipStyle('#A99C82'), ver: () => this.verTexto('Aprendizaje ' + a.portal, (a.tarea && a.tarea.nombre) || '', 'Tarea número ' + a.portal, ((a.tarea && a.tarea.texto) || '') + '\n\nHilo rojo: ' + ((a.tarea && a.tarea.hiloRojo) || '') + '\n\nNeurosis: ' + ((a.tarea && a.tarea.neurosis) || '') + '\n\nPrincipio sanador: ' + ((a.tarea && a.tarea.sanador) || '')) }])
+    }));
+
+    /* --- imagen del alma --- */
+    const ia = r.imagenAlma;
+    function celda(n) {
+      const b = ia.bloqueos[n] || 0, ay = ia.ayudas[n] || 0;
+      return {
+        n: n === 10 ? '10' : n, bloqueo: b ? String(n === 10 ? 0 : n).repeat(b) : '', ayuda: ay ? '●'.repeat(ay) : '',
+        style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:62px;border-radius:3px;border:1px solid ' +
+          (b ? 'rgba(226,87,76,.5)' : 'rgba(201,168,76,.16)') + ';background:' + (b ? 'rgba(226,87,76,.09)' : 'rgba(255,255,255,.02)') +
+          ';width:100%;opacity:0;animation:es33-pop .5s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:' + (0.06 + (n % 11) * 0.06).toFixed(2) + 's;',
+        bStyle: 'font-family:\'Cinzel\',serif;font-size:17px;letter-spacing:1px;color:#E2574C;line-height:1;min-height:17px;',
+        aStyle: 'font-size:9px;letter-spacing:2px;color:#6FAE7C;line-height:1;min-height:9px;'
+      };
+    }
+    const filasAlma = [
+      { label: 'C', celdas: [celda(7), celda(8), celda(9)] },
+      { label: 'A', celdas: [celda(4), celda(5), celda(6)] },
+      { label: 'E', celdas: [celda(1), celda(2), celda(3)] }
+    ];
+    const bloqueos = r.bloqueos.map(b => ({
+      casilla: b.casilla, intensidad: b.veces > 1 ? ' · ×' + b.veces : '',
+      nombre: (b.plano && b.plano.nombre) || '', numero: b.numero,
+      extracto: recorta((b.plano && b.plano.texto) || '', 440),
+      chips: [{ label: 'Número ' + b.numero, style: chipStyle('#C9A84C'), ver: () => this.verNumero(b.numero) }]
+        .concat(this.chipsDeFicha(b.ficha))
+        .concat([{ label: 'Plano completo', style: chipStyle('#A99C82'), ver: () => this.verTexto('Bloqueo ' + b.casilla, (b.plano && b.plano.nombre) || '', 'Plano de consciencia ' + b.casilla, (b.plano && b.plano.texto) || '') }])
+    }));
+
+    /* --- cuentas --- */
+    const c = r.cuentas;
+    const th = 'font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;display:flex;align-items:center;justify-content:center;padding:6px 0;';
+    const td = 'font-family:\'Cinzel\',serif;font-size:19px;color:#D8CDB2;display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid rgba(201,168,76,.12);border-radius:3px;background:rgba(255,255,255,.02);';
+    const tdTot = td.replace('#D8CDB2', '#F2E6C6').replace('rgba(255,255,255,.02)', 'rgba(201,168,76,.1)');
+    const tablaCuentas = [
+      { v: '', style: th }, { v: 'Día', style: th }, { v: 'Mes', style: th }, { v: 'Año', style: th }, { v: 'Cuenta', style: th },
+      { v: 'E', style: th }, { v: c.espiritu.dia, style: td }, { v: c.espiritu.mes, style: td }, { v: c.espiritu.anio, style: td }, { v: c.espiritu.total, style: tdTot },
+      { v: 'A', style: th }, { v: c.alma.dia, style: td }, { v: c.alma.mes, style: td }, { v: c.alma.anio, style: td }, { v: c.alma.total, style: tdTot },
+      { v: 'C', style: th }, { v: c.cuerpo.dia, style: td }, { v: c.cuerpo.mes, style: td }, { v: c.cuerpo.anio, style: td }, { v: c.cuerpo.total, style: tdTot },
+      { v: '', style: th }, { v: c.potenciales[0], style: tdTot }, { v: c.potenciales[1], style: tdTot }, { v: c.potenciales[2], style: tdTot }, { v: c.karmico, style: tdTot }
+    ];
+    const tarjetasKarma = [
+      { label: 'Nº kármico de las relaciones', valor: c.karmico, desc: 'Dónde fallaste en tus relaciones en vidas pasadas y qué se repite en esta.', f: r.cuentasFichas.karmico },
+      { label: 'Nº del lema de vida', valor: c.lemaDeVida, desc: 'El propósito de tu alma: la vibración que te permite llevar a cabo tu plan.', f: r.cuentasFichas.lema },
+      { label: 'Nº de efecto sanador', valor: r.vibraciones.efectoSanador, desc: 'Cuerpo ' + r.vibraciones.cuerpo + ' + alma ' + r.vibraciones.alma + ' + espíritu ' + r.vibraciones.espiritu + '.', f: r.efectoSanadorFicha },
+      { label: 'Números de afinidad', valor: r.afinidad.diaMes + ' · ' + r.afinidad.mesAnio, desc: 'Visión global de tus procesos kármicos: qué has venido a hacer en esta encarnación.', f: null }
+    ].map(k => ({ label: k.label, valor: k.valor, desc: k.desc, chips: this.chipsDeFicha(k.f) }));
+
+    /* --- ciclos --- */
+    const CI = (K.ciclos || {});
+    const ciclosVitales = r.ciclos.ciclos.map((cv, i) => ({
+      nombre: cv.nombre, numero: cv.numero,
+      rango: cv.hasta === null ? 'desde los ' + cv.desde + ' años' : cv.desde + ' – ' + cv.hasta + ' años',
+      texto: recorta((CI.ciclos || {})[cv.numero] || '', 330),
+      style: 'border:1px solid rgba(201,168,76,.16);background:rgba(255,255,255,.02);border-radius:3px;padding:16px 18px;'
+    }));
+    const realizaciones = r.ciclos.realizaciones.map(x => ({
+      n: x.n, valor: x.valor,
+      rango: x.hasta === null ? 'desde los ' + x.desde : x.desde + ' – ' + x.hasta + ' años',
+      texto: recorta((CI.realizaciones || {})[x.valor] || '', 230)
+    }));
+    const desafios = r.ciclos.desafios.map(x => ({
+      valor: x.valor, etiqueta: x.etiqueta, rango: x.rango,
+      texto: recorta((CI.desafios || {})[x.valor] || '', 230)
+    }));
+
+    const secDef = [
+      { k: 'arbol', label: 'Árbol y caminos' }, { k: 'numeros', label: 'Números' },
+      { k: 'estructura', label: 'Estructura y aprendizajes' }, { k: 'alma', label: 'Imagen del alma' },
+      { k: 'cuentas', label: 'Cuentas abiertas' }, { k: 'ciclos', label: 'Ciclos vitales' }
+    ];
+
+    return {
+      esPanel: S.view === 'panel',
+      pNombre: r.nombre.texto,
+      pFecha: r.fecha.dia + ' / ' + r.fecha.mes + ' / ' + r.fecha.anio,
+      resumen: [
+        { label: 'Corazón', valor: r.corazon.valor },
+        { label: 'Esencia', valor: r.esencia.valor },
+        { label: 'Ego', valor: r.ego.valor },
+        { label: 'Edad de cambio', valor: r.caminos.edadCambio },
+        { label: 'Estructura', valor: est.tipo },
+        { label: 'Imagen del alma', valor: ia.numero }
+      ].map(x => ({ label: x.label, valor: x.valor, style: 'font-family:\'Cinzel\',serif;font-size:22px;color:#E9CE84;line-height:1;' })),
+      secciones: secDef.map(s => ({
+        label: s.label, go: () => this.setState({ seccion: s.k }),
+        style: 'padding:8px 15px;border-radius:3px;cursor:pointer;font-size:10px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;transition:all .2s;border:1px solid ' +
+          (S.seccion === s.k ? 'rgba(201,168,76,.5)' : 'rgba(201,168,76,.14)') + ';background:' +
+          (S.seccion === s.k ? 'rgba(201,168,76,.11)' : 'transparent') + ';color:' + (S.seccion === s.k ? '#E9CE84' : '#8A7F68') + ';'
+      })),
+      secArbol: S.view === 'panel' && S.seccion === 'arbol',
+      secNumeros: S.view === 'panel' && S.seccion === 'numeros',
+      secEstructura: S.view === 'panel' && S.seccion === 'estructura',
+      secAlma: S.view === 'panel' && S.seccion === 'alma',
+      secCuentas: S.view === 'panel' && S.seccion === 'cuentas',
+      secCiclos: S.view === 'panel' && S.seccion === 'ciclos',
+      senderos, sefirot, marcasCamino, caminos, leyendaCaminos,
+      hayTurbulencias: !!r.turbulencias,
+      turbulencias: r.turbulencias ? r.turbulencias.lista : [],
+      turbRango: r.turbulencias ? (r.turbulencias.desde + ' – ' + r.turbulencias.hasta + ' años') : '',
+      numerosClave, diasFuerza,
+      tipoEstructura: est.tipo,
+      textoEstructura: (r.tipoEstructura && r.tipoEstructura.texto) || '',
+      estructuraNeg: (r.tipoEstructura && r.tipoEstructura.negativo) || '',
+      estructuraPos: (r.tipoEstructura && r.tipoEstructura.positivo) || '',
+      portales, tensiones, aprendizajes,
+      numeroAlma: ia.numero, filasAlma, celda10: celda(10), bloqueos,
+      textoProyeccion: ia.proyeccion ? ('El 0 cae en la casilla ' + ia.proyeccion + ': eso es lo que proyectas de cara a los demás.') : '',
+      tablaCuentas,
+      textoPotenciales: c.potenciales[0] + '→' + c.cuentas[0] + ', ' + c.potenciales[1] + '→' + c.cuentas[1] + ', ' + c.potenciales[2] + '→' + c.cuentas[2] + '.',
+      tarjetasKarma,
+      proposito: r.ciclos.proposito, anioUniversal: r.ciclos.anioUniversal, anioPersonal: r.ciclos.anioPersonal,
+      ciclosVitales, realizaciones, desafios
+    };
+  }
+
+  detalleVals() {
+    const d = this.state.detalle;
+    if (!d) return { hayDetalle: false, detalleExtras: [], detalleChips: [] };
+    if (d.tipo === 'numero') {
+      const F = d.f;
+      const extras = [];
+      if (F.atlante) extras.push({ label: 'Significado atlante', texto: F.atlante });
+      if (!F.enDiccionario && F.partes.length) {
+        F.partes.forEach(p => extras.push({ label: 'Lectura ' + p.n + ' · ' + p.titulo, texto: p.texto }));
+      }
+      const refs = [];
+      if (F.C) refs.push('cerradura ' + F.C);
+      if (F.R) refs.push('rango ' + F.R);
+      if (F.P) refs.push('primo ' + F.P);
+      return {
+        hayDetalle: true, detalleTipo: 'Número ' + F.n,
+        detalleTitulo: F.titulo || ('Número ' + F.n),
+        detalleSubtitulo: 'Tensión T' + F.T + ' · Liberación L' + F.L + (refs.length ? ' · ' + refs.join(' · ') : ''),
+        detalleTexto: F.texto || 'Este número se lee dividiéndolo de dos en dos.',
+        detalleExtras: extras, detalleChips: this.chipsDeFicha(F)
+      };
+    }
+    if (d.tipo === 'arcano') {
+      const c = (window.KDATA.arcanos || {})[d.a] || {};
+      const extras = c.pareja ? [{ label: 'Este camino en pareja', texto: c.pareja }] : [];
+      return {
+        hayDetalle: true, detalleTipo: 'Arcano ' + d.a,
+        detalleTitulo: c.nombre || '', detalleSubtitulo: c.lema || '',
+        detalleTexto: (c.texto || '').replace(/^[“"][^”"]*[”"]\.?\s*/, ''),
+        detalleExtras: extras, detalleChips: []
+      };
+    }
+    return {
+      hayDetalle: true, detalleTipo: d.etiqueta || '', detalleTitulo: d.titulo || '',
+      detalleSubtitulo: d.sub || '', detalleTexto: d.texto || '', detalleExtras: [], detalleChips: []
+    };
+  }
+
+  /* ---------- estudio en 14 páginas ---------- */
+  txt(id, def) {
+    const e = this.state.edits[this.state.id];
+    return (e && e[id] !== undefined) ? e[id] : def;
+  }
+  edit(id) { return ev => this.guardaEdit(id, ev.target.textContent.trim()); }
+
+  restablecer() {
+    const id = this.state.id; if (!id) return;
+    this.setState(s => {
+      const edits = Object.assign({}, s.edits); delete edits[id];
+      try { localStorage.setItem(LS_EDITS, JSON.stringify(edits)); } catch (e) {}
+      return { edits };
+    });
+  }
+  imprimir() { window.print(); }
+
+  ajusta() {
+    document.querySelectorAll('[data-cuerpo]').forEach(caja => {
+      const fit = caja.querySelector('[data-fit]');
+      if (!fit) return;
+      fit.style.zoom = '';
+      const disponible = caja.clientHeight;
+      if (!disponible) return;
+      const natural = fit.scrollHeight;
+      if (natural <= disponible + 1) return;
+      let z = Math.max(0.66, (disponible / natural) * 0.985);
+      fit.style.zoom = String(z);
+      let guard = 0;
+      while (caja.scrollHeight > caja.clientHeight + 1 && z > 0.66 && guard++ < 12) {
+        z -= 0.02;
+        fit.style.zoom = String(z);
+      }
+    });
+  }
+  programaAjuste() {
+    clearTimeout(this._fit);
+    this._fit = setTimeout(() => this.ajusta(), 140);
+    [450, 1000].forEach(ms => setTimeout(() => { if (this.state.view === 'estudio') this.ajusta(); }, ms));
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (this.state.view === 'estudio') this.ajusta(); });
+  }
+  componentDidUpdate() {
+    if (this.state.view !== 'estudio') return;
+    this.programaAjuste();
+  }
+
+  bloque(o) {
+    return Object.assign({
+      esH: false, esLead: false, esP: false, esDato: false, esPolos: false, esRefs: false,
+      esArbol: false, esEstructura: false, esAlma: false, esCuentas: false, esCiclos: false, esCita: false,
+      wrap: 'display:flex;flex-direction:column;gap:8px;', texto: '', label: '', valor: '', neg: '', pos: '', items: []
+    }, o);
+  }
+  bH(t) { return this.bloque({ esH: true, texto: t }); }
+  bP(id, t) { return this.bloque({ esP: true, texto: this.txt(id, t), onEdit: this.edit(id) }); }
+  bLead(id, t) { return this.bloque({ esLead: true, texto: this.txt(id, t), onEdit: this.edit(id) }); }
+  bDato(id, label, valor, t) { return this.bloque({ esDato: true, label, valor, texto: this.txt(id, t), onEdit: this.edit(id) }); }
+  bPolos(id, neg, pos) {
+    return this.bloque({
+      esPolos: true, neg: this.txt(id + '.neg', neg), pos: this.txt(id + '.pos', pos),
+      onEditNeg: this.edit(id + '.neg'), onEditPos: this.edit(id + '.pos')
+    });
+  }
+  refItems(F) {
+    if (!F) return [];
+    const items = [];
+    const lee = g => g ? (g.enDiccionario ? (g.titulo + ' ' + recorta(g.texto, 280))
+      : (g.partes.length ? g.partes.map(p => p.n + '. ' + p.titulo + ' ' + recorta(p.texto, 150)).join(' — ') : 'Se lee dividiéndolo de dos en dos.')) : '';
+    const add = (G, pre) => {
+      if (!G) return;
+      if (G.T) items.push({ label: pre + 'Lo que te tensa · T' + G.T, color: '#B0564C', texto: lee(window.KEngine.ficha(G.T)), style: 'border-left:2px solid #C0574C;padding-left:12px;' });
+      if (G.L) items.push({ label: pre + 'Lo que te libera · L' + G.L, color: '#40794F', texto: lee(window.KEngine.ficha(G.L)), style: 'border-left:2px solid #4C8A5A;padding-left:12px;' });
+    };
+    if (F.enDiccionario) add(F, '');
+    else (F.partes || []).forEach(p => add(p, p.n + ' · '));
+    return items;
+  }
+  bRefs(F) {
+    const items = this.refItems(F);
+    return items.length ? this.bloque({ esRefs: true, items }) : this.bloque({});
+  }
+
+  paginas() {
+    const r = this.state.r; if (!r) return [];
+    const nombre = r.nombre.texto;
+    const fecha = r.fecha.dia + ' de ' + ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][r.fecha.mes - 1] + ' de ' + r.fecha.anio;
+    const P = [];
+    const push = (o) => P.push(Object.assign({
+      n: P.length + 1, nombre, fecha, marca: this.marca, esPortada: false, esInterior: true,
+      tieneTitulo: true, kicker: '', titulo: '', seccion: '', bloques: [],
+      fondo: '#FBF8F1', padding: '48px 56px 34px'
+    }, o));
+
+    push({ esPortada: true, esInterior: false, tieneTitulo: false, fondo: '#FBF8F1', padding: '0' });
+
+    push({
+      seccion: 'Bienvenida', kicker: 'Tu mapa de luz', titulo: 'Bienvenida a tu estudio',
+      bloques: [
+        this.bLead('p2.lead', 'Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día y la hora en que naciste, junto con el nombre con el que fuiste nombrada, constituyen una contraseña única de acceso a tu potencial supremo.'),
+        this.bP('p2.a', 'Todo lo que leerás en las siguientes páginas habla de ti: de lo que ya has conquistado, de lo que aún está por despertar y de los aprendizajes que han venido a impulsarte. Léelo con apertura, amor y la certeza de que posees la fuerza para transformar cada aspecto de tu vida.'),
+        this.bH('Un viaje de retorno a tu esencia'),
+        this.bP('p2.b', 'Este estudio es una hoja de ruta para comprender la arquitectura de tu ser. A través de la Kábala desciframos los códigos de tu nacimiento para ofrecerte claridad, sentido y dirección: tus dones, las virtudes y herramientas con las que viniste a habitar el mundo; tus desafíos de evolución, esos bloqueos o patrones repetitivos transformados en tu mayor fuente de sabiduría; y tu propósito, la dirección hacia donde orientar tu energía para vivir en plenitud.'),
+        this.bloque({ esCita: true, texto: 'El estudio de Kábala no adivina tu destino; desvela la luz que ya habita en ti para que aprendas a guiar tu propio camino con conciencia, amor y libertad.' })
+      ]
+    });
+
+    push({
+      seccion: 'Árbol de la Vida', kicker: 'Tus tres energías', titulo: 'Tu Árbol de la Vida',
+      bloques: [
+        this.bP('p3.intro', 'Tu alma elige tres caminos en el árbol de la vida: tres energías que has venido a aprender, a manejar y a comprender. El camino de origen te acompaña desde que naces hasta tu edad de cambio y es lo que sabes de otras vidas. El camino de transformación nace y muere contigo: es tu manera de vivir. El camino de destino es hacia dónde quiere llevarte tu alma.'),
+        this.bloque({ esArbol: true }),
+        this.bDato('p3.edad', 'Edad de cambio', r.caminos.edadCambio, r.turbulencias
+          ? ('A los ' + r.caminos.edadCambio + ' años comienzan diez años de turbulencias en ' + r.turbulencias.lista.map(t => t.tipo.toLowerCase()).join(' y ') + '. No tomarás el camino de destino hasta los ' + (r.caminos.edadCambio + 10) + ' años.')
+          : ('A los ' + r.caminos.edadCambio + ' años se produce el cambio que te lleva a tomar tu camino de destino.'))
+      ]
+    });
+
+    const camDef = [
+      { k: 'origen', c: r.caminos.origen, kicker: 'Sesión 1 · Tus caminos', titulo: 'Tu camino de origen',
+        intro: 'Te habla de esa cualidad que traes de serie: el camino de origen es lo que vienes a recordar y a compartir con otros en esta existencia. En tu caso, desde tu nacimiento hasta los ' + r.caminos.edadCambio + ' años, que es tu edad de cambio.' },
+      { k: 'transformacion', c: r.caminos.transformacion, kicker: 'Sesión 1 · Tus caminos', titulo: 'Tu camino de transformación',
+        intro: 'Nace y muere contigo: es tu manera de vivir. Debes vivir con esta predisposición y actuar como te indique este camino ante cualquier situación o conflicto que se presente en tu vida. Será muy bueno para lograr el éxito.' },
+      { k: 'destino', c: r.caminos.destino, kicker: 'Sesión 1 · Tus caminos', titulo: 'Tu camino de destino',
+        intro: r.caminos.destino.arcano === r.caminos.transformacion.arcano
+          ? 'Una energía nueva que tu alma quiere aprender. En tu caso la continúas desde tu camino de transformación.'
+          : 'Una energía nueva que tu alma quiere aprender. Se alcanza cuando llega el momento del cambio.' }
+    ];
+    camDef.forEach(d => {
+      const carta = d.c.carta || {};
+      const cuerpo = (carta.texto || '').replace(/^[“"][^”"]*[”"]\.?\s*/, '');
+      const bloques = [
+        this.bLead('p.' + d.k + '.intro', d.intro),
+        this.bH(d.c.arcano + ' · ' + (carta.nombre || '') + (carta.lema ? ' — “' + carta.lema + '”' : '')),
+        this.bP('p.' + d.k + '.cuerpo', recorta(cuerpo, this.cupo(1750)))
+      ];
+      if (carta.pareja) bloques.push(this.bloque({ esRefs: true, items: [{ label: 'Este camino en pareja', color: '#B08A2E', texto: carta.pareja, style: 'border-left:2px solid #C9A84C;padding-left:12px;' }] }));
+      push({ seccion: 'Sesión 1 · Caminos', kicker: d.kicker, titulo: d.titulo, bloques });
+    });
+
+    const cor = r.corazon;
+    push({
+      seccion: 'Sesión 1 · Números', kicker: 'El pin de tu alma', titulo: 'Tu número de corazón: ' + cor.valor,
+      bloques: [
+        this.bLead('p7.lead', 'Es el número pin de tu alma, cómo vibras. Sabiendo que los números son vibración, entendemos que nos dan la información de la energía que generamos y el tipo de aprendizaje con los demás.'),
+        this.bPolos('p7.polos', cor.lectura.negativo, cor.lectura.positivo),
+        this.bH(cor.ficha && cor.ficha.enDiccionario ? ('Número ' + cor.valor + ' · ' + cor.ficha.titulo) : ('En Kábala los números de tres cifras se dividen de dos en dos: ' + (cor.ficha ? cor.ficha.partes.map(p => p.n).join(' y ') : ''))),
+        this.bP('p7.cuerpo', cor.ficha && cor.ficha.enDiccionario ? cor.ficha.texto
+          : (cor.ficha ? cor.ficha.partes.map(p => p.n + '. ' + p.titulo + ' ' + p.texto).join('\n\n') : '')),
+        this.bRefs(cor.ficha)
+      ]
+    });
+
+    push({
+      seccion: 'Sesión 1 · Números', kicker: 'Tus valores y tu expresión', titulo: 'Esencia, ego y días de fuerza',
+      bloques: [
+        this.bDato('p8.esencia', 'Esencia', r.esencia.valor, (r.esencia.ficha && r.esencia.ficha.enDiccionario ? (r.esencia.ficha.titulo + ' ' + recorta(r.esencia.ficha.texto, 460)) : 'Este número habla de tus valores internos, de los más profundos.')),
+        this.bRefs(r.esencia.ficha),
+        this.bDato('p8.ego', 'Ego', r.ego.valor, (r.ego.ficha && r.ego.ficha.enDiccionario ? (r.ego.ficha.titulo + ' ' + recorta(r.ego.ficha.texto, 420)) : ('Habla de la conexión que tienes con las personas. Se lee de dos en dos: ' + (r.ego.ficha ? r.ego.ficha.partes.map(p => p.n + '. ' + p.titulo).join(' · ') : '')))),
+        this.bDato('p8.dias', 'Fuerza', r.diasFuerza.dias.join(' · '), 'Van del más fuerte al menos fuerte. Aprovecha el día ' + r.diasFuerza.dias[0] + ' del mes para firmas y temas relevantes en tu vida; después, el resto de días que suman ' + r.diasFuerza.base + '.')
+      ]
+    });
+
+    push({
+      seccion: 'Sesión 2 · Aprendizajes', kicker: 'Sesión 2 · Tus aprendizajes', titulo: 'Tu estructura energética: número ' + r.estructura.tipo,
+      bloques: [
+        this.bP('p9.tipo', (r.tipoEstructura && r.tipoEstructura.texto) || ''),
+        this.bPolos('p9.polos', (r.tipoEstructura && r.tipoEstructura.negativo) || '', (r.tipoEstructura && r.tipoEstructura.positivo) || ''),
+        this.bloque({ esEstructura: true })
+      ]
+    });
+
+    const aps = r.aprendizajes;
+    const mitad = Math.ceil(aps.length / 2) || 1;
+    [[0, mitad, 'I'], [mitad, aps.length, 'II']].forEach(([a, b, num]) => {
+      const trozo = aps.slice(a, b);
+      const presupuesto = Math.max(300, Math.floor(this.cupo(1250) / Math.max(1, trozo.length)));
+      const bloques = [];
+      if (!trozo.length) bloques.push(this.bP('p10.vacio.' + num, 'Tu alma no ha marcado más aprendizajes en esta encarnación.'));
+      trozo.forEach(ap => {
+        bloques.push(this.bH('Aprendizaje ' + ap.portal + (ap.veces > 1 ? ' (×' + ap.veces + ')' : '') + ' · ' + ((ap.tarea && ap.tarea.nombre) || '') + ' — viene del número ' + ap.numero));
+        bloques.push(this.bP('p.ap.' + ap.portal, recorta((ap.tarea && ap.tarea.texto) || '', presupuesto)));
+        bloques.push(this.bloque({
+          esRefs: true, items: [
+            { label: 'Hilo rojo', color: '#8E3A83', texto: recorta((ap.tarea && ap.tarea.hiloRojo) || '', 190), style: 'border-left:2px solid #A8449B;padding-left:12px;' },
+            { label: 'Principio sanador', color: '#40794F', texto: recorta((ap.tarea && ap.tarea.sanador) || '', 190), style: 'border-left:2px solid #4C8A5A;padding-left:12px;' }
+          ].concat(this.refItems(ap.ficha).map(i => Object.assign({}, i, { texto: recorta(i.texto, 190) })))
+        }));
+      });
+      push({ seccion: 'Sesión 2 · Aprendizajes', kicker: 'Sesión 2 · Tus aprendizajes', titulo: 'Tus aprendizajes · ' + num, bloques });
+    });
+
+    const enf = aps.filter(a => a.enfermedades && (a.enfermedades.psico || a.enfermedades.nota));
+    push({
+      seccion: 'Sesión 2 · Somatizaciones', kicker: 'Cuerpo y emoción', titulo: 'Enfermedades y debilidades',
+      bloques: [
+        this.bLead('p12.lead', 'Si no llevas a cabo estos aprendizajes, la energía no trabajada se somatiza. Conocer dónde se manifiesta te permite anticiparte y trabajarlo desde la conciencia.'),
+        this.bloque({
+          esRefs: true, items: enf.map(a => ({
+            label: 'Punto ' + a.portal + ' · ' + ((a.tarea && a.tarea.nombre) || ''), color: '#B0564C',
+            texto: a.enfermedades.nota ? a.enfermedades.nota
+              : ('Disfunciones psicológicas: ' + a.enfermedades.psico + ' Órganos: ' + a.enfermedades.organos + ' Disfunciones físicas: ' + a.enfermedades.fisicas),
+            style: 'border-left:2px solid #C0574C;padding-left:12px;'
+          }))
+        }),
+        this.bH('Ejes y planos de tensión'),
+        this.bloque({ esRefs: true, items: this.tensionesResumen(true) })
+      ]
+    });
+
+    push({
+      seccion: 'Sesión 3 · Imagen del alma', kicker: 'Sesión 3 · La imagen del alma', titulo: 'Tus bloqueos y tus ayudas',
+      bloques: [
+        this.bLead('p13.lead', 'Te da información de todos los procesos kármicos que te impiden crecer y avanzar. Es una mochila cargada de rutinas heredadas, patrones familiares y maneras de actuar de otras vidas que estás repitiendo en esta. Al conocerla vas a quitarle peso.'),
+        this.bloque({ esAlma: true }),
+        this.bP('p13.cierre', 'Los bloqueos se repiten una y otra vez hasta que seas consciente de ellos. Se trata de tomar conciencia primero y después trabajarlos poco a poco, hasta que te des cuenta de que cada vez se hacen más pequeños y te influyen menos en tu vida presente.' + (r.imagenAlma.proyeccion ? ' El 0 cae en la casilla ' + r.imagenAlma.proyeccion + ': eso es lo que proyectas de cara a los demás.' : ''))
+      ]
+    });
+
+    push({
+      seccion: 'Cierre', kicker: 'Cuentas abiertas y ciclos', titulo: 'Tu karma y tus ciclos de vida',
+      bloques: [
+        this.bLead('p14.lead', 'Las cuentas abiertas son la base del sentimiento de culpa, donde tu alma siente que más ha fallado: situaciones no resueltas que continúas cargando. Cada potencial arcaico te ayuda a cerrar la cuenta abierta de su fila.'),
+        this.bloque({ esCuentas: true }),
+        this.bH('Tus ciclos vitales'),
+        this.bloque({ esCiclos: true }),
+        this.bloque({ esCita: true, texto: 'Que este mapa te acompañe. La luz que buscas ya habita en ti.' })
+      ]
+    });
+
+    return P;
+  }
+
+  tensionesResumen(soloActivas) {
+    const r = this.state.r; if (!r) return [];
+    let lista = [].concat(
+      r.ejes.map(e => ({ n: 'Eje ' + e.eje.a + '–' + e.eje.b + ' · ' + e.eje.nombre, activo: e.activo })),
+      r.planosTension.map(p => ({ n: 'Plano ' + p.plano.a + '–' + p.plano.b + ' · ' + p.plano.nombre, activo: p.activo }))
+    );
+    if (soloActivas) {
+      const activas = lista.filter(t => t.activo);
+      if (!activas.length) return [{ label: 'Sin ejes ni planos en tensión', color: '#40794F', texto: 'No tienes aprendizaje en los dos extremos de ningún eje ni plano: no hay tensión estructural añadida.', style: 'border-left:2px solid #4C8A5A;padding-left:12px;' }];
+      lista = activas;
+    }
+    return lista.map(t => ({
+      label: t.n, color: t.activo ? '#B0564C' : '#9B93A8',
+      texto: t.activo ? 'En tensión: tienes aprendizaje en los dos extremos. Sin trabajarlo puede tensionarte muscular y emocionalmente.' : 'Libre.',
+      style: 'border-left:2px solid ' + (t.activo ? '#C0574C' : 'rgba(201,168,76,.4)') + ';padding-left:12px;'
+    }));
+  }
+
+  estudioVals() {
+    const S = this.state, r = S.r;
+    if (!r || S.view !== 'estudio') return { esEstudio: false, paginas: [] };
+    const pv = this._pv || {};
+    return {
+      esEstudio: true,
+      paginas: this.paginas(),
+      restablecer: () => this.restablecer(),
+      imprimir: () => this.imprimir(),
+      senderosDoc: pv.senderos ? pv.senderos.map(s => Object.assign({}, s, { color: s.w > 2 ? s.color : '#B9B2C4' })) : [],
+      caminosDoc: [
+        { k: 'origen', c: r.caminos.origen, etapa: 'Origen', rango: '0 – ' + r.caminos.edadCambio + ' años' },
+        { k: 'transformacion', c: r.caminos.transformacion, etapa: 'Transformación', rango: 'toda la vida' },
+        { k: 'destino', c: r.caminos.destino, etapa: 'Destino', rango: 'desde los ' + (r.turbulencias ? r.caminos.edadCambio + 10 : r.caminos.edadCambio) }
+      ].map(d => ({
+        etapa: d.etapa, rango: d.rango, arcano: d.c.arcano,
+        nombre: (d.c.carta && d.c.carta.nombre) || '', lema: (d.c.carta && d.c.carta.lema) || '',
+        color: COL[d.k], style: 'border-left:3px solid ' + COL[d.k] + ';padding-left:12px;'
+      })),
+      portalesDoc: (pv.portales || []).map(p => Object.assign({}, p, {
+        fill: p.fill === 'rgba(232,185,60,.85)' ? '#E5B63C' : '#F3EFE6',
+        stroke: p.sw === 3 ? '#3E77C4' : 'rgba(201,168,76,.5)',
+        tcolor: p.tcolor === '#1A1508' ? '#241F2E' : '#9B93A8'
+      })),
+      tensionesDoc: this.tensionesResumen().map(t => ({
+        label: t.label, estado: t.texto.indexOf('En tensión') === 0 ? 'en tensión' : 'libre',
+        style: 'font-family:\'Karla\',sans-serif;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:2px;color:' +
+          (t.color === '#B0564C' ? '#8E3A2F' : '#6B6478') + ';background:' + (t.color === '#B0564C' ? 'rgba(192,87,76,.1)' : 'rgba(201,168,76,.07)') + ';'
+      })),
+      filasAlmaDoc: (pv.filasAlma || []).map(f => ({
+        label: f.label, celdas: f.celdas.map(c => Object.assign({}, c, {
+          style: c.style.replace('rgba(226,87,76,.09)', 'rgba(192,87,76,.12)').replace('rgba(255,255,255,.02)', '#F3EFE6').replace('rgba(201,168,76,.16)', 'rgba(201,168,76,.4)'),
+          bStyle: c.bStyle.replace('#E2574C', '#B0342A'), aStyle: c.aStyle.replace('#6FAE7C', '#3E7A4E')
+        }))
+      })),
+      celda10Doc: pv.celda10 ? Object.assign({}, pv.celda10, {
+        style: pv.celda10.style.replace('rgba(226,87,76,.09)', 'rgba(192,87,76,.12)').replace('rgba(255,255,255,.02)', '#F3EFE6').replace('rgba(201,168,76,.16)', 'rgba(201,168,76,.4)') + 'width:76px;',
+        bStyle: pv.celda10.bStyle.replace('#E2574C', '#B0342A'), aStyle: pv.celda10.aStyle.replace('#6FAE7C', '#3E7A4E')
+      }) : {},
+      bloqueosDoc: (pv.bloqueos || []).map(b => ({ casilla: b.casilla, intensidad: b.intensidad, nombre: b.nombre, numero: b.numero, extracto: recorta(b.extracto, 240) })),
+      tablaCuentasDoc: (pv.tablaCuentas || []).map(c => ({
+        v: c.v, style: c.style.replace(/#7E7461/g, '#9B93A8').replace(/#D8CDB2/g, '#37323F').replace(/#F2E6C6/g, '#241F2E')
+          .replace(/rgba\(255,255,255,\.02\)/g, '#F3EFE6').replace(/rgba\(201,168,76,\.1\)/g, 'rgba(201,168,76,.22)')
+          .replace(/rgba\(201,168,76,\.12\)/g, 'rgba(201,168,76,.35)').replace('font-size:19px', 'font-size:16px').replace('padding:11px 0', 'padding:8px 0')
+      })),
+      karmaDoc: [
+        { label: 'Nº kármico de las relaciones', valor: r.cuentas.karmico },
+        { label: 'Nº del lema de vida', valor: r.cuentas.lemaDeVida },
+        { label: 'Nº de efecto sanador', valor: r.vibraciones.efectoSanador },
+        { label: 'Nº de afinidad', valor: r.afinidad.diaMes + ' · ' + r.afinidad.mesAnio },
+        { label: 'Vibración cuerpo / alma / espíritu', valor: r.vibraciones.cuerpo + ' · ' + r.vibraciones.alma + ' · ' + r.vibraciones.espiritu }
+      ],
+      ciclosDoc: (pv.ciclosVitales || []).map(c => ({ nombre: c.nombre, numero: c.numero, rango: c.rango, texto: recorta(c.texto, 230) }))
+    };
+  }
+
+  comparar() {
+    const p = this.state.p;
+    if (this.valida(p) || !this.state.r) return;
+    const pr = window.KEngine.calcula(this.entrada(p));
+    this.setState({ pr, comp: window.KEngine.comparaPareja(this.state.r, pr) });
+  }
+
+  parejaVals() {
+    const S = this.state, r = S.r;
+    if (S.view !== 'pareja' || !r) return { esPareja: false, hayComparativa: false, comparativa: [] };
+    const errP = this.valida(S.p);
+    const listo = !errP;
+    const K = window.KDATA.parejas || {};
+    const base = {
+      esPareja: true,
+      qNombre: S.p.nombre, qAp1: S.p.ap1, qAp2: S.p.ap2, qDia: S.p.dia, qMes: S.p.mes, qAnio: S.p.anio,
+      setQNombre: e => this.setP('nombre', e.target.value),
+      setQAp1: e => this.setP('ap1', e.target.value),
+      setQAp2: e => this.setP('ap2', e.target.value),
+      setQDia: e => this.setP('dia', e.target.value.replace(/\D/g, '').slice(0, 2)),
+      setQMes: e => this.setP('mes', e.target.value.replace(/\D/g, '').slice(0, 2)),
+      setQAnio: e => this.setP('anio', e.target.value.replace(/\D/g, '').slice(0, 4)),
+      comparar: () => this.comparar(),
+      btnComparar: 'margin-top:20px;padding:12px 34px;border-radius:3px;cursor:' + (listo ? 'pointer' : 'not-allowed') +
+        ';font-family:\'Cinzel\',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;border:1px solid ' +
+        (listo ? '#C9A84C' : 'rgba(201,168,76,.22)') + ';background:' + (listo ? 'linear-gradient(140deg,#2A2210,#3A3018)' : 'rgba(255,255,255,.02)') +
+        ';color:' + (listo ? '#F2E6C6' : '#5C564A') + ';',
+      hayComparativa: false, comparativa: []
+    };
+    if (!S.comp || !S.pr) return base;
+    const c = S.comp, b = S.pr;
+
+    const items = [];
+    const seccion = (titulo, its) => its.length ? { titulo, items: its } : null;
+
+    const caminos = [{ clave: 'Arcano ' + c.caminoConjunto, texto: ((c.cartaConjunta && c.cartaConjunta.nombre) || '') + '. ' + ((c.cartaConjunta && c.cartaConjunta.pareja) || '') }];
+    [['Origen', r.caminos.origen, b.caminos.origen], ['Transformación', r.caminos.transformacion, b.caminos.transformacion], ['Destino', r.caminos.destino, b.caminos.destino]].forEach(([et, x, y]) => {
+      caminos.push({ clave: et, texto: (x.carta && x.carta.nombre) + ' (' + x.arcano + ') · ' + (y.carta && y.carta.nombre) + ' (' + y.arcano + ')' + (x.arcano === y.arcano ? ' — mismo camino: gran comprensión mutua en este plano.' : '') });
+    });
+
+    const estr = [{ clave: r.estructura.tipo + ' · ' + b.estructura.tipo, texto: c.textoEstructura }];
+    c.portalesComunes.forEach(p => estr.push({ clave: 'Portal ' + p, texto: (K.portales || {})[p] || '' }));
+    if (c.portalesComunes.indexOf(1) >= 0 && c.portalesComunes.indexOf(7) >= 0) estr.push({ clave: 'Portal 1 + 7', texto: (K.combinaciones || {})['1+7'] });
+
+    const planos = c.planosComunes.map(p => ({ clave: 'Plano ' + p, texto: (K.planos || {})[p] || 'Bloqueo compartido en el plano ' + p + '.' }));
+
+    const cuentas = [];
+    const vistos = {};
+    (c.coincidencias || []).forEach(x => {
+      const k = x.tipo + x.valor; if (vistos[k]) return; vistos[k] = 1;
+      cuentas.push({ clave: x.valor, texto: x.texto });
+    });
+    if (c.afinidadIgual) cuentas.push({ clave: 'Afinidad', texto: (K.cuentas || {}).afinidad || '' });
+
+    const secciones = [
+      seccion('Caminos', caminos),
+      seccion('Estructura energética y portales', estr),
+      seccion('Imagen del alma · planos compartidos', planos),
+      seccion('Cuentas abiertas y afinidad', cuentas.length ? cuentas : [{ clave: '—', texto: 'No hay coincidencias en cuentas abiertas, potenciales arcaicos ni números de afinidad.' }])
+    ].filter(Boolean);
+
+    return Object.assign(base, {
+      hayComparativa: true,
+      nombreA: r.nombre.texto, corazonA: r.corazon.valor, estructuraA: r.estructura.tipo,
+      nombreB: b.nombre.texto, corazonB: b.corazon.valor, estructuraB: b.estructura.tipo,
+      caminoConjunto: c.caminoConjunto, cartaConjunta: (c.cartaConjunta && c.cartaConjunta.nombre) || '',
+      comparativa: secciones
+    });
+  }
+
+  renderVals() {
+    const S = this.state;
+    const pv = this.panelVals();
+    this._pv = pv;
+    const E = window.KEngine;
+    const n = this.previa();
+
+    const tabDef = [
+      { k: 'inicio', label: 'Consulta' },
+      { k: 'panel', label: 'Panel' },
+      { k: 'estudio', label: 'Estudio' },
+      { k: 'pareja', label: 'Pareja' }
+    ];
+    const tabs = tabDef.map(t => {
+      const on = S.view === t.k;
+      const bloqueado = t.k !== 'inicio' && !S.r;
+      return {
+        label: t.label,
+        go: () => { if (!bloqueado) this.setState({ view: t.k }); },
+        style: 'padding:9px 17px;border-radius:3px;cursor:' + (bloqueado ? 'not-allowed' : 'pointer') +
+          ';font-size:11px;letter-spacing:.19em;text-transform:uppercase;border:1px solid ' +
+          (on ? 'rgba(201,168,76,.55)' : 'transparent') + ';background:' +
+          (on ? 'rgba(201,168,76,.12)' : 'transparent') + ';color:' +
+          (on ? '#E9CE84' : (bloqueado ? '#4E4A42' : '#948872')) + ';transition:all .22s;'
+      };
+    });
+
+    const vistaLetras = (n.palabras || []).map(w => ({
+      palabra: w.palabra, total: w.total,
+      letras: (w.letras || []).map(l => ({
+        g: l.g, v: l.v,
+        style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:26px;padding:5px 4px;border-radius:2px;border:1px solid ' +
+          (E && E.esVocal(l.g) ? 'rgba(232,185,60,.42)' : 'rgba(201,168,76,.14)') + ';background:' +
+          (E && E.esVocal(l.g) ? 'rgba(232,185,60,.11)' : 'rgba(255,255,255,.025)') + ';color:' +
+          (E && E.esVocal(l.g) ? '#EFD79A' : '#B9AE94') + ';'
+      }))
+    }));
+
+    const err = this.valida(S.f);
+    const listo = S.ready && !err;
+
+    let ev = { esEstudio: false, paginas: [] };
+    try { ev = this.estudioVals(); } catch (err) { window.__estErr = (err && err.stack) || String(err); }
+    return Object.assign({}, pv, this.detalleVals(), ev, this.parejaVals(), {
+      cerrarDetalle: () => this.cerrarDetalle(),
+      stop: e => e.stopPropagation(),
+      esInicio: S.view === 'inicio',
+      tabs,
+      fNombre: S.f.nombre, fAp1: S.f.ap1, fAp2: S.f.ap2,
+      fDia: S.f.dia, fMes: S.f.mes, fAnio: S.f.anio,
+      setNombre: e => this.set('nombre', e.target.value),
+      setAp1: e => this.set('ap1', e.target.value),
+      setAp2: e => this.set('ap2', e.target.value),
+      setDia: e => this.set('dia', e.target.value.replace(/\D/g, '').slice(0, 2)),
+      setMes: e => this.set('mes', e.target.value.replace(/\D/g, '').slice(0, 2)),
+      setAnio: e => this.set('anio', e.target.value.replace(/\D/g, '').slice(0, 4)),
+      calcular: () => this.calcular(),
+      btnCalcular: 'width:100%;margin-top:26px;padding:14px 0;border-radius:3px;cursor:' + (listo ? 'pointer' : 'not-allowed') +
+        ';font-family:\'Cinzel\',serif;font-size:12px;letter-spacing:.28em;text-transform:uppercase;border:1px solid ' +
+        (listo ? '#C9A84C' : 'rgba(201,168,76,.22)') + ';background:' +
+        (listo ? 'linear-gradient(140deg,#2A2210,#3A3018)' : 'rgba(255,255,255,.02)') + ';color:' +
+        (listo ? '#F2E6C6' : '#5C564A') + ';transition:all .25s;',
+      avisoForm: err || 'Se usa el nombre inscrito en el Registro Civil, sin diminutivos.',
+      vistaTotal: n.total || 0, vistaEsencia: n.esencia || 0, vistaEgo: n.ego || 0,
+      vistaLetras,
+      historial: S.hist.map(h => ({
+        nombre: h.nombre, fecha: h.fecha, corazon: h.corazon,
+        abrir: () => this.abrir(h), borrar: () => this.borrar(h)
+      })),
+      avisoHistorial: S.hist.length ? '' : 'Todavía no hay estudios guardados.'
+    });
+  }
+}
+
+</script>
+</body>
+</html>
