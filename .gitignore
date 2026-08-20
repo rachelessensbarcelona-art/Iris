@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Material de origen no versionado: manuales del curso en PDF, estudios
+# personales de alumnas e imágenes. Contienen datos personales de terceros
+# y no hacen falta para ejecutar la app — el contenido que la plataforma
+# necesita ya está extraído en src/data/kdata.json.
+/project/uploads/
