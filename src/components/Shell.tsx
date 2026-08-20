@@ -19,6 +19,7 @@ export default function Shell() {
 
   return (
     <div
+      data-app-root=""
       style={css(
         "min-height:100vh;background:#08090F;background-image:radial-gradient(900px 500px at 12% -8%, rgba(201,168,76,.10), transparent 65%),radial-gradient(760px 460px at 92% 4%, rgba(76,143,224,.09), transparent 62%);color:#E8E0CE;font-family:'Karla',system-ui,sans-serif;"
       )}

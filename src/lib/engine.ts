@@ -440,7 +440,12 @@ function turbulencias(f: Fecha, edadCambio: number): Turbulencias {
 }
 
 function diasDeFuerza(totalNombre: number): { base: number; dias: number[] } {
-  const base = reduceOnce(totalNombre);
+  // El número base tiene que quedar reducido a una sola cifra. Con una única
+  // pasada de suma, un corazón como 179 daba 17, y ningún día del mes suma
+  // 17 (el máximo es 29 → 11): la lista salía vacía y el estudio imprimía
+  // "el día undefined". Los ejemplos de los manuales no cambian, porque su
+  // primera pasada ya daba una cifra (223 → 7, 242 → 8).
+  const base = reduceTo(totalNombre, 9);
   const dias: number[] = [];
   for (let d = 1; d <= 31; d++) if (sumDigits(d) === base) dias.push(d);
   return { base, dias };

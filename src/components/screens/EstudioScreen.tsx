@@ -15,7 +15,7 @@ export default function EstudioScreen() {
   const imprimir = () => window.print();
 
   return (
-    <div style={css("padding:0 0 40px;")}>
+    <div className={styles.wrap}>
       <div data-chrome="1" className={styles.toolbar}>
         <span style={css("font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#8A7F68;")}>Estudio · {capitulos.length} capítulos</span>
         <span className={styles.hint} style={css("font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#6E6555;")}>
@@ -48,8 +48,13 @@ export default function EstudioScreen() {
           <div style={css("font-family:'Cormorant Garamond',serif;font-size:21px;font-style:italic;color:#7A7288;margin-top:14px;")}>{fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio)}</div>
         </section>
 
-        {capitulos.map((cap) => (
-          <section key={cap.id} className={`${styles.page} ${styles.interior}`}>
+        {capitulos.map((cap, i) => {
+          // En papel, solo abre hoja nueva el capítulo que estrena sección.
+          // Los que continúan una sección ya abierta fluyen a continuación,
+          // que es lo que evita las páginas con cuatro líneas sueltas.
+          const abreSeccion = i === 0 || cap.seccion !== capitulos[i - 1].seccion;
+          return (
+          <section key={cap.id} className={`${styles.page} ${styles.interior} ${abreSeccion ? styles.abreSeccion : styles.continua}`}>
             <header className={styles.header}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.jpeg" alt="" style={css("width:26px;height:26px;border-radius:50%;object-fit:cover;")} />
@@ -72,7 +77,8 @@ export default function EstudioScreen() {
               <span style={css("margin-left:auto;")}>{marca}</span>
             </footer>
           </section>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

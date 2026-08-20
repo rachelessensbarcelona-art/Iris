@@ -1,3 +1,6 @@
+.wrap {
+  padding: 0 0 40px;
+}
 .desk {
   background: #f5f5f4;
   padding: 40px 20px 90px;
@@ -144,6 +147,19 @@
 }
 
 @media print {
+  /* Un relleno sobrante al final del documento basta para colar una hoja
+   * de más, en blanco. */
+  .wrap {
+    padding: 0 !important;
+  }
+  /* En pantalla cada capítulo es una tarjeta y el pie la cierra bien. En
+   * papel, en cambio, si el capítulo se pasa aunque sea una línea de la
+   * hoja, el pie cae solo a la siguiente y deja una página casi vacía.
+   * Los capítulos ya van separados por salto de página, así que en
+   * impresión el pie no aporta nada. */
+  .footer {
+    display: none;
+  }
   /* Sin esto los navegadores descartan los fondos al imprimir: el papel
    * saldría blanco en vez de crema y las casillas sombreadas de la imagen
    * del alma y de las cuentas abiertas perderían el color, que es
@@ -169,6 +185,25 @@
   }
   .page + .page {
     break-before: page;
+  }
+  /* Un capítulo que continúa la sección anterior fluye detrás en la misma
+   * hoja en lugar de estrenar una: así no quedan páginas con cuatro líneas.
+   * Mantiene su título como separador, pero deja la franja de cabecera para
+   * el capítulo que sí abre sección — repetirla a media hoja parecería un
+   * encabezado de página fuera de sitio. */
+  .continua {
+    break-before: auto !important;
+    padding-top: 0 !important;
+  }
+  .continua .header {
+    display: none;
+  }
+  .continua .cuerpo {
+    margin-top: 26px;
+  }
+  /* Un título no debe quedarse solo al pie de una hoja. */
+  .cuerpo h2 {
+    break-after: avoid;
   }
   .portada {
     aspect-ratio: auto;

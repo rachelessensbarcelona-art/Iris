@@ -128,4 +128,16 @@ input:focus {
   body {
     background: #fff !important;
   }
+  /* El contenedor de la app pinta el fondo oscuro de la interfaz. En papel
+   * tiene que desaparecer: si no, con "Gráficos de fondo" activado tiñe de
+   * negro toda la hoja allí donde no la tapa una página del estudio.
+   * Lleva !important porque el fondo va en un estilo en línea.
+   * Y min-height:100vh se mide contra la ventana, no contra el papel, así
+   * que en impresión puede estirar la caja y colar hojas de más. */
+  [data-app-root] {
+    background: #fff !important;
+    background-image: none !important;
+    min-height: 0 !important;
+    color: #282430 !important;
+  }
 }
