@@ -3,6 +3,7 @@ import { css } from "@/lib/css";
 import type { Bloque } from "@/lib/estudio";
 import type { Resultado } from "@/lib/engine";
 import { DocArbol, DocEstructura, DocAlma, DocCuentas, DocCiclos } from "./DocDiagramas";
+import styles from "./Estudio.module.css";
 
 export default function BloqueView({
   b,
@@ -56,7 +57,7 @@ export default function BloqueView({
       );
     case "polos":
       return (
-        <div style={css("display:grid;grid-template-columns:1fr 1fr;gap:16px;")}>
+        <div className={styles.duo}>
           <div style={css("border-left:2px solid #C0574C;padding-left:12px;")}>
             <div style={css("font-family:'Karla',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#B0564C;margin-bottom:3px;")}>En negativo</div>
             <p contentEditable suppressContentEditableWarning onBlur={onBlur(b.editIdNeg)} style={css("font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#413B4B;margin:0;")}>

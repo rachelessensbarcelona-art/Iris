@@ -1,8 +1,13 @@
+import type { CSSProperties } from "react";
 import { css } from "@/lib/css";
 import type { Resultado } from "@/lib/engine";
 import { KDATA } from "@/lib/kdata";
 import { arbolGeometria } from "@/lib/arbol";
 import { COL } from "@/lib/tree";
+import styles from "./Estudio.module.css";
+
+/** Ancho de la primera columna de una maqueta .split (ver Estudio.module.css). */
+const col1 = (w: string) => ({ "--doc-col1": w }) as CSSProperties;
 
 /** Versiones "documento" (fondo claro, sin animación) de los diagramas del panel. */
 
@@ -14,7 +19,7 @@ export function DocArbol({ r }: { r: Resultado }) {
     { k: "destino" as const, c: r.caminos.destino, etapa: "Destino", rango: "desde los " + (r.turbulencias ? r.caminos.edadCambio + 10 : r.caminos.edadCambio) },
   ];
   return (
-    <div style={css("display:grid;grid-template-columns:210px 1fr;gap:22px;align-items:center;")}>
+    <div className={styles.split} style={col1("210px")}>
       <svg viewBox="0 0 380 660" style={css("width:100%;height:auto;")}>
         {senderos.map((s, i) => (
           <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={s.w > 2 ? s.color : "#B9B2C4"} strokeWidth={s.w} strokeOpacity={s.o} strokeLinecap="round" />
@@ -73,7 +78,7 @@ export function DocEstructura({ r }: { r: Resultado }) {
     .concat(r.planosTension.map((p) => ({ nombre: p.plano.nombre, a: p.plano.a, b: p.plano.b, activo: p.activo, tipo: "Plano" })));
 
   return (
-    <div style={css("display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center;")}>
+    <div className={styles.split} style={col1("220px")}>
       <svg viewBox="0 0 340 340" style={css("width:100%;height:auto;")}>
         <circle cx={170} cy={170} r={118} fill="none" stroke="rgba(201,168,76,.35)" strokeWidth={1} />
         {portales.map((p, i) => (
@@ -136,7 +141,7 @@ export function DocAlma({ r }: { r: Resultado }) {
   ];
   const celda10 = c(10);
   return (
-    <div style={css("display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:center;")}>
+    <div className={styles.split} style={col1("230px")}>
       <div>
         <div style={css("display:flex;justify-content:center;margin-bottom:7px;")}>
           <div style={css(celda10.style + "width:76px;")}>
@@ -188,7 +193,7 @@ export function DocCuentas({ r }: { r: Resultado }) {
     { label: "Vibración cuerpo / alma / espíritu", valor: r.vibraciones.cuerpo + " · " + r.vibraciones.alma + " · " + r.vibraciones.espiritu },
   ];
   return (
-    <div style={css("display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;")}>
+    <div className={styles.duo}>
       <div style={css("display:grid;grid-template-columns:20px 1fr 1fr 1fr 1fr;gap:5px;")}>
         {tabla.map((cell, i) => (
           <div key={i} style={css(cell.style)}>

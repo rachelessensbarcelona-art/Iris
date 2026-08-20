@@ -16,14 +16,11 @@ export default function EstudioScreen() {
 
   return (
     <div style={css("padding:0 0 40px;")}>
-      <div
-        data-chrome="1"
-        style={css(
-          "position:sticky;top:71px;z-index:30;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px clamp(14px,3vw,28px);background:rgba(8,9,15,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.14);"
-        )}
-      >
+      <div data-chrome="1" className={styles.toolbar}>
         <span style={css("font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#8A7F68;")}>Estudio · {capitulos.length} capítulos</span>
-        <span style={css("font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#6E6555;")}>Haz clic en cualquier párrafo para reescribirlo con tus palabras.</span>
+        <span className={styles.hint} style={css("font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#6E6555;")}>
+          Haz clic en cualquier párrafo para reescribirlo con tus palabras.
+        </span>
         <div style={css("margin-left:auto;display:flex;gap:9px;")}>
           <button
             onClick={restablecer}
