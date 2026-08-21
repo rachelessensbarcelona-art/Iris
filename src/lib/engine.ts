@@ -311,6 +311,8 @@ export type Cuentas = {
   karmico: number;
   lemaDeVida: number;
   tensionKarmico: number;
+  /** false si el kármico no figura en los apuntes y hubo que calcularlo. */
+  lemaEnApuntes: boolean;
 };
 function cuentasAbiertas(f: Fecha): Cuentas {
   const anioCorto = String(f.anio).slice(2);
@@ -334,9 +336,22 @@ function cuentasAbiertas(f: Fecha): Cuentas {
     potenciales,
     cuentas: [E.total, A.total, C.total],
     karmico,
-    lemaDeVida: karmico + tensionDe(karmico),
-    tensionKarmico: tensionDe(karmico),
+    ...lemaDe(karmico),
   };
+}
+
+/**
+ * Lema de vida: el número de liberación del kármico tal y como figura en los
+ * apuntes, no el que sale de aplicar la regla de tensión cifra a cifra. Para
+ * números sin ceros las dos vías coinciden (91 → 137, 81 → 117), pero con un
+ * 0 de por medio no: los apuntes dan 102 → 159, y la regla daría 759, porque
+ * los ejes de tensión (§31) no definen pareja para el 0.
+ */
+function lemaDe(karmico: number): { lemaDeVida: number; tensionKarmico: number; lemaEnApuntes: boolean } {
+  const f = ficha(karmico);
+  const enApuntes = !!f && f.enDiccionario && f.L !== null && f.L !== undefined;
+  const lemaDeVida = enApuntes ? (f!.L as number) : liberacionDe(karmico);
+  return { lemaDeVida, tensionKarmico: lemaDeVida - karmico, lemaEnApuntes: enApuntes };
 }
 
 export type Vibraciones = { cuerpo: number; alma: number; espiritu: number; efectoSanador: number };

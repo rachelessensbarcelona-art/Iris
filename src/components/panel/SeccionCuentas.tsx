@@ -2,11 +2,7 @@
 import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
-import { tensionDe } from "@/lib/engine";
 import Desglose, { type Paso } from "../Desglose";
-
-/** Ejes de tensión del manual §31: 1-6, 2-7, 3-8, 4-9, 5-10. */
-const PARES: Record<string, string> = { "1": "6", "6": "1", "2": "7", "7": "2", "3": "8", "8": "3", "4": "9", "9": "4", "5": "0", "0": "5" };
 
 const TH = "font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;display:flex;align-items:center;justify-content:center;padding:6px 0;";
 const TD = "font-family:'Cinzel',serif;font-size:19px;color:#D8CDB2;display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid rgba(201,168,76,.12);border-radius:3px;background:rgba(255,255,255,.02);";
@@ -26,19 +22,20 @@ export default function SeccionCuentas() {
   ];
 
   // De dónde sale cada número de esta pantalla (manual §29 a §35).
-  const T = tensionDe(c.karmico);
-  const mapa = String(c.karmico)
-    .split("")
-    .map((d, i, arr) => `${d}→${i === 0 && d === "5" ? "10" : PARES[d] ?? d}${i < arr.length - 1 ? "" : ""}`)
-    .join(" · ");
   const pasos: Paso[] = [
     { etiqueta: "Fila espíritu", operacion: `${c.espiritu.dia} + ${c.espiritu.mes} + ${c.espiritu.anio}`, resultado: c.espiritu.total },
     { etiqueta: "Fila alma", operacion: `${c.alma.dia} + ${c.alma.mes} + ${c.alma.anio}`, resultado: c.alma.total },
     { etiqueta: "Fila materia", operacion: `${c.cuerpo.dia} + ${c.cuerpo.mes} + ${c.cuerpo.anio}`, resultado: c.cuerpo.total },
     { etiqueta: "Potenciales", operacion: "suma de cada columna", resultado: c.potenciales.join(" · ") },
     { etiqueta: "Nº kármico", operacion: `${c.espiritu.total} + ${c.alma.total} + ${c.cuerpo.total}`, resultado: c.karmico, final: true },
-    { etiqueta: "Su tensión", operacion: mapa, resultado: T },
-    { etiqueta: "Lema de vida", operacion: `${c.karmico} + ${T} (la liberación del kármico)`, resultado: c.lemaDeVida, final: true },
+    {
+      etiqueta: "Lema de vida",
+      operacion: c.lemaEnApuntes
+        ? `la liberación del ${c.karmico} según los apuntes (${c.karmico} + ${c.tensionKarmico})`
+        : `${c.karmico} no figura en los apuntes: se calcula ${c.karmico} + ${c.tensionKarmico}`,
+      resultado: c.lemaDeVida,
+      final: true,
+    },
     {
       etiqueta: "Efecto sanador",
       operacion: `cuerpo + alma + espíritu = ${r.vibraciones.cuerpo}+${r.vibraciones.alma}+${r.vibraciones.espiritu}`,
@@ -53,6 +50,10 @@ export default function SeccionCuentas() {
     { label: "Nº de efecto sanador", valor: r.vibraciones.efectoSanador, desc: `Cuerpo ${r.vibraciones.cuerpo} + alma ${r.vibraciones.alma} + espíritu ${r.vibraciones.espiritu}.`, f: r.efectoSanadorFicha },
     { label: "Números de afinidad", valor: `${r.afinidad.diaMes} · ${r.afinidad.mesAnio}`, desc: "Visión global de tus procesos kármicos: qué has venido a hacer en esta encarnación.", f: null },
   ];
+
+  const notaLema = c.lemaEnApuntes
+    ? "El lema de vida no es un número independiente: es el número de liberación del kármico, tomado tal cual de los apuntes."
+    : `El ${c.karmico} no está en los apuntes, así que su liberación se ha calculado con la regla de tensión. Conviene comprobarlo a mano.`;
 
   return (
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:22px;align-items:start;")}>
@@ -69,7 +70,7 @@ export default function SeccionCuentas() {
           Cada potencial arcaico ayuda a cerrar la cuenta abierta de su fila: {c.potenciales[0]}→{c.cuentas[0]}, {c.potenciales[1]}→{c.cuentas[1]}, {c.potenciales[2]}→{c.cuentas[2]}.
         </div>
         <div style={css("margin-top:16px;")}>
-          <Desglose titulo="De dónde salen estos números" pasos={pasos} nota="El lema de vida no es un número independiente: es el número de liberación del kármico, es decir, el kármico más su propia tensión." />
+          <Desglose titulo="De dónde salen estos números" pasos={pasos} nota={notaLema} />
         </div>
       </div>
       <div style={css("display:flex;flex-direction:column;gap:16px;")}>
