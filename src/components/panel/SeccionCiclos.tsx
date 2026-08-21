@@ -3,6 +3,7 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { KDATA } from "@/lib/kdata";
 import { recorta } from "@/lib/format";
+import Desglose, { type Paso } from "../Desglose";
 
 export default function SeccionCiclos() {
   const { r } = useApp();
@@ -27,6 +28,33 @@ export default function SeccionCiclos() {
     texto: recorta((CI.etapas9 || {})[e.n] || "", 260),
   }));
 
+  // De dónde sale cada número de esta pantalla.
+  const c = r.ciclos;
+  const cif = (n: number | string) => String(n).split("").join("+");
+  const red = (bruto: number, fin: number) => (bruto === fin ? String(fin) : `${bruto} → ${fin}`);
+  const finFormacion = c.ciclos[0].hasta ?? 0;
+  const R = c.realizaciones.map((x) => x.valor);
+  const D = c.desafios.map((x) => x.valor);
+  const pasos: Paso[] = [
+    { etiqueta: "Día", operacion: `${r.fecha.dia} → ${cif(r.fecha.dia)}`, resultado: c.diaR },
+    { etiqueta: "Mes", operacion: `${r.fecha.mes} → ${cif(r.fecha.mes)}`, resultado: c.mesR },
+    { etiqueta: "Año", operacion: `${r.fecha.anio} → ${cif(r.fecha.anio)}`, resultado: c.anioR },
+    { etiqueta: "Propósito", operacion: `${c.mesR}+${c.diaR}+${c.anioR} = ${red(c.propositoBruto, c.proposito)}`, resultado: c.proposito, final: true },
+    { etiqueta: "Fin formación", operacion: `36 − ${c.proposito}`, resultado: `${finFormacion} años` },
+    { etiqueta: "Formación", operacion: "el mes reducido", resultado: c.mesR },
+    { etiqueta: "Evolución", operacion: "el día reducido", resultado: c.diaR },
+    { etiqueta: "Cosecha", operacion: "el año reducido", resultado: c.anioR },
+    { etiqueta: "Realización 1", operacion: `mes + día = ${c.mesR}+${c.diaR}`, resultado: R[0] },
+    { etiqueta: "Realización 2", operacion: `día + año = ${c.diaR}+${c.anioR}`, resultado: R[1] },
+    { etiqueta: "Realización 3", operacion: `1ª + 2ª = ${R[0]}+${R[1]}`, resultado: R[2] },
+    { etiqueta: "Realización 4", operacion: `mes + año = ${c.mesR}+${c.anioR}`, resultado: R[3] },
+    { etiqueta: "Desafío 1", operacion: `|mes − día| = |${c.mesR}−${c.diaR}|`, resultado: D[0] },
+    { etiqueta: "Desafío 2", operacion: `|día − año| = |${c.diaR}−${c.anioR}|`, resultado: D[1] },
+    { etiqueta: "Desafío mayor", operacion: `|1º − 2º| = |${D[0]}−${D[1]}|`, resultado: D[2] },
+    { etiqueta: "Año personal", operacion: `día + mes + ${c.anioUniversal} = ${r.fecha.dia}+${r.fecha.mes}+${c.anioUniversal}`, resultado: c.anioPersonal },
+    { etiqueta: "Etapa actual", operacion: `${c.edad} años ÷ 9`, resultado: `etapa ${c.etapaActual}` },
+  ];
+
   return (
     <div style={css("display:flex;flex-direction:column;gap:22px;")}>
       <div style={css("border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
@@ -48,6 +76,8 @@ export default function SeccionCiclos() {
           ))}
         </div>
       </div>
+
+      <Desglose titulo="De dónde salen estos números" pasos={pasos} nota="Todos los ciclos parten de reducir a una cifra el día, el mes y el año de nacimiento; lo demás son sumas y restas entre esos tres." />
 
       <div style={css("border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
         <div style={css("display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:12px;")}>

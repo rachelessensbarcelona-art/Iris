@@ -42,6 +42,21 @@ export default function Shell() {
             <div style={css("font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7E7461;")}>Estudio de Kábala</div>
           </div>
         </div>
+        {view !== "inicio" && (
+          <button
+            onClick={() => setView(view === "panel" ? "inicio" : "panel")}
+            title={view === "panel" ? "Volver a la consulta" : "Volver al panel"}
+            style={css(
+              "display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:3px;cursor:pointer;border:1px solid rgba(201,168,76,.28);background:rgba(255,255,255,.02);color:#C9A84C;font-size:10px;letter-spacing:.18em;text-transform:uppercase;transition:all .2s;"
+            )}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M19 12H5" />
+              <path d="m12 19-7-7 7-7" />
+            </svg>
+            Volver
+          </button>
+        )}
         <nav style={css("display:flex;gap:4px;flex-wrap:wrap;margin-left:auto;")}>
           {TABS.map((t) => {
             const on = view === t.k;

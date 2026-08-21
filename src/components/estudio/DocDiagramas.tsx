@@ -5,6 +5,7 @@ import { KDATA } from "@/lib/kdata";
 import { arbolGeometria } from "@/lib/arbol";
 import { COL } from "@/lib/tree";
 import styles from "./Estudio.module.css";
+import CuerpoPortales, { TEMA_CLARO } from "../CuerpoPortales";
 
 /** Ancho de la primera columna de una maqueta .split (ver Estudio.module.css). */
 const col1 = (w: string) => ({ "--doc-col1": w }) as CSSProperties;
@@ -51,51 +52,13 @@ export function DocArbol({ r }: { r: Resultado }) {
 }
 
 export function DocEstructura({ r }: { r: Resultado }) {
-  const est = r.estructura;
-  const portales = [];
-  for (let i = 1; i <= 10; i++) {
-    const ang = ((-90 - (i - 1) * 36) * Math.PI) / 180;
-    const x = 170 + Math.cos(ang) * 118,
-      y = 170 + Math.sin(ang) * 118;
-    const tieneA = !!est.aprendizajes[i],
-      tieneE = !!est.escudos[i];
-    portales.push({
-      portal: i === 10 ? 0 : i,
-      x,
-      y,
-      ty: y + 5,
-      lx: 170 + Math.cos(ang) * 87,
-      ly: 170 + Math.sin(ang) * 87 + 4,
-      dinamico: est.dinamicos[i],
-      fill: tieneA ? "#E5B63C" : "#F3EFE6",
-      stroke: tieneE ? "#3E77C4" : "rgba(201,168,76,.5)",
-      sw: tieneE ? 3 : 1,
-      tcolor: tieneA ? "#241F2E" : "#9B93A8",
-    });
-  }
   const tensiones = ([] as Array<{ nombre: string; a: number; b: number; activo: boolean; tipo: string }>)
     .concat(r.ejes.map((e) => ({ nombre: e.eje.nombre, a: e.eje.a, b: e.eje.b, activo: e.activo, tipo: "Eje" })))
     .concat(r.planosTension.map((p) => ({ nombre: p.plano.nombre, a: p.plano.a, b: p.plano.b, activo: p.activo, tipo: "Plano" })));
 
   return (
-    <div className={styles.split} style={col1("220px")}>
-      <svg viewBox="0 0 340 340" style={css("width:100%;height:auto;")}>
-        <circle cx={170} cy={170} r={118} fill="none" stroke="rgba(201,168,76,.35)" strokeWidth={1} />
-        {portales.map((p, i) => (
-          <g key={i}>
-            <circle cx={p.x} cy={p.y} r={21} fill={p.fill} stroke={p.stroke} strokeWidth={p.sw} />
-            <text x={p.x} y={p.ty} fill={p.tcolor} fontSize={14} fontFamily="Cinzel, serif" textAnchor="middle">
-              {p.portal}
-            </text>
-            <text x={p.lx} y={p.ly} fill="#C0574C" fontSize={12} fontFamily="Karla, sans-serif" textAnchor="middle">
-              {p.dinamico}
-            </text>
-          </g>
-        ))}
-        <text x={170} y={178} fill="#9A7F32" fontSize={34} fontFamily="Cinzel, serif" textAnchor="middle">
-          {est.tipo}
-        </text>
-      </svg>
+    <div className={styles.split} style={col1("210px")}>
+      <CuerpoPortales r={r} tema={TEMA_CLARO} />
       <div style={css("display:flex;flex-direction:column;gap:7px;")}>
         {tensiones.map((t, i) => (
           <div
@@ -134,36 +97,43 @@ function celdaDoc(n: number, bloqueos: Record<number, number>, ayudas: Record<nu
 export function DocAlma({ r }: { r: Resultado }) {
   const ia = r.imagenAlma;
   const c = (n: number) => celdaDoc(n, ia.bloqueos, ia.ayudas);
+  // Mismo orden que el manual: el 1 arriba a la izquierda y el 10 abajo.
   const filas = [
-    { label: "C", celdas: [c(7), c(8), c(9)] },
-    { label: "A", celdas: [c(4), c(5), c(6)] },
-    { label: "E", celdas: [c(1), c(2), c(3)] },
+    { label: "Espíritu", celdas: [c(1), c(2), c(3)] },
+    { label: "Alma", celdas: [c(4), c(5), c(6)] },
+    { label: "Materia", celdas: [c(7), c(8), c(9)] },
   ];
   const celda10 = c(10);
+  const ROT = "font-family:'Karla',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#9B93A8;";
   return (
     <div className={styles.split} style={col1("230px")}>
       <div>
-        <div style={css("display:flex;justify-content:center;margin-bottom:7px;")}>
-          <div style={css(celda10.style + "width:76px;")}>
-            <span style={css("font-family:'Cinzel',serif;font-size:14px;color:#9B93A8;")}>{celda10.n}</span>
+        <div style={css("display:grid;grid-template-columns:52px 1fr 1fr 1fr;gap:7px;margin-bottom:5px;")}>
+          <span />
+          {["Espíritu", "Alma", "Materia"].map((h) => (
+            <span key={h} style={css(ROT + "text-align:center;")}>{h}</span>
+          ))}
+        </div>
+        {filas.map((f, fi) => (
+          <div key={fi} style={css("display:grid;grid-template-columns:52px 1fr 1fr 1fr;gap:7px;margin-bottom:7px;align-items:center;")}>
+            <span style={css(ROT)}>{f.label}</span>
+            {f.celdas.map((cc, ci) => (
+              <div key={ci} style={css(cc.style)}>
+                <span style={css("font-family:'Cinzel',serif;font-size:14px;color:#9B93A8;")}>{cc.n}</span>
+                <span style={css("font-family:'Cinzel',serif;font-size:15px;color:#B0342A;")}>{cc.bloqueo}</span>
+                <span style={css("font-size:9px;letter-spacing:2px;color:#3E7A4E;")}>{cc.ayuda}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+        <div style={css("display:grid;grid-template-columns:52px 1fr;gap:7px;align-items:center;")}>
+          <span style={css(ROT)}>Evolución</span>
+          <div style={css(celda10.style)}>
+            <span style={css("font-family:'Cinzel',serif;font-size:14px;color:#9B93A8;")}>10 / 0</span>
             <span style={css("font-family:'Cinzel',serif;font-size:15px;color:#B0342A;")}>{celda10.bloqueo}</span>
             <span style={css("font-size:9px;letter-spacing:2px;color:#3E7A4E;")}>{celda10.ayuda}</span>
           </div>
         </div>
-        {filas.map((f, fi) => (
-          <div key={fi} style={css("display:flex;align-items:center;gap:7px;margin-bottom:7px;")}>
-            <div style={css("display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;flex:1;")}>
-              {f.celdas.map((cc, ci) => (
-                <div key={ci} style={css(cc.style)}>
-                  <span style={css("font-family:'Cinzel',serif;font-size:14px;color:#9B93A8;")}>{cc.n}</span>
-                  <span style={css("font-family:'Cinzel',serif;font-size:15px;color:#B0342A;")}>{cc.bloqueo}</span>
-                  <span style={css("font-size:9px;letter-spacing:2px;color:#3E7A4E;")}>{cc.ayuda}</span>
-                </div>
-              ))}
-            </div>
-            <span style={css("width:12px;font-family:'Cinzel',serif;font-size:12px;color:#9B93A8;")}>{f.label}</span>
-          </div>
-        ))}
       </div>
       <div style={css("font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.5;color:#4A4356;")}>
         {ia.proyeccion ? "El 0 cae en la casilla " + ia.proyeccion + ": eso es lo que proyectas de cara a los demás." : ""}

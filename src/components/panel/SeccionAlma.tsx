@@ -30,10 +30,12 @@ export default function SeccionAlma() {
   const ia = r.imagenAlma;
   const c = (n: number) => celda(n, ia.bloqueos, ia.ayudas);
 
+  // Orden del manual (5.1 TABLA IMAGEN DEL ALMA): el 1 arriba a la izquierda,
+  // filas espíritu / alma / materia, y el 10 abajo cruzando toda la tabla.
   const filasAlma = [
-    { label: "C", celdas: [c(7), c(8), c(9)] },
-    { label: "A", celdas: [c(4), c(5), c(6)] },
-    { label: "E", celdas: [c(1), c(2), c(3)] },
+    { label: "Espíritu", celdas: [c(1), c(2), c(3)] },
+    { label: "Alma", celdas: [c(4), c(5), c(6)] },
+    { label: "Materia", celdas: [c(7), c(8), c(9)] },
   ];
   const celda10 = c(10);
 
@@ -49,27 +51,32 @@ export default function SeccionAlma() {
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:30px;align-items:start;")}>
       <div style={css("border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(16px,2.2vw,22px);")}>
         <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:14px;")}>Imagen del alma · nº {ia.numero}</div>
-        <div style={css("display:flex;justify-content:center;margin-bottom:8px;")}>
+        <div style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:8px;margin-bottom:6px;")}>
+          <span />
+          {["Espíritu", "Alma", "Materia"].map((h) => (
+            <span key={h} style={css("font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8A7F68;text-align:center;")}>{h}</span>
+          ))}
+        </div>
+        {filasAlma.map((f, fi) => (
+          <div key={fi} style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:8px;margin-bottom:8px;align-items:center;")}>
+            <span style={css("font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;")}>{f.label}</span>
+            {f.celdas.map((cc, ci) => (
+              <div key={ci} style={css(cc.style)}>
+                <span style={css("font-family:'Cinzel',serif;font-size:15px;color:#8A7F68;")}>{cc.n}</span>
+                <span style={css(B_STYLE)}>{cc.bloqueo}</span>
+                <span style={css(A_STYLE)}>{cc.ayuda}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+        <div style={css("display:grid;grid-template-columns:66px 1fr;gap:8px;align-items:center;")}>
+          <span style={css("font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;")}>Evolución</span>
           <div style={css(celda10.style)}>
-            <span style={css("font-family:'Cinzel',serif;font-size:15px;color:#8A7F68;")}>10/0</span>
+            <span style={css("font-family:'Cinzel',serif;font-size:15px;color:#8A7F68;")}>10 / 0</span>
             <span style={css(B_STYLE)}>{celda10.bloqueo}</span>
             <span style={css(A_STYLE)}>{celda10.ayuda}</span>
           </div>
         </div>
-        {filasAlma.map((f, fi) => (
-          <div key={fi} style={css("display:flex;align-items:center;gap:8px;margin-bottom:8px;")}>
-            <div style={css("display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1;")}>
-              {f.celdas.map((cc, ci) => (
-                <div key={ci} style={css(cc.style)}>
-                  <span style={css("font-family:'Cinzel',serif;font-size:15px;color:#8A7F68;")}>{cc.n}</span>
-                  <span style={css(B_STYLE)}>{cc.bloqueo}</span>
-                  <span style={css(A_STYLE)}>{cc.ayuda}</span>
-                </div>
-              ))}
-            </div>
-            <span style={css("width:16px;font-family:'Cinzel',serif;font-size:13px;color:#7E7461;")}>{f.label}</span>
-          </div>
-        ))}
         <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:11px;letter-spacing:.1em;color:#8A7F68;")}>
           <div style={css("display:flex;align-items:center;gap:8px;")}>
             <span style={css("width:11px;height:11px;border-radius:2px;background:rgba(226,87,76,.75);")} />

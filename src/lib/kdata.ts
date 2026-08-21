@@ -2,6 +2,7 @@
 // Extraído literalmente de los manuales de Kábala aportados por la usuaria.
 import raw from "@/data/kdata.json";
 import caminoEvolutivo from "@/data/caminoEvolutivo.json";
+import tensiones from "@/data/tensiones.json";
 
 export type NumeroFicha = {
   n: number;
@@ -52,3 +53,13 @@ export const KDATA = raw as unknown as KData;
 
 export type CaminoEvolutivoEntry = { nombre: string; sendero: string; texto: string };
 export const CAMINO_EVOLUTIVO = caminoEvolutivo as unknown as Record<string, CaminoEvolutivoEntry>;
+
+/** Explicaciones de los ejes y planos de tensión (manual de estructura
+ *  energética, §20 y §21). Se indexan por "a-b", p. ej. "2-7". */
+export type TensionEntry = { nombre: string; texto: string; tension?: string };
+export type Tensiones = {
+  intro: { ejes: string; planos: string };
+  ejes: Record<string, TensionEntry>;
+  planos: Record<string, TensionEntry>;
+};
+export const TENSIONES = tensiones as unknown as Tensiones;

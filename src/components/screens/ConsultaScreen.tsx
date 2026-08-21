@@ -53,15 +53,15 @@ export default function ConsultaScreen() {
           <div style={css("font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#C9A84C;text-transform:uppercase;margin-bottom:22px;")}>Datos de nacimiento</div>
 
           <div style={css("display:flex;flex-direction:column;gap:14px;")}>
-            {campo("Nombre", "nombre", "Lara María")}
+            {campo("Nombre", "nombre", "")}
             <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;")}>
-              {campo("1er apellido", "ap1", "Soares")}
-              {campo("2º apellido", "ap2", "Campos")}
+              {campo("1er apellido", "ap1", "")}
+              {campo("2º apellido", "ap2", "")}
             </div>
             <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;")}>
-              {campo("Día", "dia", "19", true)}
-              {campo("Mes", "mes", "7", true)}
-              {campo("Año", "anio", "1951", true)}
+              {campo("Día", "dia", "", true)}
+              {campo("Mes", "mes", "", true)}
+              {campo("Año", "anio", "", true)}
             </div>
           </div>
 

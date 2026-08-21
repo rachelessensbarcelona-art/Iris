@@ -3,40 +3,38 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import { chipStyle, recorta } from "@/lib/format";
+import CuerpoPortales from "../CuerpoPortales";
+import Desglose, { type Paso } from "../Desglose";
+import { PORTALES_CUERPO } from "@/lib/cuerpo";
+import { TENSIONES, type TensionEntry } from "@/lib/kdata";
 
 export default function SeccionEstructura() {
   const { r, verNumero, verTexto } = useApp();
   if (!r) return null;
   const est = r.estructura;
+  const fc = est.fechaConvertida;
 
-  const portales = [];
-  for (let i = 1; i <= 10; i++) {
-    const ang = ((-90 - (i - 1) * 36) * Math.PI) / 180;
-    const x = 170 + Math.cos(ang) * 118,
-      y = 170 + Math.sin(ang) * 118;
-    const tieneA = !!est.aprendizajes[i],
-      tieneE = !!est.escudos[i];
-    const d = 0.08 + (i - 1) * 0.085;
-    portales.push({
-      portal: i === 10 ? 0 : i,
-      x,
-      y,
-      ty: y + 5,
-      lx: 170 + Math.cos(ang) * 87,
-      ly: 170 + Math.sin(ang) * 87 + 4,
-      dinamico: est.dinamicos[i],
-      fill: tieneA ? "rgba(232,185,60,.85)" : "rgba(255,255,255,.04)",
-      stroke: tieneE ? "#4C8FE0" : "rgba(201,168,76,.3)",
-      sw: tieneE ? 3 : 1,
-      tcolor: tieneA ? "#1A1508" : "#A99C82",
-      delay: d,
-      delayT: d + 0.26,
-    });
-  }
+  // Cómo se llega al tipo de estructura, paso a paso.
+  const cifras = (s: string) => s.split("").join("+");
+  const pasosCalculo: Paso[] = [
+    { etiqueta: "Fecha", operacion: `${r.fecha.dia} / ${r.fecha.mes} / ${r.fecha.anio}` },
+    { etiqueta: "Se transforma", operacion: "0→7 · 1→6 · 2→5", resultado: `${fc.dia} / ${fc.mes} / ${fc.anio}` },
+    { etiqueta: "Suma de cifras", operacion: `${cifras(fc.dia)} + ${cifras(fc.mes)} + ${cifras(fc.anio)}`, resultado: est.suma },
+    { etiqueta: "Se reduce", operacion: est.pasos.join(" → "), resultado: est.tipo, final: true },
+  ];
 
-  const tensiones = ([] as Array<{ nombre: string; a: number; b: number; activo: boolean; tipo: string }>)
-    .concat(r.ejes.map((e) => ({ nombre: e.eje.nombre, a: e.eje.a, b: e.eje.b, activo: e.activo, tipo: "Eje" })))
-    .concat(r.planosTension.map((p) => ({ nombre: p.plano.nombre, a: p.plano.a, b: p.plano.b, activo: p.activo, tipo: "Plano" })));
+  // Cada eje/plano se acompaña de su explicación del manual (§20 y §21).
+  const tensiones = ([] as Array<{ nombre: string; a: number; b: number; activo: boolean; tipo: string; info?: TensionEntry }>)
+    .concat(r.ejes.map((e) => ({ nombre: e.eje.nombre, a: e.eje.a, b: e.eje.b, activo: e.activo, tipo: "Eje", info: TENSIONES.ejes[`${e.eje.a}-${e.eje.b}`] })))
+    .concat(r.planosTension.map((p) => ({ nombre: p.plano.nombre, a: p.plano.a, b: p.plano.b, activo: p.activo, tipo: "Plano", info: TENSIONES.planos[`${p.plano.a}-${p.plano.b}`] })));
+
+  // Somatizaciones de los portales con aprendizaje: van aquí, junto a la
+  // estructura, porque es la energía de esos portales la que se somatiza.
+  const enfermedades = r.aprendizajes
+    .map((a) => ({ a, enf: a.enfermedades }))
+    .filter((x): x is { a: (typeof r.aprendizajes)[number]; enf: NonNullable<(typeof r.aprendizajes)[number]["enfermedades"]> } =>
+      !!x.enf && !!(x.enf.psico || x.enf.nota)
+    );
 
   const aprendizajes = r.aprendizajes.map((a, ai) => ({
     a,
@@ -63,38 +61,17 @@ export default function SeccionEstructura() {
   }));
 
   return (
-    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:30px;align-items:start;")}>
+    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:start;")}>
       <div style={css("display:flex;flex-direction:column;gap:16px;")}>
         <div style={css("border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(15px,2vw,20px);")}>
-          <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:10px;")}>Estructura energética · tipo {est.tipo}</div>
-          <svg viewBox="0 0 340 340" style={css("width:100%;height:auto;display:block;")}>
-            <circle cx={170} cy={170} r={118} fill="none" stroke="rgba(201,168,76,.14)" strokeWidth={1} />
-            {portales.map((p, i) => (
-              <g key={i}>
-                <circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={21}
-                  fill={p.fill}
-                  stroke={p.stroke}
-                  strokeWidth={p.sw}
-                  style={css(`transform-box:fill-box;transform-origin:center;opacity:0;animation:es33-pop .58s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:${p.delay.toFixed(2)}s;`)}
-                />
-                <text x={p.x} y={p.ty} fill={p.tcolor} fontSize={13} fontFamily="Cinzel, serif" textAnchor="middle" style={css(`opacity:0;animation:es33-in .45s ease forwards;animation-delay:${p.delayT.toFixed(2)}s;`)}>
-                  {p.portal}
-                </text>
-                <text x={p.lx} y={p.ly} fill="#E2574C" fontSize={12} fontFamily="Karla, sans-serif" textAnchor="middle" style={css(`opacity:0;animation:es33-in .45s ease forwards;animation-delay:${p.delayT.toFixed(2)}s;`)}>
-                  {p.dinamico}
-                </text>
-              </g>
-            ))}
-            <text x={170} y={176} fill="#E9CE84" fontSize={30} fontFamily="Cinzel, serif" textAnchor="middle">
-              {est.tipo}
-            </text>
-          </svg>
-          <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:10px;font-size:11px;letter-spacing:.1em;color:#8A7F68;")}>
+          <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px;")}>
+            <span style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;")}>Estructura energética</span>
+            <span style={css("font-family:'Cinzel',serif;font-size:26px;color:#E9CE84;line-height:1;")}>tipo {est.tipo}</span>
+          </div>
+          <CuerpoPortales r={r} />
+          <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:11px;letter-spacing:.1em;color:#8A7F68;")}>
             <div style={css("display:flex;align-items:center;gap:8px;")}>
-              <span style={css("width:11px;height:11px;border-radius:50%;background:rgba(232,185,60,.85);")} />
+              <span style={css("width:11px;height:11px;border-radius:50%;background:rgba(232,185,60,.88);")} />
               Portal con aprendizaje
             </div>
             <div style={css("display:flex;align-items:center;gap:8px;")}>
@@ -107,32 +84,112 @@ export default function SeccionEstructura() {
             </div>
           </div>
         </div>
+
+        <Desglose
+          titulo="De dónde sale la estructura"
+          pasos={pasosCalculo}
+          nota={`El portal 1 recibe el propio tipo (${est.tipo}) y a partir de ahí la cuenta sigue de uno en uno por los diez portales hasta cerrar el círculo: ese es el número dinámico de cada portal.`}
+        />
+
         <div style={css("border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(15px,2vw,20px);")}>
-          <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:10px;")}>Ejes y planos en tensión</div>
-          <div style={css("display:flex;flex-direction:column;gap:5px;")}>
+          <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:10px;")}>Número dinámico de cada portal</div>
+          <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:7px;")}>
+            {PORTALES_CUERPO.map((p) => {
+              const tieneTarea = !!est.aprendizajes[p.portal];
+              return (
+                <div
+                  key={p.portal}
+                  style={css(
+                    "display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:3px;border:1px solid " +
+                      (tieneTarea ? "rgba(232,185,60,.45)" : "rgba(201,168,76,.13)") +
+                      ";background:" +
+                      (tieneTarea ? "rgba(232,185,60,.10)" : "rgba(255,255,255,.02)") +
+                      ";"
+                  )}
+                >
+                  <span style={css("font-family:'Cinzel',serif;font-size:16px;color:#E9CE84;line-height:1;")}>{p.etiqueta}</span>
+                  <span style={css("font-size:13px;color:#E2574C;line-height:1;")}>{est.dinamicos[p.portal]}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={css("border:1px solid rgba(201,168,76,.16);background:rgba(18,20,31,.72);border-radius:4px;padding:clamp(15px,2vw,20px);")}>
+          <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#8A7F68;margin-bottom:8px;")}>Ejes y planos en tensión</div>
+          <p style={css("font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.5;color:#7E7461;margin:0 0 12px;")}>{TENSIONES.intro.ejes}</p>
+          <div style={css("display:flex;flex-direction:column;gap:7px;")}>
             {tensiones.map((t, idx) => (
               <div
                 key={idx}
                 style={css(
-                  "display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:3px;font-size:12px;border:1px solid " +
+                  "padding:11px 13px;border-radius:3px;border:1px solid " +
                     (t.activo ? "rgba(226,87,76,.4)" : "rgba(201,168,76,.1)") +
                     ";background:" +
                     (t.activo ? "rgba(226,87,76,.08)" : "rgba(255,255,255,.02)") +
-                    ";color:" +
-                    (t.activo ? "#DE8B82" : "#8A7F68") +
-                    ";opacity:0;animation:es33-slide .45s ease forwards;animation-delay:" +
-                    (0.1 + idx * 0.05).toFixed(2) +
-                    "s;"
+                    ";"
                 )}
               >
-                <span>
-                  {t.tipo} {t.a}–{t.b} · {t.nombre}
-                </span>
-                <span style={css("margin-left:auto;font-size:10px;letter-spacing:.16em;text-transform:uppercase;")}>{t.activo ? "en tensión" : "libre"}</span>
+                <div style={css("display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:12px;color:" + (t.activo ? "#DE8B82" : "#A99C82") + ";")}>
+                  <span>
+                    {t.tipo} {t.a}–{t.b} · {t.info?.nombre || t.nombre}
+                  </span>
+                  <span style={css("margin-left:auto;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:" + (t.activo ? "#DE8B82" : "#7E7461") + ";")}>
+                    {t.activo ? "en tensión" : "libre"}
+                  </span>
+                </div>
+                {t.info && (
+                  <p style={css("font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.55;color:#B8AE97;margin:7px 0 0;text-wrap:pretty;")}>
+                    {recorta(t.info.texto, 300)}
+                  </p>
+                )}
+                {t.info?.tension && (
+                  <div style={css("font-size:11px;letter-spacing:.1em;color:#C8695F;margin-top:6px;")}>Se tensa en: {t.info.tension}</div>
+                )}
+                {t.info && (
+                  <button
+                    onClick={() => verTexto(t.tipo + " " + t.a + "–" + t.b, t.info!.nombre, t.activo ? "En tensión" : "Libre", t.info!.texto + (t.info!.tension ? "\n\nSe tensa en: " + t.info!.tension : ""))}
+                    style={css(chipStyle(t.activo ? "#E2574C" : "#A99C82") + "margin-top:9px;")}
+                  >
+                    Texto completo
+                  </button>
+                )}
               </div>
             ))}
           </div>
         </div>
+
+        {enfermedades.length > 0 && (
+          <div style={css("border:1px solid rgba(226,87,76,.28);background:rgba(226,87,76,.05);border-radius:4px;padding:clamp(15px,2vw,20px);")}>
+            <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#E2574C;margin-bottom:8px;")}>Enfermedades y debilidades</div>
+            <p style={css("font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.5;color:#7E7461;margin:0 0 12px;")}>
+              Si el aprendizaje del portal no se trabaja, la energía se somatiza en los órganos que rige ese chakra.
+            </p>
+            <div style={css("display:flex;flex-direction:column;gap:11px;")}>
+              {enfermedades.map(({ a, enf }) => (
+                <div key={a.portal} style={css("border-left:2px solid rgba(226,87,76,.5);padding-left:12px;")}>
+                  <div style={css("font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#D08A82;margin-bottom:4px;")}>
+                    Portal {a.portal} · {a.tarea?.nombre || ""}
+                  </div>
+                  {enf.nota ? (
+                    <p style={css("font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;margin:0;")}>{enf.nota}</p>
+                  ) : (
+                    <div style={css("display:flex;flex-direction:column;gap:5px;")}>
+                      {([["Psicológicas", enf.psico], ["Órganos", enf.organos], ["Físicas", enf.fisicas]] as const).map(([k, v]) =>
+                        v ? (
+                          <div key={k}>
+                            <span style={css("font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8A7F68;")}>{k}: </span>
+                            <span style={css("font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:#B8AE97;")}>{v}</span>
+                          </div>
+                        ) : null
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div style={css("display:flex;flex-direction:column;gap:16px;")}>
