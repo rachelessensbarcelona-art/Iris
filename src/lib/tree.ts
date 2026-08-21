@@ -25,9 +25,16 @@ export const SENDEROS: [SefKey, SefKey][] = [
   ["hod", "malkut"], ["malkut", "yesod"],
 ];
 
+/* Colores de los tres caminos. Se usan tal cual sobre el fondo oscuro del
+ * panel y sobre el papel crema del estudio, así que cada uno tiene que
+ * distinguirse en ambos. */
 export const COL: Record<"origen" | "transformacion" | "destino", string> = {
-  origen: "#E2574C",
-  transformacion: "#E5B63C",
-  destino: "#4C8FE0",
+  origen: "#E2574C", // rojo
+  transformacion: "#4C8FE0", // azul
+  destino: "#9D6BD9", // lila
 };
+
+/* Orden fijo de los caminos: fija el color de las líneas paralelas cuando
+ * dos caminos caen en el mismo sendero, y el retardo de su animación. */
+export const ORDEN_CAMINOS = ["origen", "transformacion", "destino"] as const;
 export const IZQ: Partial<Record<SefKey, 1>> = { binah: 1, gevurah: 1, hod: 1 };

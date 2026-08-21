@@ -6,7 +6,7 @@
 import type { Resultado } from "./engine";
 import { ficha } from "./engine";
 import { refItems, type RefItem } from "./chips";
-import { CAMINO_EVOLUTIVO } from "./kdata";
+import { CAMINO_EVOLUTIVO, KDATA } from "./kdata";
 import { COL } from "./tree";
 
 export type Bloque =
@@ -286,6 +286,40 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
         `Tu propósito de vida vibra en el ${r.ciclos.proposito}. Los tres grandes ciclos —formación, evolución y cosecha— y las cuatro realizaciones marcan el ritmo de tu existencia; los desafíos son las fricciones que te afinan en cada etapa. Tu año personal actual (${r.ciclos.anioUniversal}) es el ${r.ciclos.anioPersonal}.`
       ),
       { tipo: "ciclos" },
+    ],
+  });
+
+  // Las nueve etapas de nueve años y el año personal: contenido de los
+  // manuales de ciclos que hasta ahora no aparecía en el estudio.
+  const CI = KDATA.ciclos;
+  const etapas = r.ciclos.etapas;
+  push({
+    seccion: "Cierre",
+    kicker: "Ciclos vitales",
+    titulo: "Tus etapas de nueve años",
+    bloques: [
+      bLead(
+        "p16.lead",
+        `La vida se recorre además en etapas de nueve años, cada una con su propia lección. Ahora mismo, con ${r.ciclos.edad} años, estás en la etapa ${r.ciclos.etapaActual}.`
+      ),
+      ...etapas.flatMap((e): Bloque[] => {
+        const texto = (CI.etapas9 || {})[e.n] || "";
+        if (!texto) return [];
+        return [
+          bH(`Etapa ${e.n} · de los ${e.desde} a los ${e.hasta} años${e.n === r.ciclos.etapaActual ? " — tu etapa actual" : ""}`),
+          bP(`p16.etapa.${e.n}`, texto),
+        ];
+      }),
+    ],
+  });
+
+  const textoAnio = (CI.anioPersonal || {})[r.ciclos.anioPersonal] || "";
+  push({
+    seccion: "Cierre",
+    kicker: "Ciclos vitales",
+    titulo: `Tu año personal: ${r.ciclos.anioPersonal}`,
+    bloques: [
+      bDato("p17.anio", `Año ${r.ciclos.anioUniversal}`, r.ciclos.anioPersonal, textoAnio || "Se calcula sumando tu día y tu mes de nacimiento al año en curso."),
       bCita("Que este mapa te acompañe. La luz que buscas ya habita en ti."),
     ],
   });

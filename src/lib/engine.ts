@@ -366,6 +366,9 @@ export type CiclosVitales = {
   desafios: Array<{ n: number; valor: number; etiqueta: string; rango: string }>;
   anioUniversal: number;
   anioPersonal: number;
+  edad: number;
+  etapas: Array<{ n: number; desde: number; hasta: number }>;
+  etapaActual: number;
 };
 function ciclosVitales(f: Fecha, anioUniversal?: number): CiclosVitales {
   const diaR = reduceTo(f.dia, 9),
@@ -384,6 +387,11 @@ function ciclosVitales(f: Fecha, anioUniversal?: number): CiclosVitales {
     d3 = Math.abs(d1 - d2);
   const au = anioUniversal || new Date().getFullYear();
   const anioPersonal = reduceTo(Number(f.dia) + Number(f.mes) + au, 9);
+  // Las nueve etapas de nueve años de los manuales: la 1 va del nacimiento a
+  // los 8, la 2 de los 9 a los 17, y así hasta la 9 (72 a 80).
+  const edad = Math.max(0, au - Number(f.anio));
+  const etapas = Array.from({ length: 9 }, (_, i) => ({ n: i + 1, desde: i * 9, hasta: (i + 1) * 9 - 1 }));
+  const etapaActual = Math.min(9, Math.floor(edad / 9) + 1);
   return {
     proposito,
     propositoBruto,
@@ -408,6 +416,9 @@ function ciclosVitales(f: Fecha, anioUniversal?: number): CiclosVitales {
     ],
     anioUniversal: au,
     anioPersonal,
+    edad,
+    etapas,
+    etapaActual,
   };
 }
 
