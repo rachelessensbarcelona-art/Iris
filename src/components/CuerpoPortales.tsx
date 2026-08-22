@@ -28,16 +28,16 @@ type Tema = {
 };
 
 export const TEMA_OSCURO: Tema = {
-  trazo: "rgba(201,168,76,.55)",
-  vortice: "rgba(201,168,76,.11)",
-  vorticeActivo: "rgba(232,185,60,.55)",
-  portalVacio: "rgba(255,255,255,.04)",
-  portalBorde: "rgba(201,168,76,.32)",
-  portalConTarea: "rgba(232,185,60,.88)",
-  textoPortal: "#A99C82",
-  textoPortalTarea: "#1A1508",
-  dinamico: "#E2574C",
-  escudo: "#4C8FE0",
+  trazo: "rgba(60,60,67,.55)",
+  vortice: "rgba(201,168,76,.20)",
+  vorticeActivo: "rgba(201,168,76,.52)",
+  portalVacio: "rgba(255,255,255,.92)",
+  portalBorde: "rgba(0,0,0,.16)",
+  portalConTarea: "#E3BE55",
+  textoPortal: "#6E6E73",
+  textoPortalTarea: "#3A2E08",
+  dinamico: "#C0392B",
+  escudo: "#0071E3",
 };
 
 export const TEMA_CLARO: Tema = {
@@ -98,10 +98,10 @@ export default function CuerpoPortales({ r, tema = TEMA_OSCURO }: { r: Resultado
               stroke={tieneEscudo ? tema.escudo : tema.portalBorde}
               strokeWidth={tieneEscudo ? 3 : 1}
             />
-            <text x={p.x} y={p.y + 6} fill={tieneTarea ? tema.textoPortalTarea : tema.textoPortal} fontSize={17} fontFamily="Cinzel, serif" textAnchor="middle">
+            <text x={p.x} y={p.y + 6} fill={tieneTarea ? tema.textoPortalTarea : tema.textoPortal} fontSize={17} fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" fontWeight={600} textAnchor="middle">
               {p.etiqueta}
             </text>
-            <text x={p.x + dx} y={p.y + 5} fill={tema.dinamico} fontSize={13} fontFamily="Karla, sans-serif" textAnchor="middle">
+            <text x={p.x + dx} y={p.y + 5} fill={tema.dinamico} fontSize={13} fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" textAnchor="middle">
               {est.dinamicos[p.portal]}
             </text>
           </g>

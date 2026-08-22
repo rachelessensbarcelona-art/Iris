@@ -28,8 +28,8 @@ export default function SeccionArbol() {
 
   return (
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:start;")}>
-      <div style={css("background:linear-gradient(180deg,rgba(76,143,224,.05),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.16);border-radius:4px;padding:clamp(15px,2vw,20px);")}>
-        <div style={css("font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:#8A7F68;text-transform:uppercase;margin-bottom:6px;")}>Árbol de la Vida</div>
+      <div style={css("background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.6));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.28em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px;")}>Árbol de la Vida</div>
         <svg viewBox="0 0 380 660" style={css("width:100%;height:auto;display:block;")}>
           {senderos.map((s, i) => (
             <line
@@ -53,25 +53,25 @@ export default function SeccionArbol() {
                 cy={p.y}
                 r={19}
                 fill={p.fill}
-                stroke="rgba(255,255,255,.28)"
+                stroke="rgba(0,0,0,.22)"
                 strokeWidth={1}
                 style={css(`transform-box:fill-box;transform-origin:center;opacity:0;animation:es33-pop .62s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:${p.delay.toFixed(2)}s;`)}
               />
-              <text x={p.tx} y={p.ty} fill="#8A7F68" fontSize={10} fontFamily="Karla, sans-serif" letterSpacing={1.4} textAnchor={p.anchor} style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${p.delayT.toFixed(2)}s;`)}>
+              <text x={p.tx} y={p.ty} fill="var(--text-3)" fontSize={10} fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" letterSpacing={1.4} textAnchor={p.anchor} style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${p.delayT.toFixed(2)}s;`)}>
                 {p.nombre}
               </text>
             </g>
           ))}
           {marcasCamino.map((m, i) => (
-            <text key={i} x={m.x} y={m.y} fill={m.color} fontSize={13} fontFamily="Cinzel, serif" textAnchor="middle" style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${m.delay.toFixed(2)}s;`)}>
+            <text key={i} x={m.x} y={m.y} fill={m.color} fontSize={13} fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" fontWeight={600} textAnchor="middle" style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${m.delay.toFixed(2)}s;`)}>
               {m.n}
             </text>
           ))}
         </svg>
-        <div style={css("display:flex;flex-direction:column;gap:7px;margin-top:14px;border-top:1px solid rgba(201,168,76,.12);padding-top:14px;")}>
+        <div style={css("display:flex;flex-direction:column;gap:7px;margin-top:14px;border-top:1px solid var(--gold-soft);padding-top:14px;")}>
           {camDef.map((d, i) => (
-            <div key={i} style={css("display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#A99C82;")}>
-              <span style={css("width:22px;height:3px;border-radius:2px;background:" + COL[d.k] + ";")} />
+            <div key={i} style={css("display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--text-3);")}>
+              <span style={css("width:22px;height:3px;border-radius:var(--r-xs);background:" + COL[d.k] + ";")} />
               {d.etapa} · arcano {d.c.arcano}
             </div>
           ))}
@@ -87,39 +87,39 @@ export default function SeccionArbol() {
                 COL[c.k] +
                 "33;background:linear-gradient(150deg," +
                 COL[c.k] +
-                "0D,rgba(18,20,31,.8));border-left:3px solid " +
+                "14,rgba(255,255,255,.75));border-left:3px solid " +
                 COL[c.k] +
-                ";border-radius:4px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
+                ";border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
                 (0.6 + ci * 0.16).toFixed(2) +
                 "s;"
             )}
           >
             <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
               <span style={css("font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:" + COL[c.k] + ";")}>{c.etapa}</span>
-              <span style={css("font-family:'Cinzel',serif;font-size:23px;line-height:1.25;color:#F2E6C6;letter-spacing:.03em;")}>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:23px;line-height:1.25;color:var(--text);letter-spacing:.03em;")}>
                 {c.c.arcano} · {c.nombre}
               </span>
-              <span style={css("margin-left:auto;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7E7461;")}>{c.rango}</span>
+              <span style={css("margin-left:auto;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-4);")}>{c.rango}</span>
             </div>
-            <div style={css("font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:#C9A84C;margin-top:6px;")}>{c.lema}</div>
-            <p style={css("font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.62;color:#C8BEA6;margin:12px 0 0;text-wrap:pretty;")}>{c.extracto}</p>
-            <button onClick={() => verArcano(c.c.arcano)} style={css("margin-top:12px;background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:3px;padding:7px 15px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;")}>
+            <div style={css("font-family:var(--font-ui);font-style:normal;font-size:18px;color:var(--gold);margin-top:6px;")}>{c.lema}</div>
+            <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{c.extracto}</p>
+            <button onClick={() => verArcano(c.c.arcano)} style={css("margin-top:12px;background:none;border:1px solid var(--border-accent);color:var(--gold);border-radius:var(--r-sm);padding:7px 15px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;")}>
               Texto completo
             </button>
           </article>
         ))}
 
         {r.turbulencias && (
-          <article style={css("border:1px solid rgba(226,87,76,.34);background:rgba(226,87,76,.06);border-radius:4px;padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);")}>
-            <div style={css("font-family:'Cinzel',serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#E2574C;margin-bottom:10px;")}>
+          <article style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);")}>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--red);margin-bottom:10px;")}>
               Años de turbulencias · {r.turbulencias.desde} – {r.turbulencias.hasta} años
             </div>
             {r.turbulencias.lista.map((t, i) => (
               <div key={i} style={css("margin-bottom:10px;")}>
-                <div style={css("font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#D08A82;margin-bottom:3px;")}>
+                <div style={css("font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:3px;")}>
                   Turbulencias en {t.tipo} · {t.causa}
                 </div>
-                <p style={css("font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.6;color:#C8BEA6;margin:0;")}>{t.texto}</p>
+                <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:0;")}>{t.texto}</p>
               </div>
             ))}
           </article>

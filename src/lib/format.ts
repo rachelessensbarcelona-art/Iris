@@ -7,13 +7,21 @@ export function recorta(t: string | undefined | null, n: number): string {
   return corte.slice(0, i > 0 ? i : n) + "…";
 }
 
+/**
+ * Chip tipo iOS: pastilla blanca, texto en color y borde teñido del mismo
+ * color. El borde se calcula con color-mix en vez de pegar un "55" al final
+ * del color, que sólo funciona si el color es un hexadecimal literal — y
+ * aquí llegan también variables CSS.
+ */
 export function chipStyle(color: string): string {
   return (
-    "background:rgba(255,255,255,.03);border:1px solid " +
+    "display:inline-flex;align-items:center;background:rgba(255,255,255,.8);" +
+    "border:1px solid color-mix(in srgb, " +
     color +
-    "55;color:" +
+    " 32%, transparent);color:" +
     color +
-    ";border-radius:3px;padding:6px 12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .2s;"
+    ";border-radius:999px;padding:7px 14px;font-family:var(--font-ui);font-size:12px;font-weight:500;" +
+    "letter-spacing:0;text-transform:none;cursor:pointer;box-shadow:var(--shadow-sm);"
   );
 }
 

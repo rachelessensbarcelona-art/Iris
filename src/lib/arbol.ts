@@ -38,7 +38,7 @@ export function arbolGeometria(r: Resultado) {
     const roles = arcos[i];
 
     if (!roles || !roles.length) {
-      senderos.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y, color: "#5A5E70", w: 1.4, o: 0.32, delay: 0.06 + i * 0.032 });
+      senderos.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y, color: "#C7C7CC", w: 1.4, o: 0.32, delay: 0.06 + i * 0.032 });
       return;
     }
 

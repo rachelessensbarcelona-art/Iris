@@ -47,29 +47,29 @@ export default function DetalleModal() {
       data-chrome="1"
       onClick={cerrarDetalle}
       style={css(
-        "position:fixed;inset:0;z-index:60;background:rgba(5,6,11,.86);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:clamp(20px,5vw,48px) clamp(12px,3vw,24px);overflow-y:auto;animation:es33-in .25s ease both;"
+        "position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.32);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:clamp(20px,5vw,48px) clamp(12px,3vw,24px);overflow-y:auto;animation:es33-in .25s ease both;"
       )}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={css(
-          "max-width:760px;width:100%;background:#12141F;border:1px solid rgba(201,168,76,.3);border-radius:4px;padding:clamp(22px,3.4vw,34px) clamp(20px,3.6vw,38px) clamp(26px,4vw,40px);position:relative;"
+          "max-width:760px;width:100%;background:var(--surface-solid);box-shadow:var(--shadow-lg);border:1px solid var(--border-accent);border-radius:var(--r);padding:clamp(22px,3.4vw,34px) clamp(20px,3.6vw,38px) clamp(26px,4vw,40px);position:relative;"
         )}
       >
         <button
           onClick={cerrarDetalle}
-          style={css("position:absolute;top:16px;right:16px;background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:3px;width:30px;height:30px;cursor:pointer;font-size:15px;line-height:1;")}
+          style={css("position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border-accent);color:var(--gold);border-radius:var(--r-sm);width:30px;height:30px;cursor:pointer;font-size:15px;line-height:1;")}
         >
           ×
         </button>
-        <div style={css("font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8A7F68;margin-bottom:8px;")}>{tipo}</div>
-        <h2 style={css("font-family:'Cinzel',serif;font-weight:600;font-size:28px;color:#F2E6C6;margin:0 0 6px;letter-spacing:.03em;")}>{titulo}</h2>
-        <div style={css("font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:#C9A84C;margin-bottom:18px;")}>{subtitulo}</div>
-        <p style={css("font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.68;color:#C8BEA6;margin:0;white-space:pre-line;text-wrap:pretty;")}>{texto}</p>
+        <div style={css("font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;")}>{tipo}</div>
+        <h2 style={css("font-family:var(--font-ui);font-weight:700;font-size:28px;color:var(--text);margin:0 0 6px;letter-spacing:.03em;")}>{titulo}</h2>
+        <div style={css("font-family:var(--font-ui);font-style:normal;font-size:19px;color:var(--gold);margin-bottom:18px;")}>{subtitulo}</div>
+        <p style={css("font-family:var(--font-ui);font-size:18px;line-height:1.68;color:var(--text-2);margin:0;white-space:pre-line;text-wrap:pretty;")}>{texto}</p>
         {extras.map((e, i) => (
-          <div key={i} style={css("margin-top:18px;border-top:1px solid rgba(201,168,76,.14);padding-top:14px;")}>
-            <div style={css("font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#C9A84C;margin-bottom:6px;")}>{e.label}</div>
-            <p style={css("font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.62;color:#B8AE97;margin:0;")}>{e.texto}</p>
+          <div key={i} style={css("margin-top:18px;border-top:1px solid var(--border);padding-top:14px;")}>
+            <div style={css("font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;")}>{e.label}</div>
+            <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:0;")}>{e.texto}</p>
           </div>
         ))}
         {chips.length > 0 && (
