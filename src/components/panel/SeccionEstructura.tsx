@@ -30,56 +30,48 @@ export default function SeccionEstructura() {
 
   // Sobre la figura conviven cuatro números distintos y sin esta leyenda no
   // hay forma de saber cuál es cuál.
-  const pastilla = (fondo: string, borde: string) =>
-    css(`display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:${fondo};border:${borde};flex:none;`);
+  // Sobre la figura conviven cuatro anotaciones distintas — las mismas que
+  // Iris escribe a mano en la ficha — y sin esta leyenda no hay forma de
+  // saber cuál es cuál.
   const LEYENDA: Array<{ muestra: React.ReactNode; titulo: string; texto: string }> = [
     {
       muestra: (
-        <span style={pastilla("var(--surface-solid)", "1px solid var(--border-strong)")}>
-          <span style={css("font-size:15px;font-weight:650;color:var(--text);line-height:1;")}>7</span>
-          <span style={css("font-size:9px;font-weight:600;color:var(--red);line-height:1;margin-top:1px;")}>{est.tipo}</span>
+        <span style={css("display:inline-flex;align-items:baseline;justify-content:center;width:40px;")}>
+          <span style={css("font-size:24px;font-weight:700;color:var(--text);letter-spacing:-.02em;")}>7</span>
+          <span style={css("font-size:13px;font-weight:600;color:var(--red);margin-left:1px;")}>{est.tipo}</span>
         </span>
       ),
-      titulo: "La pastilla · portal y número dinámico",
-      texto: `Arriba el portal, que está siempre en el mismo sitio del cuerpo — el décimo se rotula 0. Abajo en rojo su número dinámico, que sí cambia de una persona a otra: el portal 1 recibe el tipo de estructura (${est.tipo}) y de ahí la cuenta sigue de uno en uno.`,
-    },
-    {
-      muestra: <span style={pastilla("#E5B63C", "none")}><span style={css("font-size:15px;font-weight:650;color:#241F2E;")}>·</span></span>,
-      titulo: "Relleno dorado · tarea abierta",
-      texto: "Una cifra de la fecha de nacimiento transformada coincide con el dinámico de ese portal. Ahí está el trabajo de esta vida.",
+      titulo: "Número grande y subíndice rojo",
+      texto: `El grande es el portal, que está siempre en el mismo sitio del cuerpo — el décimo se rotula 0. El rojo es su número dinámico, que sí cambia de una persona a otra: el portal 1 recibe el tipo de estructura (${est.tipo}) y de ahí la cuenta sigue de uno en uno.`,
     },
     {
       muestra: (
-        <span style={css("position:relative;display:inline-flex;")}>
-          <span style={pastilla("#E5B63C", "none")}><span style={css("font-size:15px;font-weight:650;color:#241F2E;")}>·</span></span>
-          <span style={css("position:absolute;top:-5px;right:-7px;display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:#2C5D9E;color:#fff;font-size:10px;font-weight:700;")}>×2</span>
+        <span style={css("display:inline-flex;align-items:center;justify-content:center;width:40px;")}>
+          <span style={css("display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:26px;padding:0 7px;border-radius:7px;background:var(--surface-solid);border:2.2px solid #2C5D9E;font-size:14px;font-weight:700;color:#2C5D9E;")}>
+            {String(est.dinamicos[1]).repeat(2)}
+          </span>
         </span>
       ),
-      titulo: "Multiplicador · el aprendizaje se repite",
-      texto: "La misma cifra sale más de una vez en la fecha. La tarea pesa el doble o el triple, y así se anota en vez de repetir el número.",
-    },
-    {
-      muestra: <span style={pastilla("var(--surface-solid)", "3px solid #3E77C4")}><span style={css("font-size:15px;font-weight:650;color:var(--text);")}>·</span></span>,
-      titulo: "Aro azul · el escudo",
-      texto: "Cada aprendizaje deja un escudo tres portales más allá: la energía que protege mientras se hace esa tarea.",
+      titulo: "Recuadro azul · el aprendizaje",
+      texto: "La cifra de la fecha de nacimiento transformada que coincide con el dinámico de ese portal. Va escrita tantas veces como aparezca en la fecha: dos veces, aprendizaje doble.",
     },
     {
       muestra: (
-        <span style={css("display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;")}>
-          <span style={css("width:26px;height:12px;background:linear-gradient(90deg,var(--gold),transparent);border-radius:2px;")} />
+        <span style={css("display:inline-flex;align-items:center;justify-content:center;width:40px;")}>
+          <span style={css("width:26px;height:3.4px;border-radius:2px;background:#4C9A5A;opacity:.85;")} />
+        </span>
+      ),
+      titulo: "Subrayado verde · maestría",
+      texto: "El portal no tiene aprendizaje: viene resuelto de otras vidas y sostiene el trabajo de los demás.",
+    },
+    {
+      muestra: (
+        <span style={css("display:inline-flex;align-items:center;justify-content:center;width:40px;")}>
+          <span style={css("width:28px;height:13px;background:linear-gradient(90deg,var(--gold),transparent);border-radius:2px;")} />
         </span>
       ),
       titulo: "Conos laterales · los chakras",
       texto: "Los vórtices que absorben y expulsan energía cósmica. La corona se abre hacia arriba y la raíz hacia abajo.",
-    },
-    {
-      muestra: (
-        <span style={css("display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;")}>
-          <span style={css("width:26px;height:0;border-top:1.5px solid var(--text-4);opacity:.6;")} />
-        </span>
-      ),
-      titulo: "Línea fina · a qué altura cae",
-      texto: "Une cada portal con su altura en el cuerpo, para no tener que adivinar a qué chakra pertenece.",
     },
   ];
 

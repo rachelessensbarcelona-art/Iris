@@ -82,13 +82,13 @@ export const CONO_RAIZ = "M138 316 L162 316 L150 392 Z";
  */
 export const PORTALES_CUERPO: PortalCuerpo[] = [
   { portal: 2, etiqueta: "2", x: 150, y: 12, lado: 0 },
-  { portal: 3, etiqueta: "3", x: 58, y: 90, lado: -1 },
-  { portal: 1, etiqueta: "1", x: 242, y: 90, lado: 1 },
-  { portal: 4, etiqueta: "4", x: 58, y: 165, lado: -1 },
-  { portal: 10, etiqueta: "0", x: 242, y: 165, lado: 1 },
-  { portal: 5, etiqueta: "5", x: 58, y: 240, lado: -1 },
-  { portal: 9, etiqueta: "9", x: 242, y: 240, lado: 1 },
-  { portal: 6, etiqueta: "6", x: 58, y: 315, lado: -1 },
-  { portal: 8, etiqueta: "8", x: 242, y: 315, lado: 1 },
+  { portal: 3, etiqueta: "3", x: 68, y: 90, lado: -1 },
+  { portal: 1, etiqueta: "1", x: 232, y: 90, lado: 1 },
+  { portal: 4, etiqueta: "4", x: 68, y: 165, lado: -1 },
+  { portal: 10, etiqueta: "0", x: 232, y: 165, lado: 1 },
+  { portal: 5, etiqueta: "5", x: 68, y: 240, lado: -1 },
+  { portal: 9, etiqueta: "9", x: 232, y: 240, lado: 1 },
+  { portal: 6, etiqueta: "6", x: 68, y: 315, lado: -1 },
+  { portal: 8, etiqueta: "8", x: 232, y: 315, lado: 1 },
   { portal: 7, etiqueta: "7", x: 150, y: 412, lado: 0 },
 ];
