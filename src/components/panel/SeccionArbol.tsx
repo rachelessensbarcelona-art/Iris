@@ -1,5 +1,4 @@
 "use client";
-import { motion, useReducedMotion } from "framer-motion";
 import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { arbolGeometria } from "@/lib/arbol";
@@ -7,14 +6,13 @@ import { COL } from "@/lib/tree";
 import { frase, recorta, titulo } from "@/lib/format";
 import Particulas from "../Particulas";
 import Lienzo from "../Lienzo";
-
-const FUENTE = "-apple-system, BlinkMacSystemFont, sans-serif";
+import ArbolVida from "../ArbolVida";
 
 export default function SeccionArbol() {
   const { r, verArcano } = useApp();
-  const quieto = useReducedMotion();
   if (!r) return null;
-  const { senderos, sefirot, marcasCamino, complementarios } = arbolGeometria(r);
+  // Sólo para la leyenda: el dibujo lo arma <ArbolVida /> por su cuenta.
+  const { rotulosComp } = arbolGeometria(r);
 
   const camDef = [
     { k: "origen" as const, etapa: "Origen", c: r.caminos.origen, rango: "0 – " + r.caminos.edadCambio + " años" },
@@ -35,95 +33,7 @@ export default function SeccionArbol() {
         </div>
         <div style={css("position:relative;")}>
           <Particulas cantidad={26} />
-          <svg viewBox="-54 -8 488 676" style={css("position:relative;width:100%;height:auto;display:block;")}>
-            {/* Complementarios primero, por debajo: van en discontinuo y la
-             * línea corre, para que se lea que es energía que acompaña y no
-             * un camino que se recorre. */}
-            {complementarios.map((c, i) => (
-              <motion.line
-                key={"c" + i}
-                x1={c.x1}
-                y1={c.y1}
-                x2={c.x2}
-                y2={c.y2}
-                stroke={c.color}
-                strokeWidth={2.4}
-                strokeOpacity={0.42}
-                strokeLinecap="round"
-                strokeDasharray="7 9"
-                initial={quieto ? false : { opacity: 0 }}
-                animate={quieto ? { opacity: 1 } : { opacity: 1, strokeDashoffset: [0, -32] }}
-                transition={{
-                  opacity: { delay: c.delay, duration: 0.6 },
-                  strokeDashoffset: { duration: 1.6, repeat: Infinity, ease: "linear" },
-                }}
-              />
-            ))}
-            {senderos.map((s, i) => (
-              <motion.line
-                key={i}
-                x1={s.x1}
-                y1={s.y1}
-                x2={s.x2}
-                y2={s.y2}
-                stroke={s.color}
-                strokeWidth={s.w}
-                strokeOpacity={s.o}
-                strokeLinecap="round"
-                initial={quieto ? false : { pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ delay: s.delay, duration: s.w > 2 ? 0.9 : 0.55, ease: [0.4, 0, 0.2, 1] }}
-              />
-            ))}
-            {sefirot.map((p, i) => (
-              <g key={i}>
-                <motion.circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={19}
-                  fill={p.fill}
-                  stroke="rgba(0,0,0,.22)"
-                  strokeWidth={1}
-                  initial={quieto ? false : { opacity: 0, scale: 0.2 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: p.delay, duration: 0.62, ease: [0.34, 1.56, 0.64, 1] }}
-                  style={{ transformBox: "fill-box", transformOrigin: "center" }}
-                />
-                <motion.text
-                  x={p.tx}
-                  y={p.ty}
-                  fill="var(--text-3)"
-                  fontSize={13}
-                  fontFamily={FUENTE}
-                  fontWeight={510}
-                  textAnchor={p.anchor}
-                  initial={quieto ? false : { opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: p.delayT, duration: 0.5 }}
-                >
-                  {p.nombre}
-                </motion.text>
-              </g>
-            ))}
-            {marcasCamino.map((m, i) => (
-              <motion.text
-                key={i}
-                x={m.x}
-                y={m.y}
-                fill={m.color}
-                fontSize={14}
-                fontFamily={FUENTE}
-                fontWeight={700}
-                textAnchor="middle"
-                initial={quieto ? false : { opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: m.delay, duration: 0.5, ease: [0.34, 1.4, 0.64, 1] }}
-                style={{ transformBox: "fill-box", transformOrigin: "center" }}
-              >
-                {m.n}
-              </motion.text>
-            ))}
-          </svg>
+          <ArbolVida r={r} estilo="position:relative;width:100%;height:auto;display:block;" />
         </div>
 
         <div style={css("display:flex;flex-direction:column;gap:var(--s2);margin-top:var(--s4);border-top:1px solid var(--border);padding-top:var(--s4);")}>
@@ -133,14 +43,10 @@ export default function SeccionArbol() {
               {d.etapa} · arcano {d.c.arcano}
             </div>
           ))}
-          {complementarios.length > 0 && (
-            <div style={css("display:flex;align-items:center;gap:var(--s3);font-size:14px;color:var(--text-3);")}>
-              <span
-                style={css(
-                  "width:24px;height:0;flex:none;border-top:3px dashed var(--text-4);"
-                )}
-              />
-              Complementarios · {complementarios.map((c) => c.n).join(", ")}
+          {rotulosComp.length > 0 && (
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);font-size:14px;color:var(--text-3);")}>
+              <span style={css("width:24px;height:0;flex:none;margin-top:8px;border-top:3px dashed var(--text-4);")} />
+              <span>Complementarios · {rotulosComp.map((c) => c.nombre).join(" · ")}</span>
             </div>
           )}
         </div>

@@ -1,11 +1,15 @@
 import { SEF, SENDEROS, COL, IZQ, ORDEN_CAMINOS, type SefKey } from "./tree";
 import type { Resultado } from "./engine";
 import { KDATA } from "./kdata";
+import { titulo } from "./format";
 
 export type Rol = "origen" | "transformacion" | "destino";
 
 export type SenderoView = { x1: number; y1: number; x2: number; y2: number; color: string; w: number; o: number; delay: number };
 export type SefiraView = { x: number; y: number; fill: string; nombre: string; tx: number; ty: number; anchor: "start" | "middle" | "end"; delay: number; delayT: number };
+/** El nombre del arcano escrito a lo largo de su sendero, como está anotado a
+ *  mano en la ficha: «La Fuerza», «El Sumo Sacerdote», «La Templanza». */
+export type RotuloView = { x: number; y: number; rot: number; nombre: string; color: string; delay: number };
 export type MarcaCaminoView = { x: number; y: number; n: number; color: string; delay: number };
 /** Sendero complementario de uno de los tuyos: mismo color, trazo discontinuo. */
 export type ComplementarioView = { x1: number; y1: number; x2: number; y2: number; color: string; n: number; de: number; delay: number };
@@ -30,6 +34,36 @@ export function arcosDe(r: Resultado): Record<number, Rol[]> {
  *  dos líneas y no como una sola más gruesa. */
 const SEPARACION = 5;
 const GROSOR = 4;
+
+/**
+ * Dónde y con qué inclinación se escribe el nombre del arcano a lo largo de su
+ * sendero. En la ficha el nombre va montado sobre la propia línea, girado con
+ * ella, y siempre por el lado de fuera del árbol — por el de dentro se juntan
+ * las tres columnas y no se leería.
+ */
+function rotuloDe(a: { x: number; y: number }, b: { x: number; y: number }, aparta: number) {
+  const dx = b.x - a.x,
+    dy = b.y - a.y;
+  const largo = Math.hypot(dx, dy) || 1;
+  let px = -dy / largo,
+    py = dx / largo;
+  const mx = (a.x + b.x) / 2,
+    my = (a.y + b.y) / 2;
+  // La columna del medio no tiene «fuera»: se rotula siempre a su derecha.
+  const centro = Math.abs(mx - 190) < 1;
+  if (centro ? px < 0 : px * (mx - 190) < 0) {
+    px = -px;
+    py = -py;
+  }
+  // El texto nunca se lee del revés. Los senderos verticales se rotulan de
+  // abajo arriba — el tramo entre Keter y Tiphereth y el de Tiphereth a Yesod
+  // son largos y están despejados, así que el nombre cabe entero a lo largo
+  // de la línea sin pisar ninguna sefirá.
+  let rot = (Math.atan2(dy, dx) * 180) / Math.PI;
+  if (rot >= 90) rot -= 180;
+  if (rot < -90) rot += 180;
+  return { x: mx + px * aparta, y: my + py * aparta, rot };
+}
 
 export function arbolGeometria(r: Resultado) {
   const arcos = arcosDe(r);
@@ -96,43 +130,88 @@ export function arbolGeometria(r: Resultado) {
     const p1 = SEF[s[0]],
       p2 = SEF[s[1]];
     const roles = arcos[idx];
-    const dx = p2.x - p1.x,
-      dy = p2.y - p1.y;
-    const largo = Math.hypot(dx, dy) || 1;
-    const aparta = ((roles.length - 1) / 2) * SEPARACION + 10;
-    marcasCamino.push({
-      x: (p1.x + p2.x) / 2 + (-dy / largo) * aparta,
-      y: (p1.y + p2.y) / 2 + (dx / largo) * aparta + 4,
-      n: idx,
-      color: COL[roles[0]],
-      delay: 2.0 + i * 0.28,
-    });
+    // El número va por el lado de dentro y el nombre por el de fuera, cada
+    // uno en su margen: juntos en el mismo lado se pisaban.
+    const aparta = -(((roles.length - 1) / 2) * SEPARACION + 11);
+    const { x, y } = rotuloDe(p1, p2, aparta);
+    marcasCamino.push({ x, y: y + 4, n: idx, color: COL[roles[0]], delay: 2.0 + i * 0.28 });
   });
 
   // Caminos complementarios: los senderos que hacen pareja con los tuyos.
   // No son tu recorrido, así que van en discontinuo y por debajo — es la
   // energía que te acompaña, no la que te toca andar.
-  const complementarios: ComplementarioView[] = [];
+  //
+  // Un mismo complementario puede venir de dos caminos a la vez. En la ficha
+  // eso se dibuja como dos discontinuas en paralelo, una de cada color —
+  // igual que cuando dos caminos comparten sendero — y no como una sola
+  // línea que se quede con el color del primero.
+  const porSendero = new Map<number, string[]>();
   const yaTuyos = new Set(Object.keys(arcos).map(Number));
   Object.entries(arcos).forEach(([clave, roles]) => {
-    (KDATA.caminosComplementarios?.[clave] || []).forEach((comp, k) => {
-      if (yaTuyos.has(comp)) return;
-      const s = SENDEROS[comp];
-      if (!s) return;
-      const a = SEF[s[0]],
-        b = SEF[s[1]];
-      complementarios.push({
-        x1: a.x,
-        y1: a.y,
-        x2: b.x,
-        y2: b.y,
-        color: COL[roles[0]],
-        n: comp,
-        de: +clave,
-        delay: 2.1 + k * 0.2,
+    (KDATA.caminosComplementarios?.[clave] || []).forEach((comp) => {
+      if (yaTuyos.has(comp) || !SENDEROS[comp]) return;
+      const lista = porSendero.get(comp) || [];
+      // Cada camino aporta su color. Si el origen y la transformación caen en
+      // el mismo arcano, sus complementarios salen dos veces — y por eso en la
+      // hoja esas discontinuas van de dos en dos, una roja y una azul.
+      roles.forEach((rol) => {
+        if (!lista.includes(COL[rol])) lista.push(COL[rol]);
       });
+      porSendero.set(comp, lista);
     });
   });
 
-  return { arcos, senderos, sefirot, marcasCamino, complementarios };
+  const complementarios: ComplementarioView[] = [];
+  const rotulosComp: RotuloView[] = [];
+  [...porSendero.entries()].forEach(([comp, colores], i) => {
+    const s = SENDEROS[comp];
+    const a = SEF[s[0]],
+      b = SEF[s[1]];
+    const dx = b.x - a.x,
+      dy = b.y - a.y;
+    const largo = Math.hypot(dx, dy) || 1;
+    const px = -dy / largo,
+      py = dx / largo;
+
+    colores.forEach((color, k) => {
+      const desvio = (k - (colores.length - 1) / 2) * SEPARACION;
+      complementarios.push({
+        x1: a.x + px * desvio,
+        y1: a.y + py * desvio,
+        x2: b.x + px * desvio,
+        y2: b.y + py * desvio,
+        color,
+        n: comp,
+        de: colores.length,
+        delay: 2.1 + i * 0.2 + k * 0.08,
+      });
+    });
+
+    const nombre = titulo(KDATA.arcanos?.[String(comp)]?.nombre);
+    if (nombre) {
+      rotulosComp.push({
+        ...rotuloDe(a, b, ((colores.length - 1) / 2) * SEPARACION + 11),
+        nombre,
+        color: colores[0],
+        delay: 2.5 + i * 0.2,
+      });
+    }
+  });
+
+  // Los nombres de tus tres caminos, escritos sobre su sendero como en la hoja.
+  const rotulos: RotuloView[] = [];
+  Object.keys(arcos).forEach((clave, i) => {
+    const idx = +clave;
+    const s = SENDEROS[idx];
+    const nombre = titulo(KDATA.arcanos?.[clave]?.nombre);
+    if (!s || !nombre) return;
+    rotulos.push({
+      ...rotuloDe(SEF[s[0]], SEF[s[1]], ((arcos[idx].length - 1) / 2) * SEPARACION + 12),
+      nombre,
+      color: COL[arcos[idx][0]],
+      delay: 1.9 + i * 0.22,
+    });
+  });
+
+  return { arcos, senderos, sefirot, marcasCamino, complementarios, rotulos, rotulosComp };
 }

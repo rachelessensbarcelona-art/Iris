@@ -2,10 +2,10 @@ import type { CSSProperties } from "react";
 import { css } from "@/lib/css";
 import type { Resultado } from "@/lib/engine";
 import { KDATA } from "@/lib/kdata";
-import { arbolGeometria } from "@/lib/arbol";
 import { COL } from "@/lib/tree";
 import styles from "./Estudio.module.css";
 import CuerpoPortales from "../CuerpoPortales";
+import ArbolVida from "../ArbolVida";
 
 /** Ancho de la primera columna de una maqueta .split (ver Estudio.module.css). */
 const col1 = (w: string) => ({ "--doc-col1": w }) as CSSProperties;
@@ -13,7 +13,6 @@ const col1 = (w: string) => ({ "--doc-col1": w }) as CSSProperties;
 /** Versiones "documento" (fondo claro, sin animación) de los diagramas del panel. */
 
 export function DocArbol({ r }: { r: Resultado }) {
-  const { senderos, sefirot, marcasCamino } = arbolGeometria(r);
   const camDef = [
     { k: "origen" as const, c: r.caminos.origen, etapa: "Origen", rango: "0 – " + r.caminos.edadCambio + " años" },
     { k: "transformacion" as const, c: r.caminos.transformacion, etapa: "Transformación", rango: "toda la vida" },
@@ -21,19 +20,17 @@ export function DocArbol({ r }: { r: Resultado }) {
   ];
   return (
     <div className={styles.split} style={col1("210px")}>
-      <svg viewBox="-54 -8 488 676" style={css("width:100%;height:auto;")}>
-        {senderos.map((s, i) => (
-          <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={s.w > 2 ? s.color : "#B9B2C4"} strokeWidth={s.w} strokeOpacity={s.o} strokeLinecap="round" />
-        ))}
-        {sefirot.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={19} fill={p.fill} stroke="rgba(40,36,48,.35)" strokeWidth={1} />
-        ))}
-        {marcasCamino.map((m, i) => (
-          <text key={i} x={m.x} y={m.y} fill={m.color} fontSize={15} fontFamily="Cinzel, serif" textAnchor="middle">
-            {m.n}
-          </text>
-        ))}
-      </svg>
+      {/* En papel el árbol va quieto, con los grises del documento y la
+       * tipografía del estudio, pero completo: nombres y complementarios. */}
+      <ArbolVida
+        r={r}
+        animado={false}
+        fuente="Cinzel, serif"
+        tenue="#B9B2C4"
+        borde="rgba(40,36,48,.35)"
+        colorNombre="#6A6274"
+        estilo="width:100%;height:auto;"
+      />
       <div style={css("display:flex;flex-direction:column;gap:11px;")}>
         {camDef.map((d, i) => (
           <div key={i} style={css("border-left:3px solid " + COL[d.k] + ";padding-left:12px;")}>

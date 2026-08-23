@@ -2,10 +2,10 @@
 import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { COL } from "@/lib/tree";
-import { arbolGeometria } from "@/lib/arbol";
 import { frase, recorta, titulo } from "@/lib/format";
 import Particulas from "../Particulas";
 import Cifra from "../Cifra";
+import ArbolVida from "../ArbolVida";
 
 const TARJETA = "background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);";
 const ROTULO = "font-size:13px;font-weight:590;color:var(--text-3);";
@@ -21,7 +21,6 @@ export default function SeccionResumen() {
   if (!r) return null;
 
   const c = r.ciclos;
-  const { senderos, sefirot, marcasCamino } = arbolGeometria(r);
   const nombreCorto = titulo(r.nombre.texto).split(" ")[0];
 
   const caminos = [
@@ -145,31 +144,31 @@ export default function SeccionResumen() {
             </button>
           </section>
 
-          {/* El árbol, en pequeño y sin animación: aquí es una miniatura para
-           * reconocer el dibujo, no la lámina que se estudia. */}
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
-            <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:6px;")}>
-              <span style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>Árbol de la Vida</span>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:4px;")}>
+              <span style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>Aprendizajes abiertos</span>
               <button
-                onClick={() => setSeccion("arbol")}
+                onClick={() => setSeccion("estructura")}
                 style={css("margin-left:auto;background:none;border:none;padding:0;cursor:pointer;font-size:14px;font-weight:590;color:var(--gold);")}
               >
-                Abrir
+                Ver todos
               </button>
             </div>
-            <svg viewBox="-54 -8 488 676" style={css("width:100%;max-width:330px;height:auto;display:block;margin:6px auto 0;")}>
-              {senderos.map((s, i) => (
-                <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={s.color} strokeWidth={s.w} strokeOpacity={s.o} strokeLinecap="round" />
-              ))}
-              {sefirot.map((p, i) => (
-                <circle key={i} cx={p.x} cy={p.y} r={19} fill={p.fill} stroke="rgba(0,0,0,.22)" strokeWidth={1} />
-              ))}
-              {marcasCamino.map((m, i) => (
-                <text key={i} x={m.x} y={m.y} fill={m.color} fontSize={15} fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" fontWeight={600} textAnchor="middle">
-                  {m.n}
-                </text>
-              ))}
-            </svg>
+            {r.aprendizajes.length === 0 && <p style={css("font-size:15px;color:var(--text-4);margin:8px 0 0;")}>No hay portales con aprendizaje en esta estructura.</p>}
+            {r.aprendizajes.slice(0, 5).map((a, i) => (
+              <button
+                key={i}
+                onClick={() => setSeccion("estructura")}
+                style={css("display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:11px 0;border:none;border-top:1px solid var(--border);background:none;cursor:pointer;")}
+              >
+                <span style={css("flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:var(--gold-soft);color:var(--gold-deep);font-size:14px;font-weight:600;")}>{a.portal}</span>
+                <span style={css("flex:1;min-width:0;")}>
+                  <span style={css("display:block;font-size:15px;font-weight:590;color:var(--text);line-height:1.25;")}>{frase(a.tarea?.nombre) || "Portal " + a.portal}</span>
+                  <span style={css("display:block;font-size:13px;color:var(--text-4);margin-top:1px;")}>viene del número {a.numero}</span>
+                </span>
+                <span style={css("flex:none;font-size:13px;font-weight:590;color:var(--gold);")}>Portal {a.portal}</span>
+              </button>
+            ))}
           </section>
         </div>
 
@@ -226,31 +225,21 @@ export default function SeccionResumen() {
             </div>
           </section>
 
+          {/* El mismo árbol que en su sección — con nombres, complementarios y
+           * animación — sólo que más contenido de alto para que no estire la
+           * columna. Va a la derecha porque es la tarjeta más alta de las dos
+           * columnas y aquí compensa el bloque de cifras y la rueda. */}
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
-            <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:4px;")}>
-              <span style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>Aprendizajes abiertos</span>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:6px;")}>
+              <span style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>Árbol de la Vida</span>
               <button
-                onClick={() => setSeccion("estructura")}
+                onClick={() => setSeccion("arbol")}
                 style={css("margin-left:auto;background:none;border:none;padding:0;cursor:pointer;font-size:14px;font-weight:590;color:var(--gold);")}
               >
-                Ver todos
+                Abrir
               </button>
             </div>
-            {r.aprendizajes.length === 0 && <p style={css("font-size:15px;color:var(--text-4);margin:8px 0 0;")}>No hay portales con aprendizaje en esta estructura.</p>}
-            {r.aprendizajes.slice(0, 5).map((a, i) => (
-              <button
-                key={i}
-                onClick={() => setSeccion("estructura")}
-                style={css("display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:11px 0;border:none;border-top:1px solid var(--border);background:none;cursor:pointer;")}
-              >
-                <span style={css("flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:var(--gold-soft);color:var(--gold-deep);font-size:14px;font-weight:600;")}>{a.portal}</span>
-                <span style={css("flex:1;min-width:0;")}>
-                  <span style={css("display:block;font-size:15px;font-weight:590;color:var(--text);line-height:1.25;")}>{frase(a.tarea?.nombre) || "Portal " + a.portal}</span>
-                  <span style={css("display:block;font-size:13px;color:var(--text-4);margin-top:1px;")}>viene del número {a.numero}</span>
-                </span>
-                <span style={css("flex:none;font-size:13px;font-weight:590;color:var(--gold);")}>Portal {a.portal}</span>
-              </button>
-            ))}
+            <ArbolVida r={r} estilo="width:100%;max-width:390px;height:auto;display:block;margin:6px auto 0;" />
           </section>
         </div>
       </div>
