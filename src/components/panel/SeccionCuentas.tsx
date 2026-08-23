@@ -6,8 +6,8 @@ import Desglose, { type Paso } from "../Desglose";
 import Particulas from "../Particulas";
 
 const TH = "font-size:12px;font-weight:590;color:var(--text-4);display:flex;align-items:center;justify-content:center;padding:6px 0;";
-const TD = "font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text-2);display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid var(--gold-soft);border-radius:var(--r-sm);background:rgba(0,0,0,.025);";
-const TD_TOT = TD.replace("var(--text-2)", "var(--text)").replace("rgba(0,0,0,.025)", "var(--border)");
+const TD = "font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text-2);display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid var(--gold-soft);border-radius:var(--r-sm);background:color-mix(in srgb, var(--text) 4%, transparent);";
+const TD_TOT = TD.replace("var(--text-2)", "var(--text)").replace("color-mix(in srgb, var(--text) 4%, transparent)", "var(--border)");
 
 export default function SeccionCuentas() {
   const { r, verNumero } = useApp();
@@ -82,7 +82,7 @@ export default function SeccionCuentas() {
               "border:1px solid " +
                 (k.mistica ? "var(--border-accent)" : "var(--border)") +
                 ";background:" +
-                (k.mistica ? "linear-gradient(155deg,rgba(201,168,76,.10),rgba(255,255,255,.72))" : "var(--surface)") +
+                (k.mistica ? "linear-gradient(155deg,var(--gold-soft),color-mix(in srgb, var(--surface-solid) 72%, transparent))" : "var(--surface)") +
                 ";backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);position:relative;overflow:hidden;isolation:isolate;"
             )}
           >

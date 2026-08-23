@@ -225,7 +225,7 @@ export default function SeccionEstructura() {
                   "padding:11px 13px;border-radius:var(--r-sm);border:1px solid " +
                     (t.activo ? "var(--red-border)" : "var(--border)") +
                     ";background:" +
-                    (t.activo ? "var(--red-soft)" : "rgba(0,0,0,.025)") +
+                    (t.activo ? "var(--red-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
                     ";"
                 )}
               >

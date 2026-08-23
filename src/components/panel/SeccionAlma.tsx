@@ -15,7 +15,7 @@ function celda(n: number, bloqueos: Record<number, number>, ayudas: Record<numbe
       "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:62px;border-radius:var(--r-sm);border:1px solid " +
       (b ? "var(--red)" : "var(--border)") +
       ";background:" +
-      (b ? "var(--red-soft)" : "rgba(0,0,0,.025)") +
+      (b ? "var(--red-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
       ";width:100%;opacity:0;animation:es33-pop .5s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:" +
       (0.06 + (n % 11) * 0.06).toFixed(2) +
       "s;",

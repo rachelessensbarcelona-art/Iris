@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 import { css } from "@/lib/css";
 import { useApp, valida } from "@/lib/app-context";
 import { analizaNombre, esVocal } from "@/lib/engine";
@@ -12,6 +13,10 @@ function saludo(): string {
   return "Buenas noches";
 }
 
+const TARJETA =
+  "background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--pad-card);";
+const ROTULO = "font-size:13px;font-weight:590;color:var(--gold);";
+
 export default function ConsultaScreen() {
   const { f, set, calcular, hist, abrir, borrar } = useApp();
 
@@ -19,162 +24,182 @@ export default function ConsultaScreen() {
   const err = valida(f);
   const listo = !err;
 
-  const campo = (
-    label: string,
-    key: "nombre" | "ap1" | "ap2" | "dia" | "mes" | "anio",
-    placeholder: string,
-    numeric?: boolean
-  ) => (
-    <label style={css("display:flex;flex-direction:column;gap:7px;min-width:0;")}>
-      <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>{label}</span>
+  const campo = (label: string, key: "nombre" | "ap1" | "ap2" | "dia" | "mes" | "anio", numeric?: boolean) => (
+    <label style={css("display:flex;flex-direction:column;gap:var(--s2);min-width:0;")}>
+      <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>{label}</span>
       <input
         size={4}
         value={f[key]}
         onChange={(e) => set(key, numeric ? e.target.value.replace(/\D/g, "").slice(0, key === "anio" ? 4 : 2) : e.target.value)}
-        placeholder={placeholder}
         inputMode={numeric ? "numeric" : undefined}
         style={css(
-          "width:100%;min-width:0;background:rgba(120,120,128,.08);border:1px solid transparent;border-radius:var(--r-sm);padding:13px 15px;color:var(--text);font-family:var(--font-ui);font-size:17px;transition:border-color .25s,box-shadow .25s,background .25s;"
+          "width:100%;min-width:0;background:color-mix(in srgb, var(--text) 6%, transparent);border:1px solid transparent;border-radius:var(--r-sm);padding:14px 16px;color:var(--text);font-family:var(--font-ui);font-size:17px;"
         )}
       />
     </label>
   );
 
   return (
-    <main style={css("max-width:1180px;margin:0 auto;padding:var(--s7) var(--gutter) var(--s8);")}>
-      <div style={css("text-align:center;margin-bottom:var(--s7);")}>
-        <div style={css("font-size:13px;font-weight:590;color:var(--gold);margin-bottom:var(--s3);")}>{saludo()}, Iris</div>
-        <h1 style={css("font-weight:700;font-size:clamp(26px,4.6vw,40px);line-height:1.12;letter-spacing:-.028em;color:var(--text);margin:0 0 var(--s3);text-wrap:balance;")}>
-          ¿A quién estudiamos hoy?
-        </h1>
-        <p style={css("font-size:clamp(16px,2vw,19px);line-height:1.55;color:var(--text-3);max-width:640px;margin:0 auto;text-wrap:pretty;")}>
-          Dime el nombre de la partida de nacimiento y la fecha exacta. Yo hago las cuentas, te enseño de dónde sale cada número y te dejo el estudio listo para imprimir.
-        </p>
+    <main style={css("position:relative;max-width:1140px;margin:0 auto;padding:clamp(40px,7vh,84px) var(--gutter) var(--s8);")}>
+      {/* El polvo cubre la pantalla entera, no una tarjeta: es la puerta de
+       * entrada al estudio y se lee mejor como atmósfera que como adorno. */}
+      <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
+        <Particulas cantidad={64} />
       </div>
 
-      <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--gap-lg);align-items:start;")}>
-        <section
-          style={css(
-            "background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:var(--pad-card);position:relative;overflow:hidden;isolation:isolate;"
-          )}
+      <div style={css("position:relative;z-index:1;")}>
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={css("text-align:center;max-width:660px;margin:0 auto var(--s8);")}
         >
-          <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
-            <Particulas cantidad={22} />
-          </div>
-          <div style={css("position:absolute;top:-1px;left:44px;right:44px;height:1px;z-index:1;background:linear-gradient(90deg,transparent,var(--gold),transparent);")} />
-          <div style={css("position:relative;z-index:1;")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s5);")}>Datos de nacimiento</div>
+          <div style={css(ROTULO + "margin-bottom:var(--s4);")}>{saludo()}, Iris</div>
+          <h1 style={css("font-size:clamp(34px,6vw,58px);line-height:1.06;letter-spacing:-.018em;color:var(--text);margin:0 0 var(--s5);")}>
+            ¿A quién estudiamos hoy?
+          </h1>
+          <p style={css("font-size:clamp(17px,2vw,20px);line-height:1.55;color:var(--text-3);margin:0;")}>
+            Dime el nombre de la partida de nacimiento y la fecha exacta. Yo hago las cuentas, te enseño de dónde sale cada número y te dejo el estudio listo para imprimir.
+          </p>
+        </motion.div>
 
-          <div style={css("display:flex;flex-direction:column;gap:var(--s4);")}>
-            {campo("Nombre", "nombre", "")}
-            <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4);")}>
-              {campo("Primer apellido", "ap1", "")}
-              {campo("Segundo apellido", "ap2", "")}
-            </div>
-            <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4);")}>
-              {campo("Día", "dia", "", true)}
-              {campo("Mes", "mes", "", true)}
-              {campo("Año", "anio", "", true)}
-            </div>
-          </div>
-
-          <button
-            onClick={calcular}
-            disabled={!listo}
+        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--gap-lg);align-items:start;")}>
+          <motion.section
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={css(
-              "width:100%;margin-top:var(--s6);padding:15px 0;border-radius:980px;border:none;cursor:" +
-                (listo ? "pointer" : "not-allowed") +
-                ";font-family:var(--font-ui);font-weight:600;font-size:17px;letter-spacing:-.01em;background:" +
-                (listo ? "linear-gradient(180deg,#B9942F,#8A6A1B)" : "rgba(120,120,128,.12)") +
-                ";box-shadow:" +
-                (listo ? "0 1px 2px rgba(0,0,0,.10),0 8px 20px rgba(154,123,46,.26)" : "none") +
-                ";color:" +
-                (listo ? "#fff" : "var(--text-4)") +
-                ";transition:all .25s;"
+              "background:linear-gradient(160deg,color-mix(in srgb, var(--surface-solid) 88%, transparent),color-mix(in srgb, var(--surface-solid) 58%, transparent));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow-lg);border:1px solid var(--border-accent);border-radius:var(--r-lg);padding:clamp(24px,3vw,36px);position:relative;"
             )}
           >
-            Generar el estudio
-          </button>
-          <div style={css("margin-top:var(--s4);font-family:var(--font-ui);font-size:16px;color:var(--text-4);line-height:1.45;text-align:center;text-wrap:pretty;")}>
-            {err || "Se usa el nombre inscrito en el Registro Civil, sin diminutivos."}
-          </div>
-          </div>
-        </section>
+            <div style={css("position:absolute;top:-1px;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);")} />
+            <div style={css(ROTULO + "margin-bottom:var(--s6);")}>Datos de nacimiento</div>
 
-        <aside data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
-          <div style={css("background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s2);")}>Valor del nombre</div>
-            {n.palabras.length === 0 && (
-              <p style={css("font-size:16px;line-height:1.5;color:var(--text-4);margin:var(--s3) 0 0;text-wrap:pretty;")}>
-                Cada letra tiene un valor. En cuanto escribas el nombre verás aquí su desglose letra a letra.
-              </p>
-            )}
-            <div style={css("display:flex;flex-wrap:wrap;gap:var(--s4);margin:var(--s4) 0 6px;")}>
-              {n.palabras.map((w, wi) => (
-                <div key={wi} style={css("display:flex;flex-direction:column;gap:7px;")}>
-                  <div style={css("display:flex;flex-wrap:wrap;gap:4px;")}>
-                    {w.letras.map((l, li) => (
-                      <div
-                        key={li}
-                        style={css(
-                          "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:26px;padding:5px 4px;border-radius:var(--r-xs);border:1px solid " +
-                            (esVocal(l.g) ? "var(--border-accent)" : "var(--border)") +
-                            ";background:" +
-                            (esVocal(l.g) ? "var(--gold-soft)" : "rgba(0,0,0,.025)") +
-                            ";color:" +
-                            (esVocal(l.g) ? "var(--gold-deep)" : "var(--text-3)") +
-                            ";"
-                        )}
-                      >
-                        <span style={css("font-family:var(--font-ui);font-size:17px;line-height:1;")}>{l.g}</span>
-                        <span style={css("font-size:12px;font-weight:590;opacity:.72;")}>{l.v}</span>
+            <div style={css("display:flex;flex-direction:column;gap:var(--s5);")}>
+              {campo("Nombre", "nombre")}
+              <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4);")}>
+                {campo("Primer apellido", "ap1")}
+                {campo("Segundo apellido", "ap2")}
+              </div>
+              <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4);")}>
+                {campo("Día", "dia", true)}
+                {campo("Mes", "mes", true)}
+                {campo("Año", "anio", true)}
+              </div>
+            </div>
+
+            <motion.button
+              onClick={calcular}
+              disabled={!listo}
+              whileTap={listo ? { scale: 0.98 } : undefined}
+              style={css(
+                "width:100%;margin-top:var(--s7);padding:16px 0;border-radius:980px;border:none;cursor:" +
+                  (listo ? "pointer" : "not-allowed") +
+                  ";font-family:var(--font-ui);font-weight:600;font-size:17px;letter-spacing:-.01em;background:" +
+                  (listo ? "linear-gradient(180deg,#C9A84C,#8A6A1B)" : "color-mix(in srgb, var(--text) 9%, transparent)") +
+                  ";box-shadow:" +
+                  (listo ? "0 1px 2px rgba(0,0,0,.14),0 10px 26px rgba(154,123,46,.32)" : "none") +
+                  ";color:" +
+                  (listo ? "#fff" : "var(--text-4)") +
+                  ";"
+              )}
+            >
+              Generar el estudio
+            </motion.button>
+            <p style={css("margin:var(--s4) 0 0;font-size:15px;color:var(--text-4);line-height:1.5;text-align:center;")}>
+              {err || "Se usa el nombre inscrito en el Registro Civil, sin diminutivos."}
+            </p>
+          </motion.section>
+
+          <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+            <div style={css(TARJETA)}>
+              <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Valor del nombre</div>
+              {n.palabras.length === 0 ? (
+                <p style={css("font-size:16px;line-height:1.55;color:var(--text-4);margin:0;")}>
+                  Cada letra tiene su valor. En cuanto escribas el nombre verás aquí el desglose letra a letra.
+                </p>
+              ) : (
+                <div style={css("display:flex;flex-wrap:wrap;gap:var(--s4);")}>
+                  {n.palabras.map((w, wi) => (
+                    <div key={wi} style={css("display:flex;flex-direction:column;gap:var(--s2);")}>
+                      <div style={css("display:flex;flex-wrap:wrap;gap:4px;")}>
+                        {w.letras.map((l, li) => (
+                          <motion.div
+                            key={li}
+                            initial={{ opacity: 0, scale: 0.7 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.28, delay: li * 0.015 }}
+                            style={css(
+                              "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:28px;padding:6px 5px;border-radius:var(--r-xs);border:1px solid " +
+                                (esVocal(l.g) ? "var(--border-accent)" : "var(--border)") +
+                                ";background:" +
+                                (esVocal(l.g) ? "var(--gold-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
+                                ";color:" +
+                                (esVocal(l.g) ? "var(--gold-deep)" : "var(--text-3)") +
+                                ";"
+                            )}
+                          >
+                            <span style={css("font-size:17px;line-height:1;")}>{l.g}</span>
+                            <span style={css("font-size:11px;font-weight:590;opacity:.7;")}>{l.v}</span>
+                          </motion.div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  <div style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>
-                    {w.palabra} · {w.total}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={css("display:flex;align-items:baseline;gap:10px;border-top:1px solid var(--border);margin-top:var(--s4);padding-top:var(--s4);")}>
-              <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>Valor del nombre</span>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:30px;color:var(--gold);line-height:1;margin-left:auto;")}>{n.total || 0}</span>
-            </div>
-            <div style={css("display:flex;gap:var(--gap);margin-top:10px;")}>
-              <div style={css("display:flex;flex-direction:column;gap:2px;")}>
-                <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>Esencia</span>
-                <span style={css("font-family:var(--font-ui);font-weight:600;font-size:17px;color:var(--text-3);")}>{n.esencia || 0}</span>
-              </div>
-              <div style={css("display:flex;flex-direction:column;gap:2px;")}>
-                <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>Ego</span>
-                <span style={css("font-family:var(--font-ui);font-weight:600;font-size:17px;color:var(--text-3);")}>{n.ego || 0}</span>
-              </div>
-            </div>
-          </div>
-
-          <div style={css("background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:14px;")}>Estudios guardados</div>
-            <div style={css("display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;")}>
-              {hist.map((h) => (
-                <div key={h.id} style={css("display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:var(--r-sm);background:rgba(0,0,0,.025);")}>
-                  <button onClick={() => abrir(h)} style={css("flex:1;text-align:left;background:none;border:none;padding:0;cursor:pointer;color:var(--text);")}>
-                    <div style={css("font-family:var(--font-ui);font-size:18px;line-height:1.2;color:var(--text);")}>{h.nombre}</div>
-                    <div style={css("font-size:12px;font-weight:590;color:var(--text-4);margin-top:2px;")}>
-                      {h.fecha} · corazón {h.corazon}
+                      <div style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>
+                        {w.palabra} · {w.total}
+                      </div>
                     </div>
-                  </button>
-                  <button onClick={() => borrar(h)} title="Eliminar" style={css("background:none;border:1px solid var(--red-border);color:var(--red);border-radius:980px;width:24px;height:24px;cursor:pointer;font-size:15px;line-height:1;")}>
-                    ×
-                  </button>
+                  ))}
                 </div>
-              ))}
+              )}
+              <div style={css("display:flex;align-items:baseline;gap:var(--s3);border-top:1px solid var(--border);margin-top:var(--s5);padding-top:var(--s4);")}>
+                <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>Valor del nombre</span>
+                <span data-cifras="" style={css("font-weight:600;font-size:32px;color:var(--gold);line-height:1;margin-left:auto;letter-spacing:-.028em;")}>{n.total || 0}</span>
+              </div>
+              <div style={css("display:flex;gap:var(--s6);margin-top:var(--s3);")}>
+                {[
+                  { l: "Esencia", v: n.esencia },
+                  { l: "Ego", v: n.ego },
+                ].map((x) => (
+                  <div key={x.l} style={css("display:flex;flex-direction:column;gap:2px;")}>
+                    <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>{x.l}</span>
+                    <span data-cifras="" style={css("font-weight:600;font-size:19px;color:var(--text-3);")}>{x.v || 0}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div style={css("font-family:var(--font-ui);font-style:normal;font-size:16px;color:var(--text-4);margin-top:10px;")}>
-              {hist.length ? "" : "Todavía no hay estudios guardados."}
+
+            <div style={css(TARJETA)}>
+              <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Estudios guardados</div>
+              {hist.length === 0 ? (
+                <p style={css("font-size:16px;line-height:1.55;color:var(--text-4);margin:0;")}>Todavía no hay estudios guardados. Los que generes se quedan aquí, en este equipo.</p>
+              ) : (
+                <div style={css("display:flex;flex-direction:column;gap:var(--s2);max-height:320px;overflow-y:auto;")}>
+                  {hist.map((h) => (
+                    <div
+                      key={h.id}
+                      data-alza=""
+                      style={css("display:flex;align-items:center;gap:var(--s3);padding:11px 13px;border:1px solid var(--border);border-radius:var(--r-sm);background:color-mix(in srgb, var(--text) 4%, transparent);")}
+                    >
+                      <button onClick={() => abrir(h)} style={css("flex:1;min-width:0;text-align:left;background:none;border:none;padding:0;cursor:pointer;color:var(--text);")}>
+                        <div style={css("font-size:17px;line-height:1.25;color:var(--text);overflow-wrap:anywhere;")}>{h.nombre}</div>
+                        <div style={css("font-size:13px;color:var(--text-4);margin-top:2px;")}>
+                          {h.fecha} · corazón {h.corazon}
+                        </div>
+                      </button>
+                      <button
+                        onClick={() => borrar(h)}
+                        title="Eliminar"
+                        style={css("flex:none;background:none;border:1px solid var(--red-border);color:var(--red);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:15px;line-height:1;")}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-        </aside>
+        </div>
       </div>
     </main>
   );

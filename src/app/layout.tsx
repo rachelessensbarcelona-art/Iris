@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
-import { Cinzel, Cormorant_Garamond, Karla } from "next/font/google";
+import { Karla } from "next/font/google";
 import "./globals.css";
 
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600", "700"],
-});
+// Karla es sólo la red de seguridad: en un Mac o un iPad la interfaz va en San
+// Francisco y los titulares en New York, que ya trae el sistema. Cinzel y
+// Cormorant se retiraron al pasar a tipografía de sistema y descargarlas era
+// pagar dos fuentes que ya no se usaban.
 const karla = Karla({
   variable: "--font-karla",
   subsets: ["latin"],
@@ -24,9 +17,26 @@ export const metadata: Metadata = {
   description: "Plataforma de estudio kabalístico: nombre, fecha y el motor calcula el árbol de la vida, la estructura energética, la imagen del alma y el estudio completo.",
 };
 
+/**
+ * El tema se decide antes del primer pintado. Si esperásemos a que React
+ * monte, la página aparecería en claro y saltaría a oscuro delante de quien
+ * mira. Por eso va en un script suelto, síncrono, en el <head>.
+ */
+const ELIGE_TEMA = `
+try {
+  var t = localStorage.getItem("es33.tema");
+  if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "oscuro" : "claro";
+  document.documentElement.dataset.tema = t;
+} catch (e) {
+  document.documentElement.dataset.tema = "claro";
+}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className={`${cinzel.variable} ${cormorant.variable} ${karla.variable}`}>
+    <html lang="es" className={karla.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: ELIGE_TEMA }} />
+      </head>
       <body>{children}</body>
     </html>
   );

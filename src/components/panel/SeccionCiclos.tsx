@@ -67,7 +67,7 @@ export default function SeccionCiclos() {
         </div>
         <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:var(--s4);")}>
           {ciclos.map((c, i) => (
-            <div key={i} style={css("border:1px solid var(--border);background:rgba(0,0,0,.025);border-radius:var(--r-sm);padding:16px 18px;")}>
+            <div key={i} style={css("border:1px solid var(--border);background:color-mix(in srgb, var(--text) 4%, transparent);border-radius:var(--r-sm);padding:16px 18px;")}>
               <div style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>{c.nombre}</div>
               <div style={css("font-family:var(--font-ui);font-weight:600;font-size:34px;color:var(--text);line-height:1.1;margin:4px 0;")}>{c.numero}</div>
               <div style={css("font-size:13px;font-weight:590;color:var(--text-3);margin-bottom:var(--s2);")}>{c.rango}</div>
@@ -102,7 +102,7 @@ export default function SeccionCiclos() {
                 "border-radius:var(--r-sm);padding:13px 15px;border:1px solid " +
                   (e.actual ? "var(--gold)" : "var(--border)") +
                   ";background:" +
-                  (e.actual ? "var(--gold-soft)" : "rgba(0,0,0,.025)") +
+                  (e.actual ? "var(--gold-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
                   ";"
               )}
             >

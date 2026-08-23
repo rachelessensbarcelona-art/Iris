@@ -152,12 +152,12 @@ export default function SeccionArbol() {
             key={ci}
             data-alza=""
             style={css(
-              "border:1px solid " + COL[c.k] + "33;background:linear-gradient(150deg," + COL[c.k] + "12,rgba(255,255,255,.78));border-left:3px solid " + COL[c.k] + ";border-radius:var(--r);padding:var(--pad-card-sm);"
+              "border:1px solid " + COL[c.k] + "33;background:linear-gradient(150deg," + COL[c.k] + "12,color-mix(in srgb, var(--surface-solid) 78%, transparent));border-left:3px solid " + COL[c.k] + ";border-radius:var(--r);padding:var(--pad-card-sm);"
             )}
           >
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
               <span style={css("font-size:13px;font-weight:590;color:" + COL[c.k] + ";")}>{c.etapa}</span>
-              <span style={css("font-weight:600;font-size:23px;line-height:1.2;color:var(--text);letter-spacing:-.022em;")}>
+              <span style={css("font-family:var(--font-display);font-weight:500;font-size:23px;line-height:1.25;color:var(--text);letter-spacing:-.022em;")}>
                 {c.c.arcano} · {c.nombre}
               </span>
               <span style={css("margin-left:auto;font-size:13px;color:var(--text-4);")}>{c.rango}</span>
@@ -166,7 +166,7 @@ export default function SeccionArbol() {
             <p style={css("font-size:17px;line-height:1.62;color:var(--text-2);margin:var(--s3) 0 0;text-wrap:pretty;")}>{c.extracto}</p>
             <button
               onClick={() => verArcano(c.c.arcano)}
-              style={css("margin-top:var(--s3);background:rgba(255,255,255,.7);border:1px solid var(--border-accent);color:var(--gold);border-radius:980px;padding:8px 16px;font-size:14px;font-weight:590;cursor:pointer;")}
+              style={css("margin-top:var(--s3);background:color-mix(in srgb, var(--surface-solid) 70%, transparent);border:1px solid var(--border-accent);color:var(--gold);border-radius:980px;padding:8px 16px;font-size:14px;font-weight:590;cursor:pointer;")}
             >
               Texto completo
             </button>

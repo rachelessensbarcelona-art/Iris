@@ -67,7 +67,7 @@ export default function SeccionResumen() {
           <section style={css(TARJETA + "padding:var(--pad-card);position:relative;overflow:hidden;isolation:isolate;")}>
             <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
               <Particulas cantidad={30} />
-              <div style={css("position:absolute;top:-70px;left:-50px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.24),transparent 70%);animation:es33-aliento 7s ease-in-out infinite;")} />
+              <div style={css("position:absolute;top:-70px;left:-50px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb, var(--gold) 34%, transparent),transparent 70%);animation:es33-aliento 7s ease-in-out infinite;")} />
             </div>
             <div style={css("position:relative;z-index:1;")}>
             <div style={css(ROTULO)}>Número de corazón</div>
@@ -86,7 +86,7 @@ export default function SeccionResumen() {
               </button>
               <button
                 onClick={() => setView("pareja")}
-                style={css("flex:1;min-width:130px;padding:12px 18px;border:1px solid var(--border-strong);border-radius:980px;cursor:pointer;font-size:15px;font-weight:590;letter-spacing:-.01em;color:var(--text-2);background:rgba(255,255,255,.7);")}
+                style={css("flex:1;min-width:130px;padding:12px 18px;border:1px solid var(--border-strong);border-radius:980px;cursor:pointer;font-size:15px;font-weight:590;letter-spacing:-.01em;color:var(--text-2);background:color-mix(in srgb, var(--surface-solid) 70%, transparent);")}
               >
                 Comparar pareja
               </button>
@@ -107,11 +107,11 @@ export default function SeccionResumen() {
                         COL[x.k] +
                         ";background:linear-gradient(160deg," +
                         COL[x.k] +
-                        "12,rgba(255,255,255,.7));"
+                        "12,color-mix(in srgb, var(--surface-solid) 70%, transparent));"
                     )}
                   >
                     <div style={css("font-size:12px;font-weight:590;color:" + COL[x.k] + ";")}>{x.etapa}</div>
-                    <div style={css("font-size:20px;font-weight:600;letter-spacing:-.022em;color:var(--text);line-height:1.1;margin-top:3px;")}>{x.d.arcano}</div>
+                    <div style={css("font-family:var(--font-display);font-size:20px;font-weight:500;letter-spacing:-.01em;color:var(--text);line-height:1.1;margin-top:3px;")}>{x.d.arcano}</div>
                     <div style={css("font-size:12px;color:var(--text-4);margin-top:2px;line-height:1.25;")}>{recorta(titulo(x.d.carta?.nombre), 18)}</div>
                   </button>
                 ))}
@@ -125,10 +125,10 @@ export default function SeccionResumen() {
               <span style={css(ROTULO)}>Ciclo vital en curso</span>
               <span style={css("margin-left:auto;font-size:13px;color:var(--text-4);")}>{c.edad} años</span>
             </div>
-            <div style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);margin-top:6px;")}>
+            <div style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);margin-top:6px;")}>
               {cicloActual.nombre} · {cicloActual.numero}
             </div>
-            <div style={css("height:9px;border-radius:980px;background:rgba(120,120,128,.14);overflow:hidden;margin-top:var(--s3);")}>
+            <div style={css("height:9px;border-radius:980px;background:color-mix(in srgb, var(--text) 10%, transparent);overflow:hidden;margin-top:var(--s3);")}>
               <div style={css("height:100%;width:" + avance.toFixed(1) + "%;border-radius:980px;background:linear-gradient(90deg,#C9A84C,#9A7B2E);")} />
             </div>
             <div style={css("display:flex;justify-content:space-between;font-size:13px;color:var(--text-4);margin-top:7px;")}>
@@ -137,7 +137,7 @@ export default function SeccionResumen() {
             </div>
             <button
               onClick={() => setSeccion("ciclos")}
-              style={css("margin-top:var(--s4);padding:9px 16px;border:1px solid var(--border-strong);border-radius:980px;cursor:pointer;background:rgba(255,255,255,.7);color:var(--text-2);font-size:14px;font-weight:590;")}
+              style={css("margin-top:var(--s4);padding:9px 16px;border:1px solid var(--border-strong);border-radius:980px;cursor:pointer;background:color-mix(in srgb, var(--surface-solid) 70%, transparent);color:var(--text-2);font-size:14px;font-weight:590;")}
             >
               Ver ciclos vitales
             </button>
@@ -147,7 +147,7 @@ export default function SeccionResumen() {
            * reconocer el dibujo, no la lámina que se estudia. */}
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:6px;")}>
-              <span style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Árbol de la Vida</span>
+              <span style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>Árbol de la Vida</span>
               <button
                 onClick={() => setSeccion("arbol")}
                 style={css("margin-left:auto;background:none;border:none;padding:0;cursor:pointer;font-size:14px;font-weight:590;color:var(--gold);")}
@@ -188,7 +188,7 @@ export default function SeccionResumen() {
               >
                 <div style={css("font-size:13px;font-weight:590;color:" + (x.destacada ? "rgba(255,255,255,.85)" : "var(--text-3)") + ";")}>{x.label}</div>
                 <div style={css("font-size:31px;font-weight:700;letter-spacing:-.028em;line-height:1.1;margin-top:6px;color:" + (x.destacada ? "#fff" : "var(--text)") + ";")}>{x.valor}</div>
-                <div style={css("font-size:13px;margin-top:3px;line-height:1.3;color:" + (x.destacada ? "rgba(255,255,255,.8)" : "var(--text-4)") + ";")}>{x.pie}</div>
+                <div style={css("font-size:13px;margin-top:3px;line-height:1.3;color:" + (x.destacada ? "color-mix(in srgb, var(--surface-solid) 80%, transparent)" : "var(--text-4)") + ";")}>{x.pie}</div>
               </button>
             ))}
           </div>
@@ -196,7 +196,7 @@ export default function SeccionResumen() {
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
               <div>
-                <div style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Año personal {c.anioPersonal}</div>
+                <div style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>Año personal {c.anioPersonal}</div>
                 <div style={css("font-size:14px;color:var(--text-3);margin-top:2px;")}>Dónde estás dentro de la rueda de nueve años</div>
               </div>
               <span style={css("margin-left:auto;font-size:13px;font-weight:590;color:var(--gold);background:var(--gold-soft);border-radius:980px;padding:5px 12px;")}>Etapa {c.etapaActual}</span>
@@ -213,7 +213,7 @@ export default function SeccionResumen() {
                         "width:100%;border-radius:7px 7px 3px 3px;height:" +
                           Math.round(28 + (n / maxEtapa) * 72) +
                           "%;background:" +
-                          (on ? "linear-gradient(180deg,#C9A84C,#8A6A1B)" : "rgba(120,120,128,.16)") +
+                          (on ? "linear-gradient(180deg,#C9A84C,#8A6A1B)" : "color-mix(in srgb, var(--text) 10%, transparent)") +
                           ";"
                       )}
                     />
@@ -226,7 +226,7 @@ export default function SeccionResumen() {
 
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:4px;")}>
-              <span style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Aprendizajes abiertos</span>
+              <span style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>Aprendizajes abiertos</span>
               <button
                 onClick={() => setSeccion("estructura")}
                 style={css("margin-left:auto;background:none;border:none;padding:0;cursor:pointer;font-size:14px;font-weight:590;color:var(--gold);")}

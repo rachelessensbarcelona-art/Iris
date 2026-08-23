@@ -11,7 +11,7 @@ import { css } from "@/lib/css";
  * tarjeta no está a la vista: no tiene sentido gastar cuadros en algo que
  * nadie está mirando.
  */
-export default function Particulas({ cantidad = 26, color = "201,168,76" }: { cantidad?: number; color?: string }) {
+export default function Particulas({ cantidad = 26, color }: { cantidad?: number; color?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -22,6 +22,11 @@ export default function Particulas({ cantidad = 26, color = "201,168,76" }: { ca
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Sobre fondo oscuro el dorado tostado desaparece: hay que subirlo de luz,
+    // igual que se hace con el token de color.
+    const oscuro = document.documentElement.dataset.tema === "oscuro";
+    const tinta = color || (oscuro ? "236,214,150" : "176,142,52");
+
     let ancho = 0;
     let alto = 0;
     let visible = true;
@@ -31,13 +36,13 @@ export default function Particulas({ cantidad = 26, color = "201,168,76" }: { ca
     const motas = Array.from({ length: cantidad }, () => ({
       x: Math.random(),
       y: Math.random(),
-      r: 0.6 + Math.random() * 1.7,
+      r: 1.1 + Math.random() * 2.6,
       // Deriva muy lenta y hacia arriba: tiene que leerse como suspensión, no
       // como lluvia al revés.
       vx: (Math.random() - 0.5) * 0.00022,
       vy: -(0.00012 + Math.random() * 0.00028),
       fase: Math.random() * Math.PI * 2,
-      brillo: 0.22 + Math.random() * 0.4,
+      brillo: oscuro ? 0.4 + Math.random() * 0.5 : 0.34 + Math.random() * 0.46,
     }));
 
     const medir = () => {
@@ -77,8 +82,14 @@ export default function Particulas({ cantidad = 26, color = "201,168,76" }: { ca
         // parpadeen todas a la vez.
         const alfa = m.brillo * (0.55 + 0.45 * Math.sin(t * 0.012 + m.fase));
         ctx.beginPath();
-        ctx.arc(m.x * ancho, m.y * alto, m.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${color},${alfa.toFixed(3)})`;
+        ctx.arc(m.x * ancho, m.y * alto, m.r * 3.4, 0, Math.PI * 2);
+        // Un halo suave alrededor de cada mota: sin él se ven como puntos
+        // duros, y esto tiene que leerse como polvo suspendido.
+        const halo = ctx.createRadialGradient(m.x * ancho, m.y * alto, 0, m.x * ancho, m.y * alto, m.r * 3.4);
+        halo.addColorStop(0, `rgba(${tinta},${alfa.toFixed(3)})`);
+        halo.addColorStop(0.45, `rgba(${tinta},${(alfa * 0.35).toFixed(3)})`);
+        halo.addColorStop(1, `rgba(${tinta},0)`);
+        ctx.fillStyle = halo;
         ctx.fill();
       }
     };

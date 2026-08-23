@@ -21,7 +21,7 @@ export default function ParejaScreen() {
         value={p[key]}
         onChange={(e) => setP(key, numeric ? e.target.value.replace(/\D/g, "").slice(0, key === "anio" ? 4 : 2) : e.target.value)}
         inputMode={numeric ? "numeric" : undefined}
-        style={css("width:100%;min-width:0;background:rgba(120,120,128,.08);border:1px solid transparent;border-radius:var(--r-sm);padding:12px 14px;color:var(--text);font-family:var(--font-ui);font-size:17px;")}
+        style={css("width:100%;min-width:0;background:color-mix(in srgb, var(--text) 6%, transparent);border:1px solid transparent;border-radius:var(--r-sm);padding:12px 14px;color:var(--text);font-family:var(--font-ui);font-size:17px;")}
       />
     </label>
   );
@@ -71,7 +71,7 @@ export default function ParejaScreen() {
         <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(21px,3.4vw,30px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.2;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)} &amp; su pareja</h1>
       </div>
 
-      <section style={css("background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:var(--pad-card-sm);margin-bottom:var(--s5);")}>
+      <section style={css("background:linear-gradient(160deg,color-mix(in srgb, var(--surface-solid) 90%, transparent),color-mix(in srgb, var(--surface-solid) 62%, transparent));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:var(--pad-card-sm);margin-bottom:var(--s5);")}>
         <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s5);")}>Datos de la segunda persona</div>
         <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:var(--s3);align-items:end;")}>
           {campo("Nombre", "nombre")}
@@ -88,7 +88,7 @@ export default function ParejaScreen() {
             "margin-top:20px;padding:13px 34px;border-radius:980px;border:none;cursor:" +
               (listo ? "pointer" : "not-allowed") +
               ";font-family:var(--font-ui);font-weight:600;font-size:17px;letter-spacing:-.01em;background:" +
-              (listo ? "linear-gradient(180deg,#B9942F,#8A6A1B)" : "rgba(120,120,128,.12)") +
+              (listo ? "linear-gradient(180deg,#B9942F,#8A6A1B)" : "color-mix(in srgb, var(--text) 10%, transparent)") +
               ";box-shadow:" +
               (listo ? "0 1px 2px rgba(0,0,0,.10),0 8px 20px rgba(154,123,46,.26)" : "none") +
               ";color:" +
@@ -104,7 +104,7 @@ export default function ParejaScreen() {
         <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
           <div
             style={css(
-              "position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--gap);align-items:center;justify-items:center;text-align:center;border:1px solid var(--border-accent);background:linear-gradient(155deg,rgba(201,168,76,.10),rgba(255,255,255,.7));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card);"
+              "position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--gap);align-items:center;justify-items:center;text-align:center;border:1px solid var(--border-accent);background:linear-gradient(155deg,var(--gold-soft),color-mix(in srgb, var(--surface-solid) 70%, transparent));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card);"
             )}
           >
             <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>

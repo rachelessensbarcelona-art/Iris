@@ -75,7 +75,7 @@ export default function SeccionNumeros() {
                   "px;border:1px solid " +
                   (i === 0 ? "var(--gold)" : "var(--border-accent)") +
                   ";background:" +
-                  (i === 0 ? "var(--border)" : "rgba(0,0,0,.025)") +
+                  (i === 0 ? "var(--border)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
                   ";color:" +
                   (i === 0 ? "var(--text)" : "var(--text-3)") +
                   ";"

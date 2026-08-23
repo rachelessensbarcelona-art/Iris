@@ -57,7 +57,7 @@ export default function PanelScreen() {
 
       {/* Duplica la barra lateral, así que sólo aparece cuando ésta se esconde
        * por falta de ancho. */}
-      <nav data-nav="" data-tabs-panel="" style={css("display:flex;gap:2px;margin-bottom:var(--s6);background:rgba(120,120,128,.1);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
+      <nav data-nav="" data-tabs-panel="" style={css("display:flex;gap:2px;margin-bottom:var(--s6);background:color-mix(in srgb, var(--text) 10%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
         {SECCIONES.map((s) => {
           const on = seccion === s.k;
           return (
