@@ -2,6 +2,7 @@
 import { css } from "@/lib/css";
 import { titulo } from "@/lib/format";
 import { useApp, type Seccion } from "@/lib/app-context";
+import SeccionResumen from "../panel/SeccionResumen";
 import SeccionArbol from "../panel/SeccionArbol";
 import SeccionNumeros from "../panel/SeccionNumeros";
 import SeccionEstructura from "../panel/SeccionEstructura";
@@ -10,6 +11,7 @@ import SeccionCuentas from "../panel/SeccionCuentas";
 import SeccionCiclos from "../panel/SeccionCiclos";
 
 const SECCIONES: Array<{ k: Seccion; label: string }> = [
+  { k: "resumen", label: "Resumen" },
   { k: "arbol", label: "Árbol y caminos" },
   { k: "numeros", label: "Números" },
   { k: "estructura", label: "Estructura y aprendizajes" },
@@ -41,7 +43,9 @@ export default function PanelScreen() {
             {r.fecha.dia} / {r.fecha.mes} / {r.fecha.anio}
           </div>
         </div>
-        <div style={css("display:flex;gap:clamp(14px,2.4vw,26px);flex-wrap:wrap;margin-left:auto;")}>
+        {/* En el resumen estas mismas cifras ya salen en las tarjetas, así que
+         * la tira sólo aparece en las demás secciones. */}
+        <div style={css("display:" + (seccion === "resumen" ? "none" : "flex") + ";gap:clamp(14px,2.4vw,26px);flex-wrap:wrap;margin-left:auto;")}>
           {resumen.map((k, i) => (
             <div key={i} style={css("display:flex;flex-direction:column;gap:3px;align-items:flex-end;")}>
               <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>{k.label}</span>
@@ -51,9 +55,9 @@ export default function PanelScreen() {
         </div>
       </div>
 
-      {/* Igual que la cabecera: pista gris con pastilla blanca, y en móvil se
-       * desliza en horizontal en lugar de partirse en dos filas. */}
-      <nav data-nav="" style={css("display:flex;gap:2px;margin-bottom:28px;background:rgba(120,120,128,.1);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
+      {/* Duplica la barra lateral, así que sólo aparece cuando ésta se esconde
+       * por falta de ancho. */}
+      <nav data-nav="" data-tabs-panel="" style={css("display:flex;gap:2px;margin-bottom:28px;background:rgba(120,120,128,.1);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
         {SECCIONES.map((s) => {
           const on = seccion === s.k;
           return (
@@ -76,6 +80,7 @@ export default function PanelScreen() {
         })}
       </nav>
 
+      {seccion === "resumen" && <SeccionResumen />}
       {seccion === "arbol" && <SeccionArbol />}
       {seccion === "numeros" && <SeccionNumeros />}
       {seccion === "estructura" && <SeccionEstructura />}

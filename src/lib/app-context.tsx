@@ -4,7 +4,7 @@ import { calcula, comparaPareja, ficha as fichaDe, type Resultado, type Comparat
 import { cargaHistorial, guardaHistorial, cargaEdits, guardaEdits, type HistItem, type Edits } from "./storage";
 
 export type View = "inicio" | "panel" | "estudio" | "pareja";
-export type Seccion = "arbol" | "numeros" | "estructura" | "alma" | "cuentas" | "ciclos";
+export type Seccion = "resumen" | "arbol" | "numeros" | "estructura" | "alma" | "cuentas" | "ciclos";
 export type FormState = { nombre: string; ap1: string; ap2: string; dia: string; mes: string; anio: string };
 const FORM_VACIO: FormState = { nombre: "", ap1: "", ap2: "", dia: "", mes: "", anio: "" };
 
@@ -74,7 +74,7 @@ const AppCtx = createContext<Ctx | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [view, setView] = useState<View>("inicio");
-  const [seccion, setSeccion] = useState<Seccion>("arbol");
+  const [seccion, setSeccion] = useState<Seccion>("resumen");
   const [f, setF] = useState<FormState>(FORM_VACIO);
   const [r, setR] = useState<Resultado | null>(null);
   const [id, setId] = useState<string | null>(null);
@@ -109,7 +109,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setR(resultado);
     setId(hid);
     setView("panel");
-    setSeccion("arbol");
+    setSeccion("resumen");
   }, [f, anioUniversal]);
 
   const abrir = useCallback(
@@ -119,7 +119,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setR(resultado);
       setId(h.id);
       setView("panel");
-      setSeccion("arbol");
+      setSeccion("resumen");
     },
     [anioUniversal]
   );

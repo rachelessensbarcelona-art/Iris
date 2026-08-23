@@ -6,6 +6,7 @@ import PanelScreen from "./screens/PanelScreen";
 import EstudioScreen from "./screens/EstudioScreen";
 import ParejaScreen from "./screens/ParejaScreen";
 import DetalleModal from "./DetalleModal";
+import Sidebar from "./Sidebar";
 
 const TABS: Array<{ k: View; label: string }> = [
   { k: "inicio", label: "Consulta" },
@@ -89,10 +90,17 @@ export default function Shell() {
         </nav>
       </header>
 
-      {view === "inicio" && <ConsultaScreen />}
-      {view === "panel" && <PanelScreen />}
-      {view === "estudio" && <EstudioScreen />}
-      {view === "pareja" && <ParejaScreen />}
+      {/* En el panel la barra lateral va pegada al contenido; el resto de
+       * pantallas ocupan el ancho completo. */}
+      <div style={css("display:flex;align-items:flex-start;")}>
+        {view === "panel" && <Sidebar />}
+        <div style={css("flex:1;min-width:0;")}>
+          {view === "inicio" && <ConsultaScreen />}
+          {view === "panel" && <PanelScreen />}
+          {view === "estudio" && <EstudioScreen />}
+          {view === "pareja" && <ParejaScreen />}
+        </div>
+      </div>
 
       <DetalleModal />
     </div>
