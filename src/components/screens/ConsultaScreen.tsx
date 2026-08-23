@@ -130,7 +130,7 @@ export default function ConsultaScreen() {
               ))}
             </div>
             <div style={css("display:flex;align-items:baseline;gap:10px;border-top:1px solid var(--border);margin-top:14px;padding-top:14px;")}>
-              <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>Número de corazón</span>
+              <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>Valor del nombre</span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:30px;color:var(--gold);line-height:1;margin-left:auto;")}>{n.total || 0}</span>
             </div>
             <div style={css("display:flex;gap:var(--gap);margin-top:10px;")}>

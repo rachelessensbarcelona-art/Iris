@@ -156,6 +156,8 @@ export type Estructura = {
   cifras: number[];
   aprendizajes: Record<number, number>;
   escudos: Record<number, number>;
+  /** Portales sin aprendizaje: en los apuntes, las maestrías. */
+  maestrias: number[];
 };
 function estructuraEnergetica(f: Fecha): Estructura {
   const p = piezasFecha(f, MAPA_ESTRUCTURA);
@@ -175,12 +177,22 @@ function estructuraEnergetica(f: Fecha): Estructura {
   cifras.forEach((d) => {
     for (let portal = 1; portal <= 10; portal++) if (dinamicos[portal] === d) aprend[portal] = (aprend[portal] || 0) + 1;
   });
+  // El escudo cae tres portales más allá del que tiene el aprendizaje, y la
+  // cuenta se hace sobre la cifra rotulada, no sobre el índice: el portal 10
+  // se escribe 0, así que 10 → 0+3 = 3. Comprobado contra la ficha resuelta de
+  // MARIA IRIS SOARES CAMPOS (24/2/1983): aprendizajes en 1, 2, 5 y 10 dan
+  // escudos en 4, 5, 8 y 3.
   const escudos: Record<number, number> = {};
   Object.keys(aprend).forEach((portal) => {
-    const e = ((+portal + 2 - 1) % 10) + 1;
+    const cifra = (+portal % 10) + 3;
+    const e = cifra % 10 === 0 ? 10 : cifra % 10;
     escudos[e] = (escudos[e] || 0) + aprend[+portal];
   });
-  return { fechaConvertida: p, suma, pasos, tipo, dinamicos, cifras, aprendizajes: aprend, escudos };
+  // Los portales sin aprendizaje ya vienen resueltos de otras vidas: en los
+  // apuntes se llaman maestrías.
+  const maestrias: number[] = [];
+  for (let portal = 1; portal <= 10; portal++) if (!aprend[portal]) maestrias.push(portal);
+  return { fechaConvertida: p, suma, pasos, tipo, dinamicos, cifras, aprendizajes: aprend, escudos, maestrias };
 }
 
 export type ImagenAlma = {
@@ -465,16 +477,18 @@ function turbulencias(f: Fecha, edadCambio: number): Turbulencias {
   return { lista: t, desde: edadCambio, hasta: edadCambio + 10 };
 }
 
-function diasDeFuerza(totalNombre: number): { base: number; dias: number[] } {
-  // El número base tiene que quedar reducido a una sola cifra. Con una única
-  // pasada de suma, un corazón como 179 daba 17, y ningún día del mes suma
-  // 17 (el máximo es 29 → 11): la lista salía vacía y el estudio imprimía
-  // "el día undefined". Los ejemplos de los manuales no cambian, porque su
-  // primera pasada ya daba una cifra (223 → 7, 242 → 8).
+function diasDeFuerza(totalNombre: number): { primeraSuma: number; base: number; dias: number[] } {
+  // En la ficha se anota primero la suma de las cifras del nombre (269 → 17) y
+  // de ahí salen los días. El número base tiene que quedar reducido a una sola
+  // cifra: con una única pasada, un nombre como 179 daba 17, y ningún día del
+  // mes suma 17 (el máximo es 29 → 11), así que la lista salía vacía y el
+  // estudio imprimía "el día undefined". Se guardan los dos para poder
+  // enseñar la cuenta como está escrita a mano.
+  const primeraSuma = reduceOnce(totalNombre);
   const base = reduceTo(totalNombre, 9);
   const dias: number[] = [];
   for (let d = 1; d <= 31; d++) if (sumDigits(d) === base) dias.push(d);
-  return { base, dias };
+  return { primeraSuma, base, dias };
 }
 
 export type Aprendizaje = {
@@ -497,10 +511,12 @@ export type Resultado = {
   entrada: Entrada;
   fecha: Fecha;
   nombre: NombreAnalizado;
+  /** Valor del nombre: la suma de sus letras, sin la edad de cambio. */
+  valorNombre: number;
   corazon: { valor: number; ficha: Ficha | null; lectura: { positivo: string; negativo: string } };
   esencia: { valor: number; ficha: Ficha | null; lectura: { positivo: string; negativo: string } };
   ego: { valor: number; ficha: Ficha | null; lectura: { positivo: string; negativo: string } };
-  diasFuerza: { base: number; dias: number[] };
+  diasFuerza: { primeraSuma: number; base: number; dias: number[] };
   caminos: {
     origen: { calculo: ArcanoCalc; arcano: number; carta?: ArcanoData };
     transformacion: { calculo: { total: number; arcano: number }; arcano: number; carta?: ArcanoData };
@@ -527,11 +543,16 @@ export function calcula(entrada: Entrada): Resultado {
   const f: Fecha = { dia: Number(entrada.dia), mes: Number(entrada.mes), anio: Number(entrada.anio) };
   const nombre = analizaNombre([entrada.nombre, entrada.apellido1, entrada.apellido2].filter(Boolean).join(" "));
 
-  const corazon = nombre.total;
-  const origen = arcanoDesde(corazon);
+  // Ojo con los nombres: en la ficha de trabajo el número grande del nombre
+  // (aquí 269) es el "valor del nombre", y el "Nº de corazón" es ese valor más
+  // la edad de cambio (269 + 29 = 298). El camino de origen y los días de
+  // fuerza salen del valor del nombre; el de destino, del corazón.
+  const valorNombre = nombre.total;
+  const origen = arcanoDesde(valorNombre);
   const edadCambio = fechaSuma(f);
   const transformacion = { total: edadCambio, arcano: reduceTo(edadCambio, 21) };
-  const destino = arcanoDesde(corazon + edadCambio);
+  const corazon = valorNombre + edadCambio;
+  const destino = arcanoDesde(corazon);
 
   const est = estructuraEnergetica(f);
   const ia = imagenDelAlma(f);
@@ -574,10 +595,11 @@ export function calcula(entrada: Entrada): Resultado {
     entrada,
     fecha: f,
     nombre,
+    valorNombre,
     corazon: { valor: corazon, ficha: ficha(corazon), lectura: lectura(corazon) },
     esencia: { valor: nombre.esencia, ficha: ficha(nombre.esencia), lectura: lectura(nombre.esencia) },
     ego: { valor: nombre.ego, ficha: ficha(nombre.ego), lectura: lectura(nombre.ego) },
-    diasFuerza: diasDeFuerza(corazon),
+    diasFuerza: diasDeFuerza(valorNombre),
     caminos: {
       origen: { calculo: origen, arcano: origen.arcano, carta: (KDATA.arcanos || {})[origen.arcano] },
       transformacion: { calculo: transformacion, arcano: transformacion.arcano, carta: (KDATA.arcanos || {})[transformacion.arcano] },

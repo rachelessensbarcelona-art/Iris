@@ -5,7 +5,7 @@ import { KDATA } from "@/lib/kdata";
 import { arbolGeometria } from "@/lib/arbol";
 import { COL } from "@/lib/tree";
 import styles from "./Estudio.module.css";
-import CuerpoPortales, { TEMA_CLARO } from "../CuerpoPortales";
+import CuerpoPortales from "../CuerpoPortales";
 
 /** Ancho de la primera columna de una maqueta .split (ver Estudio.module.css). */
 const col1 = (w: string) => ({ "--doc-col1": w }) as CSSProperties;
@@ -58,7 +58,7 @@ export function DocEstructura({ r }: { r: Resultado }) {
 
   return (
     <div className={styles.split} style={col1("210px")}>
-      <CuerpoPortales r={r} tema={TEMA_CLARO} />
+      <CuerpoPortales r={r} />
       <div style={css("display:flex;flex-direction:column;gap:7px;")}>
         {tensiones.map((t, i) => (
           <div

@@ -3,6 +3,7 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import { chipStyle } from "@/lib/format";
+import Desglose from "../Desglose";
 
 export default function SeccionNumeros() {
   const { r, verNumero } = useApp();
@@ -47,6 +48,19 @@ export default function SeccionNumeros() {
           </article>
         );
       })}
+
+      <Desglose
+        titulo="De dónde salen estos números"
+        pasos={[
+          { etiqueta: "Valor del nombre", operacion: r.nombre.palabras.map((w) => w.total).join(" + "), resultado: r.valorNombre },
+          { etiqueta: "Edad de cambio", operacion: `${r.fecha.dia} + ${r.fecha.mes} + ${r.fecha.anio}, sumando cifras`, resultado: r.caminos.edadCambio },
+          { etiqueta: "Número de corazón", operacion: `${r.valorNombre} + ${r.caminos.edadCambio}`, resultado: r.corazon.valor, final: true },
+          { etiqueta: "Esencia", operacion: "sólo las vocales", resultado: r.esencia.valor },
+          { etiqueta: "Ego", operacion: "sólo las consonantes", resultado: r.ego.valor },
+          { etiqueta: "Días de fuerza", operacion: `${String(r.valorNombre).split("").join("+")} = ${r.diasFuerza.primeraSuma}, y de ahí ${r.diasFuerza.base}`, resultado: r.diasFuerza.dias.join(" · ") },
+        ]}
+        nota="El valor del nombre sale del nombre solo; el número de corazón necesita además la fecha, porque le suma la edad de cambio. Los días de fuerza se leen del valor del nombre."
+      />
 
       <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:12px;")}>Tus días de fuerza</div>

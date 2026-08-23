@@ -6,13 +6,70 @@ import { chipStyle, recorta } from "@/lib/format";
 import CuerpoPortales from "../CuerpoPortales";
 import Desglose, { type Paso } from "../Desglose";
 import { PORTALES_CUERPO } from "@/lib/cuerpo";
-import { TENSIONES, type TensionEntry } from "@/lib/kdata";
+import { KDATA, TENSIONES, type TensionEntry } from "@/lib/kdata";
+
+/** Dónde cae cada portal sobre el cuerpo, según los apuntes (§ pág. 127). */
+const LUGAR: Record<number, string> = {
+  1: "Cabeza, delante · tercer ojo",
+  2: "Corona",
+  3: "Cabeza, detrás · nuca",
+  4: "Garganta, detrás",
+  5: "Pecho, detrás",
+  6: "Vientre, detrás",
+  7: "Raíz",
+  8: "Vientre, delante",
+  9: "Pecho, delante",
+  10: "Garganta, delante",
+};
 
 export default function SeccionEstructura() {
   const { r, verNumero, verTexto } = useApp();
   if (!r) return null;
   const est = r.estructura;
   const fc = est.fechaConvertida;
+
+  // Sobre la figura conviven cuatro números distintos y sin esta leyenda no
+  // hay forma de saber cuál es cuál.
+  const punto = (fondo: string, borde: string, texto: string, contenido: string) =>
+    css(
+      `display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-size:14px;font-weight:700;background:${fondo};border:${borde};color:${texto};` + contenido
+    );
+  const LEYENDA: Array<{ muestra: React.ReactNode; titulo: string; texto: string }> = [
+    {
+      muestra: <span style={punto("#fff", "1px solid rgba(90,80,60,.45)", "#4A4550", "")}>7</span>,
+      titulo: "Número grande · el portal",
+      texto: "Los diez portales de energía, siempre en el mismo sitio del cuerpo. El décimo se rotula 0.",
+    },
+    {
+      muestra: <span style={css("display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;font-size:15px;font-weight:600;color:var(--red);")}>{est.tipo}</span>,
+      titulo: "Número pequeño rojo · el dinámico",
+      texto: `Es el que cambia de una persona a otra. El portal 1 recibe el tipo de estructura (${est.tipo}) y de ahí la cuenta sigue de uno en uno por los diez portales.`,
+    },
+    {
+      muestra: (
+        <span style={css("display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:24px;padding:0 6px;border-radius:5px;background:#fff;border:2px solid #3E77C4;font-size:13px;font-weight:700;color:#2C5D9E;")}>
+          {est.cifras[0]}
+        </span>
+      ),
+      titulo: "Recuadro azul · el aprendizaje",
+      texto: "Una cifra de tu fecha de nacimiento transformada que coincide con el dinámico de ese portal. Si la cifra sale dos veces, el aprendizaje va doble.",
+    },
+    {
+      muestra: <span style={punto("#E5B63C", "none", "#241F2E", "")}>·</span>,
+      titulo: "Portal dorado · tarea abierta",
+      texto: "El portal que tiene aprendizaje: ahí está el trabajo de esta vida.",
+    },
+    {
+      muestra: <span style={punto("#fff", "3px solid #3E77C4", "#4A4550", "")}>·</span>,
+      titulo: "Aro azul · el escudo",
+      texto: "Cada aprendizaje deja un escudo tres portales más allá: es la energía que te protege mientras haces esa tarea.",
+    },
+    {
+      muestra: <span style={css("display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;font-size:19px;color:var(--gold);")}>◟</span>,
+      titulo: "Conos laterales · los chakras",
+      texto: "Cada pareja de portales comparte un vórtice que absorbe y expulsa energía. La corona sube y la raíz baja.",
+    },
+  ];
 
   // Cómo se llega al tipo de estructura, paso a paso.
   const cifras = (s: string) => s.split("").join("+");
@@ -69,18 +126,21 @@ export default function SeccionEstructura() {
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:26px;color:var(--gold);line-height:1;")}>tipo {est.tipo}</span>
           </div>
           <CuerpoPortales r={r} />
-          <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:13px;font-weight:590;color:var(--text-3);")}>
-            <div style={css("display:flex;align-items:center;gap:8px;")}>
-              <span style={css("width:11px;height:11px;border-radius:50%;background:var(--gold);")} />
-              Portal con aprendizaje
-            </div>
-            <div style={css("display:flex;align-items:center;gap:8px;")}>
-              <span style={css("width:11px;height:11px;border-radius:50%;border:2px solid var(--blue);")} />
-              Escudo energético
-            </div>
-            <div style={css("display:flex;align-items:center;gap:8px;")}>
-              <span style={css("color:var(--red);font-size:13px;")}>7</span>
-              Número dinámico
+
+          {/* Qué es cada número del dibujo. Sobre la figura conviven cuatro
+           * cosas distintas y sin esto no hay forma de saber cuál es cuál. */}
+          <div style={css("margin-top:var(--s4);padding-top:var(--s4);border-top:1px solid var(--border);")}>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s3);")}>Qué significa cada número del dibujo</div>
+            <div style={css("display:flex;flex-direction:column;gap:var(--s3);")}>
+              {LEYENDA.map((l, i) => (
+                <div key={i} style={css("display:grid;grid-template-columns:38px 1fr;gap:var(--s3);align-items:start;")}>
+                  <span style={css("justify-self:center;margin-top:2px;")}>{l.muestra}</span>
+                  <span style={css("min-width:0;")}>
+                    <span style={css("display:block;font-size:14px;font-weight:590;color:var(--text);line-height:1.3;")}>{l.titulo}</span>
+                    <span style={css("display:block;font-size:14px;color:var(--text-3);line-height:1.45;margin-top:2px;text-wrap:pretty;")}>{l.texto}</span>
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -92,27 +152,66 @@ export default function SeccionEstructura() {
         />
 
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:10px;")}>Número dinámico de cada portal</div>
-          <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:7px;")}>
-            {PORTALES_CUERPO.map((p) => {
-              const tieneTarea = !!est.aprendizajes[p.portal];
-              return (
-                <div
-                  key={p.portal}
-                  style={css(
-                    "display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:var(--r-sm);border:1px solid " +
-                      (tieneTarea ? "var(--gold)" : "var(--border)") +
-                      ";background:" +
-                      (tieneTarea ? "var(--gold-soft)" : "rgba(0,0,0,.025)") +
-                      ";"
-                  )}
-                >
-                  <span style={css("font-family:var(--font-ui);font-weight:600;font-size:16px;color:var(--gold);line-height:1;")}>{p.etiqueta}</span>
-                  <span style={css("font-size:13px;color:var(--red);line-height:1;")}>{est.dinamicos[p.portal]}</span>
-                </div>
-              );
-            })}
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s3);")}>Los diez portales, uno a uno</div>
+          <div style={css("display:flex;flex-direction:column;")}>
+            {PORTALES_CUERPO.slice()
+              .sort((a, b) => a.portal - b.portal)
+              .map((p) => {
+                const veces = est.aprendizajes[p.portal] || 0;
+                const escudo = !!est.escudos[p.portal];
+                const tarea = KDATA.tareas?.[p.portal];
+                return (
+                  <button
+                    key={p.portal}
+                    onClick={() =>
+                      verTexto(
+                        "Portal " + p.etiqueta,
+                        tarea?.nombre || "Portal " + p.etiqueta,
+                        LUGAR[p.portal],
+                        (tarea?.texto || "") +
+                          (tarea?.hiloRojo ? "\n\nHilo rojo: " + tarea.hiloRojo : "") +
+                          (tarea?.neurosis ? "\n\nNeurosis: " + tarea.neurosis : "") +
+                          (tarea?.sanador ? "\n\nPrincipio sanador: " + tarea.sanador : "")
+                      )
+                    }
+                    style={css("display:grid;grid-template-columns:34px 1fr auto;gap:var(--s3);align-items:center;text-align:left;width:100%;padding:10px 2px;border:none;border-top:1px solid var(--border);background:none;cursor:pointer;")}
+                  >
+                    <span
+                      style={css(
+                        "justify-self:center;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;font-size:15px;font-weight:700;background:" +
+                          (veces ? "#E5B63C" : "rgba(0,0,0,.04)") +
+                          ";color:" +
+                          (veces ? "#241F2E" : "var(--text-3)") +
+                          ";border:" +
+                          (escudo ? "2.5px solid var(--blue)" : "1px solid var(--border)") +
+                          ";"
+                      )}
+                    >
+                      {p.etiqueta}
+                    </span>
+                    <span style={css("min-width:0;")}>
+                      <span style={css("display:block;font-size:15px;font-weight:590;color:var(--text);line-height:1.3;")}>{tarea?.nombre || "—"}</span>
+                      <span style={css("display:block;font-size:13px;color:var(--text-4);margin-top:1px;")}>
+                        {LUGAR[p.portal]} · dinámico <span style={css("color:var(--red);font-weight:590;")}>{est.dinamicos[p.portal]}</span>
+                      </span>
+                    </span>
+                    <span style={css("justify-self:end;display:flex;flex-direction:column;align-items:flex-end;gap:2px;white-space:nowrap;")}>
+                      {veces > 0 ? (
+                        <span style={css("font-size:12px;font-weight:590;color:var(--gold-deep);background:var(--gold-soft);border-radius:980px;padding:3px 9px;")}>
+                          Aprendizaje{veces > 1 ? " ×" + veces : ""}
+                        </span>
+                      ) : (
+                        <span style={css("font-size:12px;font-weight:590;color:var(--green);")}>Maestría</span>
+                      )}
+                      {escudo && <span style={css("font-size:12px;font-weight:590;color:var(--blue);")}>Escudo</span>}
+                    </span>
+                  </button>
+                );
+              })}
           </div>
+          <p style={css("font-size:14px;line-height:1.5;color:var(--text-4);margin:var(--s3) 0 0;text-wrap:pretty;")}>
+            Los portales sin aprendizaje son maestrías: vienen resueltos y sostienen el trabajo de los demás. Pulsa cualquiera para leer su texto completo.
+          </p>
         </div>
 
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>

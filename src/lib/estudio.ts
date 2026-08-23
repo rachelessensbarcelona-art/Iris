@@ -150,6 +150,8 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
     titulo: "Tu número de corazón: " + cor.valor,
     bloques: [
       bLead("p7.lead", "Es el número pin de tu alma, cómo vibras. Sabiendo que los números son vibración, entendemos que nos dan la información de la energía que generamos y el tipo de aprendizaje con los demás."),
+      // De dónde sale la cifra, para que se pueda seguir la cuenta a mano.
+      bP("p7.cuenta", `Sale del valor de tu nombre (${r.valorNombre}) más tu edad de cambio (${r.caminos.edadCambio}): ${r.valorNombre} + ${r.caminos.edadCambio} = ${cor.valor}.`),
       bPolos("p7.polos", cor.lectura.negativo, cor.lectura.positivo),
       bH(cor.ficha?.enDiccionario ? "Número " + cor.valor + " · " + cor.ficha.titulo : "En Kábala los números de tres cifras se dividen de dos en dos: " + (cor.ficha ? cor.ficha.partes.map((p) => p.n).join(" y ") : "")),
       bP("p7.cuerpo", cor.ficha?.enDiccionario ? cor.ficha.texto : cor.ficha ? cor.ficha.partes.map((p) => p.n + ". " + p.titulo + " " + p.texto).join("\n\n") : ""),
