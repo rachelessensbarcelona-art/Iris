@@ -2,6 +2,7 @@
 import { css } from "@/lib/css";
 import { useApp, valida } from "@/lib/app-context";
 import { analizaNombre, esVocal } from "@/lib/engine";
+import Particulas from "../Particulas";
 
 export default function ConsultaScreen() {
   const { f, set, calcular, hist, abrir, borrar } = useApp();
@@ -32,7 +33,7 @@ export default function ConsultaScreen() {
   );
 
   return (
-    <main style={css("max-width:1120px;margin:0 auto;padding:clamp(26px,5vw,48px) clamp(14px,3vw,28px) 80px;animation:es33-in .5s ease both;")}>
+    <main style={css("max-width:1180px;margin:0 auto;padding:var(--s7) var(--gutter) var(--s8);")}>
       <div style={css("text-align:center;margin-bottom:40px;")}>
         <div style={css("font-size:13px;font-weight:590;color:var(--text-3);margin-bottom:14px;")}>Nueva consulta</div>
         <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(25px,4.6vw,38px);line-height:1.16;letter-spacing:-.022em;color:var(--text);margin:0 0 12px;")}>
@@ -43,16 +44,20 @@ export default function ConsultaScreen() {
         </p>
       </div>
 
-      <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:26px;align-items:start;")}>
+      <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--gap-lg);align-items:start;")}>
         <section
           style={css(
-            "background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:clamp(20px,3vw,30px);position:relative;"
+            "background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:var(--pad-card);position:relative;overflow:hidden;isolation:isolate;"
           )}
         >
-          <div style={css("position:absolute;top:-1px;left:44px;right:44px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);")} />
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:22px;")}>Datos de nacimiento</div>
+          <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
+            <Particulas cantidad={22} />
+          </div>
+          <div style={css("position:absolute;top:-1px;left:44px;right:44px;height:1px;z-index:1;background:linear-gradient(90deg,transparent,var(--gold),transparent);")} />
+          <div style={css("position:relative;z-index:1;")}>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s5);")}>Datos de nacimiento</div>
 
-          <div style={css("display:flex;flex-direction:column;gap:14px;")}>
+          <div style={css("display:flex;flex-direction:column;gap:var(--s4);")}>
             {campo("Nombre", "nombre", "")}
             <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;")}>
               {campo("Primer apellido", "ap1", "")}
@@ -82,15 +87,21 @@ export default function ConsultaScreen() {
           >
             Generar el estudio
           </button>
-          <div style={css("margin-top:14px;font-family:var(--font-ui);font-style:normal;font-size:16px;color:var(--text-4);line-height:1.45;text-align:center;")}>
+          <div style={css("margin-top:var(--s4);font-family:var(--font-ui);font-size:16px;color:var(--text-4);line-height:1.45;text-align:center;text-wrap:pretty;")}>
             {err || "Se usa el nombre inscrito en el Registro Civil, sin diminutivos."}
+          </div>
           </div>
         </section>
 
-        <aside style={css("display:flex;flex-direction:column;gap:18px;")}>
-          <div style={css("background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);")}>
+        <aside data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+          <div style={css("background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
             <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:8px;")}>Valor del nombre</div>
-            <div style={css("display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 6px;")}>
+            {n.palabras.length === 0 && (
+              <p style={css("font-size:16px;line-height:1.5;color:var(--text-4);margin:var(--s3) 0 0;text-wrap:pretty;")}>
+                Cada letra tiene un valor. En cuanto escribas el nombre verás aquí su desglose letra a letra.
+              </p>
+            )}
+            <div style={css("display:flex;flex-wrap:wrap;gap:var(--s4);margin:var(--s4) 0 6px;")}>
               {n.palabras.map((w, wi) => (
                 <div key={wi} style={css("display:flex;flex-direction:column;gap:7px;")}>
                   <div style={css("display:flex;flex-wrap:wrap;gap:4px;")}>
@@ -122,7 +133,7 @@ export default function ConsultaScreen() {
               <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>Número de corazón</span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:30px;color:var(--gold);line-height:1;margin-left:auto;")}>{n.total || 0}</span>
             </div>
-            <div style={css("display:flex;gap:18px;margin-top:10px;")}>
+            <div style={css("display:flex;gap:var(--gap);margin-top:10px;")}>
               <div style={css("display:flex;flex-direction:column;gap:2px;")}>
                 <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>Esencia</span>
                 <span style={css("font-family:var(--font-ui);font-weight:600;font-size:17px;color:var(--text-3);")}>{n.esencia || 0}</span>
@@ -134,7 +145,7 @@ export default function ConsultaScreen() {
             </div>
           </div>
 
-          <div style={css("background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);")}>
+          <div style={css("background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
             <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:14px;")}>Estudios guardados</div>
             <div style={css("display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;")}>
               {hist.map((h) => (

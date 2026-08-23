@@ -4,6 +4,7 @@ import { useApp } from "@/lib/app-context";
 import { COL } from "@/lib/tree";
 import { arbolGeometria } from "@/lib/arbol";
 import { frase, recorta, titulo } from "@/lib/format";
+import Particulas from "../Particulas";
 
 const TARJETA = "background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);";
 const ROTULO = "font-size:13px;font-weight:590;color:var(--text-3);";
@@ -53,7 +54,7 @@ export default function SeccionResumen() {
   const maxEtapa = 9;
 
   return (
-    <div style={css("display:flex;flex-direction:column;gap:18px;")}>
+    <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
       <div>
         <h2 style={css("font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.024em;color:var(--text);margin:0;")}>
           {saludo()}, {nombreCorto}
@@ -61,16 +62,24 @@ export default function SeccionResumen() {
         <p style={css("font-size:17px;color:var(--text-3);margin:5px 0 0;")}>Este es el mapa completo de tu lectura. Pulsa cualquier bloque para abrirlo entero.</p>
       </div>
 
-      <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:18px;align-items:start;")}>
+      <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:var(--gap);align-items:start;")}>
         {/* ------------------------------------------------ columna izquierda */}
-        <div style={css("display:flex;flex-direction:column;gap:18px;")}>
-          <section style={css(TARJETA + "padding:clamp(20px,2.6vw,26px);")}>
+        <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+          {/* El polvo y el halo van en una capa aparte, por debajo. Sin
+           * isolation el canvas, que va posicionado, se pintaría por encima
+           * del texto de la tarjeta. */}
+          <section style={css(TARJETA + "padding:var(--pad-card);position:relative;overflow:hidden;isolation:isolate;")}>
+            <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
+              <Particulas cantidad={30} />
+              <div style={css("position:absolute;top:-70px;left:-50px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.24),transparent 70%);animation:es33-aliento 7s ease-in-out infinite;")} />
+            </div>
+            <div style={css("position:relative;z-index:1;")}>
             <div style={css(ROTULO)}>Número de corazón</div>
-            <div style={css("font-size:clamp(38px,6vw,52px);font-weight:700;letter-spacing:-.03em;color:var(--text);line-height:1.05;margin-top:4px;")}>{r.corazon.valor}</div>
+            <div style={css("font-size:clamp(38px,6vw,52px);font-weight:700;letter-spacing:-.03em;color:var(--text);line-height:1.05;margin-top:var(--s1);font-variant-numeric:tabular-nums;")}>{r.corazon.valor}</div>
             <div style={css("font-size:15px;color:var(--text-3);margin-top:2px;")}>
               Esencia {r.esencia.valor} · Ego {r.ego.valor}
             </div>
-            <div style={css("display:flex;gap:9px;margin-top:18px;flex-wrap:wrap;")}>
+            <div style={css("display:flex;gap:var(--s2);margin-top:var(--s5);flex-wrap:wrap;")}>
               <button
                 onClick={() => setView("estudio")}
                 style={css("flex:1;min-width:130px;padding:12px 18px;border:none;border-radius:980px;cursor:pointer;font-size:15px;font-weight:600;letter-spacing:-.01em;color:#fff;background:linear-gradient(180deg,#3A3244,#241F2E);box-shadow:0 1px 2px rgba(0,0,0,.14),0 8px 18px rgba(36,31,46,.24);")}
@@ -85,15 +94,16 @@ export default function SeccionResumen() {
               </button>
             </div>
 
-            <div style={css("margin-top:20px;padding-top:16px;border-top:1px solid var(--border);")}>
-              <div style={css(ROTULO + "margin-bottom:10px;")}>Tus tres caminos</div>
-              <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;")}>
+            <div style={css("margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--border);")}>
+              <div style={css(ROTULO + "margin-bottom:var(--s3);")}>Tus tres caminos</div>
+              <div data-cascada="" style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s2);")}>
                 {caminos.map((x) => (
                   <button
                     key={x.k}
+                    data-alza=""
                     onClick={() => verArcano(x.d.arcano)}
                     style={css(
-                      "text-align:left;padding:11px 12px;border-radius:var(--r-sm);cursor:pointer;border:1px solid " +
+                      "text-align:left;padding:var(--s3);border-radius:var(--r-sm);cursor:pointer;border:1px solid " +
                         COL[x.k] +
                         "33;border-top:3px solid " +
                         COL[x.k] +
@@ -109,10 +119,11 @@ export default function SeccionResumen() {
                 ))}
               </div>
             </div>
+            </div>
           </section>
 
-          <section style={css(TARJETA + "padding:clamp(18px,2.2vw,22px);")}>
-            <div style={css("display:flex;align-items:baseline;gap:10px;")}>
+          <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);")}>
               <span style={css(ROTULO)}>Ciclo vital en curso</span>
               <span style={css("margin-left:auto;font-size:13px;color:var(--text-4);")}>{c.edad} años</span>
             </div>
@@ -136,7 +147,7 @@ export default function SeccionResumen() {
 
           {/* El árbol, en pequeño y sin animación: aquí es una miniatura para
            * reconocer el dibujo, no la lámina que se estudia. */}
-          <section style={css(TARJETA + "padding:clamp(18px,2.2vw,22px);")}>
+          <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:12px;margin-bottom:6px;")}>
               <span style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Árbol de la Vida</span>
               <button
@@ -163,11 +174,12 @@ export default function SeccionResumen() {
         </div>
 
         {/* --------------------------------------------------- columna derecha */}
-        <div style={css("display:flex;flex-direction:column;gap:18px;")}>
-          <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;")}>
+        <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+          <div data-cascada="" style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4);")}>
             {cifras.map((x, i) => (
               <button
                 key={i}
+                data-alza=""
                 onClick={() => (x.ir ? setSeccion(x.ir) : verNumero(x.n!))}
                 style={css(
                   "text-align:left;padding:17px 18px;cursor:pointer;border-radius:var(--r);" +
@@ -183,7 +195,7 @@ export default function SeccionResumen() {
             ))}
           </div>
 
-          <section style={css(TARJETA + "padding:clamp(18px,2.2vw,24px);")}>
+          <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
               <div>
                 <div style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Año personal {c.anioPersonal}</div>
@@ -214,7 +226,7 @@ export default function SeccionResumen() {
             </div>
           </section>
 
-          <section style={css(TARJETA + "padding:clamp(18px,2.2vw,22px);")}>
+          <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:12px;margin-bottom:4px;")}>
               <span style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Aprendizajes abiertos</span>
               <button

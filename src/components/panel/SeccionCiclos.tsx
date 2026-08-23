@@ -56,9 +56,9 @@ export default function SeccionCiclos() {
   ];
 
   return (
-    <div style={css("display:flex;flex-direction:column;gap:22px;")}>
-      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
-        <div style={css("display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:20px;")}>
+    <div style={css("display:flex;flex-direction:column;gap:var(--gap-lg);")}>
+      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+        <div style={css("display:flex;align-items:baseline;gap:var(--gap);flex-wrap:wrap;margin-bottom:20px;")}>
           <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>Ciclos vitales</span>
           <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>propósito de vida {r.ciclos.proposito}</span>
           <span style={css("margin-left:auto;font-size:13px;font-weight:590;color:var(--text-3);")}>
@@ -79,7 +79,7 @@ export default function SeccionCiclos() {
 
       <Desglose titulo="De dónde salen estos números" pasos={pasos} nota="Todos los ciclos parten de reducir a una cifra el día, el mes y el año de nacimiento; lo demás son sumas y restas entre esos tres." />
 
-      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
+      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:12px;")}>
           <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>Tu año personal {r.ciclos.anioUniversal}</span>
           <span style={css("font-family:var(--font-ui);font-weight:600;font-size:32px;color:var(--gold);line-height:1;")}>{r.ciclos.anioPersonal}</span>
@@ -87,8 +87,8 @@ export default function SeccionCiclos() {
         <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:0;text-wrap:pretty;")}>{textoAnioPersonal}</p>
       </div>
 
-      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
-        <div style={css("display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px;")}>
+      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+        <div style={css("display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:var(--s4);")}>
           <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>Etapas de nueve años</span>
           <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>
             ahora en la etapa {r.ciclos.etapaActual} · {r.ciclos.edad} años
@@ -119,8 +119,8 @@ export default function SeccionCiclos() {
         </div>
       </div>
 
-      <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:22px;")}>
-        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);")}>
+      <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap-lg);")}>
+        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:14px;")}>Realizaciones</div>
           {realizaciones.map((r2, i) => (
             <div key={i} style={css("display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--border);")}>
@@ -134,7 +134,7 @@ export default function SeccionCiclos() {
             </div>
           ))}
         </div>
-        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);")}>
+        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:14px;")}>Desafíos</div>
           {desafios.map((d, i) => (
             <div key={i} style={css("display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--border);")}>

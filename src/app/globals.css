@@ -46,6 +46,30 @@
   --r-lg: 24px;
 
   --blur: saturate(180%) blur(20px);
+
+  /* -------------------------------------------------------------------------
+     Escala de espacio. Una sola serie de ocho valores para todo: los márgenes
+     dejan de decidirse tarjeta a tarjeta y el ritmo vertical se repite igual
+     en las seis secciones.
+     ------------------------------------------------------------------------- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 22px;
+  --s6: 30px;
+  --s7: 42px;
+  --s8: 60px;
+
+  /* Aire de la página y relleno de las tarjetas: crecen con la ventana, pero
+   * lo hacen a la vez en todas partes. */
+  --gutter: clamp(16px, 3.4vw, 40px);
+  --pad-card: clamp(18px, 2.2vw, 26px);
+  --pad-card-sm: clamp(16px, 1.8vw, 20px);
+  /* Separación entre tarjetas hermanas y entre bloques de una sección. */
+  --gap: clamp(14px, 1.6vw, 20px);
+  --gap-lg: clamp(20px, 2.4vw, 30px);
+  --ancho: 1320px;
 }
 
 html,
@@ -189,6 +213,78 @@ button:not(:disabled):active {
     transform: none;
   }
 }
+/* Entrada escalonada: cada hijo directo aparece un poco después que el
+ * anterior. Es el mismo gesto de las fichas de un panel de iOS al abrirse. */
+@keyframes es33-alza {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+[data-cascada] > * {
+  opacity: 0;
+  animation: es33-alza 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+[data-cascada] > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+[data-cascada] > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+[data-cascada] > *:nth-child(3) {
+  animation-delay: 0.16s;
+}
+[data-cascada] > *:nth-child(4) {
+  animation-delay: 0.22s;
+}
+[data-cascada] > *:nth-child(5) {
+  animation-delay: 0.28s;
+}
+[data-cascada] > *:nth-child(6) {
+  animation-delay: 0.34s;
+}
+[data-cascada] > *:nth-child(n + 7) {
+  animation-delay: 0.4s;
+}
+
+/* Las tarjetas que llevan a algún sitio se levantan al pasar por encima. */
+[data-alza] {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s, border-color 0.28s;
+}
+[data-alza]:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+[data-alza]:active {
+  transform: translateY(-1px) scale(0.995);
+}
+
+/* Respiración lenta del halo dorado detrás de las cifras principales. */
+@keyframes es33-aliento {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cascada] > * {
+    opacity: 1 !important;
+  }
+  [data-alza]:hover,
+  [data-alza]:active {
+    transform: none !important;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   button {
@@ -217,6 +313,17 @@ button:not(:disabled):active {
 @media (max-width: 980px) {
   [data-sidebar] {
     display: none !important;
+  }
+}
+
+/* En un móvil las tres columnas del desglose no caben: la etiqueta pasa a
+ * ocupar su propia línea y debajo van la operación y su resultado. */
+@media (max-width: 560px) {
+  .es33-paso {
+    grid-template-columns: 1fr auto !important;
+  }
+  .es33-paso > *:first-child {
+    grid-column: 1 / -1;
   }
 }
 

@@ -34,8 +34,8 @@ export default function PanelScreen() {
   ];
 
   return (
-    <main style={css("max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,30px) clamp(14px,3vw,28px) 80px;animation:es33-in .45s ease both;")}>
-      <div style={css("display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px;")}>
+    <main style={css("max-width:var(--ancho);margin:0 auto;padding:var(--s6) var(--gutter) var(--s8);")}>
+      <div style={css("display:flex;align-items:flex-end;gap:var(--s5);flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:var(--s5);margin-bottom:var(--s5);")}>
         <div>
           <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:6px;")}>Estudio de Kábala</div>
           <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(22px,3.6vw,31px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.15;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)}</h1>
@@ -57,7 +57,7 @@ export default function PanelScreen() {
 
       {/* Duplica la barra lateral, así que sólo aparece cuando ésta se esconde
        * por falta de ancho. */}
-      <nav data-nav="" data-tabs-panel="" style={css("display:flex;gap:2px;margin-bottom:28px;background:rgba(120,120,128,.1);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
+      <nav data-nav="" data-tabs-panel="" style={css("display:flex;gap:2px;margin-bottom:var(--s6);background:rgba(120,120,128,.1);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
         {SECCIONES.map((s) => {
           const on = seccion === s.k;
           return (
@@ -80,13 +80,18 @@ export default function PanelScreen() {
         })}
       </nav>
 
-      {seccion === "resumen" && <SeccionResumen />}
-      {seccion === "arbol" && <SeccionArbol />}
-      {seccion === "numeros" && <SeccionNumeros />}
-      {seccion === "estructura" && <SeccionEstructura />}
-      {seccion === "alma" && <SeccionAlma />}
-      {seccion === "cuentas" && <SeccionCuentas />}
-      {seccion === "ciclos" && <SeccionCiclos />}
+      {/* La key hace que React tire el árbol anterior al cambiar de sección,
+       * así la animación de entrada se reproduce en cada salto y no sólo la
+       * primera vez. */}
+      <div key={seccion} style={css("animation:es33-alza .5s cubic-bezier(.22,1,.36,1) both;")}>
+        {seccion === "resumen" && <SeccionResumen />}
+        {seccion === "arbol" && <SeccionArbol />}
+        {seccion === "numeros" && <SeccionNumeros />}
+        {seccion === "estructura" && <SeccionEstructura />}
+        {seccion === "alma" && <SeccionAlma />}
+        {seccion === "cuentas" && <SeccionCuentas />}
+        {seccion === "ciclos" && <SeccionCiclos />}
+      </div>
     </main>
   );
 }

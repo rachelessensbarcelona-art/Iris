@@ -27,8 +27,8 @@ export default function SeccionArbol() {
   });
 
   return (
-    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:start;")}>
-      <div style={css("background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.6));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
+    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap-lg);align-items:start;")}>
+      <div style={css("position:sticky;top:78px;align-self:start;max-height:calc(100vh - 96px);overflow-y:auto;background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.6));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:6px;")}>Árbol de la Vida</div>
         <svg viewBox="-54 -8 488 676" style={css("width:100%;height:auto;display:block;")}>
           {senderos.map((s, i) => (
@@ -78,7 +78,7 @@ export default function SeccionArbol() {
         </div>
       </div>
 
-      <div style={css("display:flex;flex-direction:column;gap:16px;")}>
+      <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
         {caminos.map((c, ci) => (
           <article
             key={ci}
@@ -89,7 +89,7 @@ export default function SeccionArbol() {
                 COL[c.k] +
                 "14,rgba(255,255,255,.75));border-left:3px solid " +
                 COL[c.k] +
-                ";border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
+                ";border-radius:var(--r);padding:var(--pad-card-sm);opacity:0;animation:es33-rise .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
                 (0.6 + ci * 0.16).toFixed(2) +
                 "s;"
             )}
@@ -110,7 +110,7 @@ export default function SeccionArbol() {
         ))}
 
         {r.turbulencias && (
-          <article style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);")}>
+          <article style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:var(--pad-card-sm);")}>
             <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--red);margin-bottom:10px;")}>
               Años de turbulencias · {r.turbulencias.desde} – {r.turbulencias.hasta} años
             </div>

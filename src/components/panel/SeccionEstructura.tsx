@@ -40,7 +40,7 @@ export default function SeccionEstructura() {
     a,
     ai,
     card:
-      "border:1px solid var(--border-accent);background:var(--gold-soft);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .55s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
+      "border:1px solid var(--border-accent);background:var(--gold-soft);border-radius:var(--r);padding:var(--pad-card-sm);opacity:0;animation:es33-rise .55s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
       (0.18 + ai * 0.13).toFixed(2) +
       "s;",
     chips: [{ label: "Número " + a.numero, style: chipStyle("var(--gold)"), onClick: () => verNumero(a.numero) }]
@@ -61,9 +61,9 @@ export default function SeccionEstructura() {
   }));
 
   return (
-    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:start;")}>
-      <div style={css("display:flex;flex-direction:column;gap:16px;")}>
-        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
+    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap-lg);align-items:start;")}>
+      <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px;")}>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);")}>Estructura energética</span>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:26px;color:var(--gold);line-height:1;")}>tipo {est.tipo}</span>
@@ -91,7 +91,7 @@ export default function SeccionEstructura() {
           nota={`El portal 1 recibe el propio tipo (${est.tipo}) y a partir de ahí la cuenta sigue de uno en uno por los diez portales hasta cerrar el círculo: ese es el número dinámico de cada portal.`}
         />
 
-        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
+        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:10px;")}>Número dinámico de cada portal</div>
           <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:7px;")}>
             {PORTALES_CUERPO.map((p) => {
@@ -115,7 +115,7 @@ export default function SeccionEstructura() {
           </div>
         </div>
 
-        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
+        <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:8px;")}>Ejes y planos en tensión</div>
           <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>{TENSIONES.intro.ejes}</p>
           <div style={css("display:flex;flex-direction:column;gap:7px;")}>
@@ -160,7 +160,7 @@ export default function SeccionEstructura() {
         </div>
 
         {enfermedades.length > 0 && (
-          <div style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
+          <div style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:var(--pad-card-sm);")}>
             <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--red);margin-bottom:8px;")}>Enfermedades y debilidades</div>
             <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>
               Si el aprendizaje del portal no se trabaja, la energía se somatiza en los órganos que rige ese chakra.
@@ -192,8 +192,8 @@ export default function SeccionEstructura() {
         )}
       </div>
 
-      <div style={css("display:flex;flex-direction:column;gap:16px;")}>
-        <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);")}>
+      <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+        <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:10px;")}>Estructura número {est.tipo}</div>
           <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:0;text-wrap:pretty;")}>{r.tipoEstructura?.texto || ""}</p>
           <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:14px;")}>

@@ -15,29 +15,39 @@ export type Paso = {
  */
 export default function Desglose({ titulo, pasos, nota }: { titulo: string; pasos: Paso[]; nota?: string }) {
   return (
-    <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);")}>
-      <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--gold);margin-bottom:12px;")}>{titulo}</div>
-      <div style={css("display:flex;flex-direction:column;gap:2px;")}>
+    <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+      <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s4);")}>{titulo}</div>
+      <div style={css("display:flex;flex-direction:column;gap:1px;")}>
         {pasos.map((p, i) => (
+          // Tres columnas fijas en vez de flex con salto: con flex-wrap una
+          // operación larga empujaba el resultado a una línea propia y el
+          // "= 119" quedaba suelto, sin su cuenta al lado.
           <div
             key={i}
+            className="es33-paso"
             style={css(
-              "display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:7px 9px;border-radius:var(--r-sm);background:" +
+              "display:grid;grid-template-columns:minmax(96px,auto) 1fr auto;align-items:baseline;column-gap:var(--s3);row-gap:2px;padding:8px 10px;border-radius:var(--r-sm);background:" +
                 (p.final ? "var(--gold-soft)" : "transparent") +
                 ";"
             )}
           >
-            <span style={css("font-size:12px;font-weight:590;color:var(--text-3);min-width:118px;")}>{p.etiqueta}</span>
-            <span style={css("font-family:var(--font-ui);font-size:14px;color:var(--text-2);letter-spacing:-.022em;")}>{p.operacion}</span>
-            {p.resultado !== undefined && p.resultado !== "" && (
-              <span style={css("margin-left:auto;font-family:var(--font-ui);font-weight:600;font-size:" + (p.final ? "22px" : "17px") + ";color:" + (p.final ? "var(--text)" : "var(--text-3)") + ";line-height:1;")}>
-                = {p.resultado}
-              </span>
-            )}
+            <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>{p.etiqueta}</span>
+            <span style={css("font-family:var(--font-ui);font-size:15px;color:var(--text-2);letter-spacing:-.012em;min-width:0;overflow-wrap:anywhere;")}>{p.operacion}</span>
+            <span
+              style={css(
+                "justify-self:end;white-space:nowrap;font-family:var(--font-ui);font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1;font-size:" +
+                  (p.final ? "22px" : "17px") +
+                  ";color:" +
+                  (p.final ? "var(--text)" : "var(--text-3)") +
+                  ";"
+              )}
+            >
+              {p.resultado !== undefined && p.resultado !== "" ? "= " + p.resultado : ""}
+            </span>
           </div>
         ))}
       </div>
-      {nota && <div style={css("font-family:var(--font-ui);font-style:normal;font-size:15px;color:var(--text-4);margin-top:11px;line-height:1.45;")}>{nota}</div>}
+      {nota && <div style={css("font-family:var(--font-ui);font-size:15px;color:var(--text-4);margin-top:var(--s4);line-height:1.5;")}>{nota}</div>}
     </div>
   );
 }

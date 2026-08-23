@@ -48,8 +48,8 @@ export default function SeccionAlma() {
   }));
 
   return (
-    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:30px;align-items:start;")}>
-      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(16px,2.2vw,22px);")}>
+    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:var(--gap-lg);align-items:start;")}>
+      <div style={css("position:sticky;top:78px;align-self:start;max-height:calc(100vh - 96px);overflow-y:auto;border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:14px;")}>Imagen del alma · número {ia.numero}</div>
         <div style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:8px;margin-bottom:6px;")}>
           <span />
@@ -91,12 +91,12 @@ export default function SeccionAlma() {
           </div>
         </div>
       </div>
-      <div style={css("display:flex;flex-direction:column;gap:16px;")}>
+      <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
         {bloqueos.map(({ b, extracto, chips }, i) => (
           <article
             key={i}
             style={css(
-              "border:1px solid var(--border-accent);background:rgba(142,68,173,.06);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);opacity:0;animation:es33-rise .55s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
+              "border:1px solid var(--border-accent);background:rgba(142,68,173,.06);border-radius:var(--r);padding:var(--pad-card-sm);opacity:0;animation:es33-rise .55s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
                 (0.18 + i * 0.13).toFixed(2) +
                 "s;"
             )}
