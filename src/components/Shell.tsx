@@ -41,7 +41,7 @@ export default function Shell() {
           />
           <div style={css("display:flex;flex-direction:column;gap:2px;")}>
             <div style={css("font-family:var(--font-display);font-weight:500;font-size:clamp(15px,1.7vw,19px);letter-spacing:-.008em;color:var(--text);line-height:1.15;")}>Escuela de Sabiduría 33</div>
-            <div style={css("font-size:13px;color:var(--text-4);letter-spacing:-.01em;")}>Estudio de Kábala</div>
+            <div style={css("font-size:var(--t-mini);color:var(--text-4);letter-spacing:-.01em;")}>Estudio de Kábala</div>
           </div>
         </div>
         {view !== "inicio" && (
@@ -49,7 +49,7 @@ export default function Shell() {
             onClick={() => setView(view === "panel" ? "inicio" : "panel")}
             title={view === "panel" ? "Volver a la consulta" : "Volver al panel"}
             style={css(
-              "display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:980px;cursor:pointer;border:1px solid var(--border-accent);background:color-mix(in srgb, var(--text) 4%, transparent);color:var(--gold);font-size:15px;font-weight:590;transition:all .2s;"
+              "display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:980px;cursor:pointer;border:1px solid var(--border-accent);background:color-mix(in srgb, var(--text) 4%, transparent);color:var(--gold);font-size:var(--t-body);font-weight:590;transition:all .2s;"
             )}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -74,7 +74,7 @@ export default function Shell() {
                 style={css(
                   "padding:7px 16px;border-radius:980px;border:none;white-space:nowrap;cursor:" +
                     (bloqueado ? "not-allowed" : "pointer") +
-                    ";font-size:14px;font-weight:590;letter-spacing:-.01em;background:" +
+                    ";font-size:var(--t-body);font-weight:590;letter-spacing:-.01em;background:" +
                     (on ? "var(--surface-solid)" : "transparent") +
                     ";box-shadow:" +
                     (on ? "0 3px 8px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.06)" : "none") +

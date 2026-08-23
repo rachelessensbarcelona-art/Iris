@@ -59,7 +59,7 @@ export default function TablaAlma({ ia }: { ia: ImagenAlma }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 + i * 0.04, duration: 0.35 }}
             style={css(
-              `position:absolute;top:-11px;right:6px;display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:5px;background:var(--surface-solid);border:2px solid ${ROJO};color:${ROJO};font-size:13px;font-weight:700;line-height:1;letter-spacing:.04em;`
+              `position:absolute;top:-11px;right:6px;display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:5px;background:var(--surface-solid);border:2px solid ${ROJO};color:${ROJO};font-size:var(--t-mini);font-weight:700;line-height:1;letter-spacing:.04em;`
             )}
           >
             {cifraAyuda}
@@ -84,7 +84,7 @@ export default function TablaAlma({ ia }: { ia: ImagenAlma }) {
         >
           {texto}
         </span>
-        <span style={css(`font-size:13px;font-weight:600;line-height:1.4;color:${AZUL};`)}>{movil}</span>
+        <span style={css(`font-size:var(--t-mini);font-weight:600;line-height:1.4;color:${AZUL};`)}>{movil}</span>
       </motion.div>
     );
   };
@@ -100,7 +100,7 @@ export default function TablaAlma({ ia }: { ia: ImagenAlma }) {
       <div style={css("display:grid;grid-template-columns:58px repeat(3,minmax(0,1fr));gap:var(--s2);align-items:center;")}>
         {filas.map(([label, celdas], fi) => (
           <div key={label} style={css("display:contents;")}>
-            <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>{label}</span>
+            <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>{label}</span>
             {celdas.map((n, ci) => casilla(n, fi * 3 + ci))}
           </div>
         ))}
@@ -108,7 +108,7 @@ export default function TablaAlma({ ia }: { ia: ImagenAlma }) {
         <div style={css("grid-column:2 / -1;")}>{casilla(10, 9)}</div>
       </div>
 
-      <div style={css("display:flex;flex-wrap:wrap;gap:var(--s4);margin-top:var(--s4);font-size:13px;color:var(--text-3);")}>
+      <div style={css("display:flex;flex-wrap:wrap;gap:var(--s4);margin-top:var(--s4);font-size:var(--t-mini);color:var(--text-3);")}>
         <span style={css("display:inline-flex;align-items:center;gap:6px;")}>
           <span style={css(`width:13px;height:13px;border-radius:3px;background:color-mix(in srgb, ${AZUL} 22%, transparent);border:1px solid color-mix(in srgb, ${AZUL} 45%, transparent);`)} />
           Plano bloqueado
@@ -122,7 +122,7 @@ export default function TablaAlma({ ia }: { ia: ImagenAlma }) {
           Punto verde
         </span>
         <span style={css("display:inline-flex;align-items:center;gap:6px;")}>
-          <span style={css(`font-size:13px;font-weight:600;color:${AZUL};`)}>7</span>
+          <span style={css(`font-size:var(--t-mini);font-weight:600;color:${AZUL};`)}>7</span>
           Número móvil
         </span>
       </div>

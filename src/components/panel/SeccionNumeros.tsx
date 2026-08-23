@@ -23,20 +23,20 @@ export default function SeccionNumeros() {
           d.o.ficha && d.o.ficha.enDiccionario ? [{ label: "Significado " + d.o.valor, style: chipStyle("var(--gold)"), onClick: () => verNumero(d.o.valor) }] : []
         );
         return (
-          <article key={i} style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+          <article key={i} style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:var(--gap);flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>{d.label}</span>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);")}>{d.label}</span>
               <Cifra id={d.id} valor={d.o.valor} tam={42} />
-              <span style={css("font-family:var(--font-ui);font-style:normal;font-size:18px;color:var(--text-3);")}>{d.desc}</span>
+              <span style={css("font-family:var(--font-ui);font-style:normal;font-size:var(--t-read);color:var(--text-3);")}>{d.desc}</span>
             </div>
             <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:var(--s4);margin-top:var(--s4);")}>
               <div style={css("border-left:2px solid var(--red);padding:2px 0 2px 12px;")}>
-                <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>En negativo</div>
-                <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;")}>{d.o.lectura.negativo}</p>
+                <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--red);margin-bottom:4px;")}>En negativo</div>
+                <p style={css("font-family:var(--font-ui);font-size:var(--t-read);line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;")}>{d.o.lectura.negativo}</p>
               </div>
               <div style={css("border-left:2px solid var(--green);padding:2px 0 2px 12px;")}>
-                <div style={css("font-size:12px;font-weight:590;color:var(--green);margin-bottom:4px;")}>En positivo</div>
-                <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;")}>{d.o.lectura.positivo}</p>
+                <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--green);margin-bottom:4px;")}>En positivo</div>
+                <p style={css("font-family:var(--font-ui);font-size:var(--t-read);line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;")}>{d.o.lectura.positivo}</p>
               </div>
             </div>
             <div style={css("display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);")}>
@@ -63,8 +63,8 @@ export default function SeccionNumeros() {
         nota="El valor del nombre sale del nombre solo; el número de corazón necesita además la fecha, porque le suma la edad de cambio. Los días de fuerza se leen del valor del nombre."
       />
 
-      <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s3);")}>Tus días de fuerza</div>
+      <article style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s3);")}>Tus días de fuerza</div>
         <div style={css("display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap;")}>
           {r.diasFuerza.dias.map((n, i) => (
             <span
@@ -84,7 +84,7 @@ export default function SeccionNumeros() {
               {n}
             </span>
           ))}
-          <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.5;color:var(--text-3);margin:0 0 0 8px;flex:1;min-width:240px;")}>
+          <p style={css("font-family:var(--font-ui);font-size:var(--t-read);line-height:1.5;color:var(--text-3);margin:0 0 0 8px;flex:1;min-width:240px;")}>
             Van del más fuerte al menos fuerte. Aprovecha estos días del mes para firmas y decisiones relevantes.
           </p>
         </div>

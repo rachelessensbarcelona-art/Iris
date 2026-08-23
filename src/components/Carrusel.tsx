@@ -64,7 +64,7 @@ export default function Carrusel({
     <div style={css("min-width:0;")}>
       {(titulo || accion) && (
         <div style={css("display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s3);")}>
-          {titulo && <span style={css("font-family:var(--font-display);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text);")}>{titulo}</span>}
+          {titulo && <span style={css("font-family:var(--font-display);font-size:var(--t-title);font-weight:500;letter-spacing:-.01em;color:var(--text);")}>{titulo}</span>}
           <div style={css("margin-left:auto;display:flex;align-items:center;gap:var(--s2);")}>
             {accion}
             {flecha(-1)}

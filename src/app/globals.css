@@ -13,8 +13,10 @@
   --font-display: ui-serif, "New York", "Iowan Old Style", "Palatino Linotype", Palatino, "Hoefler Text", Georgia, serif;
 
   --bg: #f5f5f7;
-  --surface: rgba(255, 255, 255, 0.72);
-  --surface-2: rgba(255, 255, 255, 0.55);
+  /* Opacas. Translúcidas dejaban pasar el fondo y cada tarjeta cogía un tinte
+   * distinto según sobre qué parte del velo cayera. */
+  --surface: #ffffff;
+  --surface-2: #fafafc;
   --surface-solid: #ffffff;
 
   --border: rgba(0, 0, 0, 0.07);
@@ -37,9 +39,25 @@
   --blue: #0071e3;
   --purple: #8e44ad;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.04);
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 28px rgba(0, 0, 0, 0.06);
+  /* Las tarjetas se apoyan en el fondo con una línea de un pelo, no con una
+   * sombra. La sombra queda para lo que de verdad flota — la cabecera y las
+   * hojas que se abren encima. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 6px 20px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.06), 0 24px 64px rgba(0, 0, 0, 0.12);
+
+  /* -------------------------------------------------------------------------
+     Escala tipográfica. Siete cuerpos y ni uno más: antes había veinticuatro
+     y ninguna pantalla se parecía a la de al lado. Cada uno tiene su oficio y
+     los componentes piden el oficio, no el número de píxeles.
+     ------------------------------------------------------------------------- */
+  --t-micro: 11px; /* apostillas, unidades, pies */
+  --t-mini: 13px; /* rótulos, chips, metadatos */
+  --t-body: 15px; /* texto de apoyo */
+  --t-read: 17px; /* el texto que se lee de verdad */
+  --t-title: 21px; /* título de tarjeta */
+  --t-head: 28px; /* encabezado de sección */
+  --t-hero: clamp(32px, 4vw, 42px); /* nombre de la persona, cifras grandes */
 
   /* Radios generosos, al gusto de iOS. */
   --r-xs: 8px;
@@ -47,7 +65,6 @@
   --r: 18px;
   --r-lg: 24px;
 
-  --blur: saturate(180%) blur(20px);
 
   /* -------------------------------------------------------------------------
      Escala de espacio. Una sola serie de ocho valores para todo: los márgenes
@@ -81,8 +98,8 @@
    --------------------------------------------------------------------------- */
 :root[data-tema="oscuro"] {
   --bg: #0f0e13;
-  --surface: rgba(38, 35, 46, 0.66);
-  --surface-2: rgba(38, 35, 46, 0.45);
+  --surface: #1c1a23;
+  --surface-2: #22202b;
   --surface-solid: #1c1a23;
 
   --border: rgba(255, 255, 255, 0.09);
@@ -105,8 +122,8 @@
   --blue: #6aa9f0;
   --purple: #b083d8;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.45), 0 8px 28px rgba(0, 0, 0, 0.38);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.22);
   --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.5), 0 24px 64px rgba(0, 0, 0, 0.55);
 }
 
@@ -115,15 +132,14 @@
  * hay que bajarlos mucho. */
 [data-app-root] {
   background: var(--bg);
-  background-image: radial-gradient(1100px 620px at 8% -12%, rgba(201, 168, 76, 0.22), transparent 62%),
-    radial-gradient(900px 560px at 96% 2%, rgba(120, 150, 255, 0.18), transparent 58%),
-    radial-gradient(820px 520px at 50% 108%, rgba(190, 120, 220, 0.12), transparent 60%);
+  /* Un solo velo, y muy flojo. Eran tres halos de colores distintos y con las
+   * tarjetas translúcidas encima el fondo se veía a través de todo: cada
+   * bloque cogía un tinte diferente según dónde cayera. */
+  background-image: radial-gradient(1200px 700px at 12% -10%, rgba(201, 168, 76, 0.1), transparent 60%);
   background-attachment: fixed;
 }
 :root[data-tema="oscuro"] [data-app-root] {
-  background-image: radial-gradient(1100px 620px at 8% -12%, rgba(216, 184, 96, 0.14), transparent 60%),
-    radial-gradient(900px 560px at 96% 2%, rgba(96, 122, 214, 0.16), transparent 58%),
-    radial-gradient(820px 520px at 50% 108%, rgba(150, 92, 190, 0.14), transparent 58%);
+  background-image: radial-gradient(1200px 700px at 12% -10%, rgba(216, 184, 96, 0.07), transparent 58%);
 }
 
 html,

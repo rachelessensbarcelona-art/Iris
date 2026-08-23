@@ -36,7 +36,7 @@ export default function Particulas({ cantidad = 26, color }: { cantidad?: number
     const motas = Array.from({ length: cantidad }, () => ({
       x: Math.random(),
       y: Math.random(),
-      r: 1.1 + Math.random() * 2.6,
+      r: 0.7 + Math.random() * 1.5,
       // Deriva muy lenta y hacia arriba: tiene que leerse como suspensión, no
       // como lluvia al revés.
       vx: (Math.random() - 0.5) * 0.00022,
@@ -82,10 +82,10 @@ export default function Particulas({ cantidad = 26, color }: { cantidad?: number
         // parpadeen todas a la vez.
         const alfa = m.brillo * (0.55 + 0.45 * Math.sin(t * 0.012 + m.fase));
         ctx.beginPath();
-        ctx.arc(m.x * ancho, m.y * alto, m.r * 3.4, 0, Math.PI * 2);
+        ctx.arc(m.x * ancho, m.y * alto, m.r * 2.4, 0, Math.PI * 2);
         // Un halo suave alrededor de cada mota: sin él se ven como puntos
         // duros, y esto tiene que leerse como polvo suspendido.
-        const halo = ctx.createRadialGradient(m.x * ancho, m.y * alto, 0, m.x * ancho, m.y * alto, m.r * 3.4);
+        const halo = ctx.createRadialGradient(m.x * ancho, m.y * alto, 0, m.x * ancho, m.y * alto, m.r * 2.4);
         halo.addColorStop(0, `rgba(${tinta},${alfa.toFixed(3)})`);
         halo.addColorStop(0.45, `rgba(${tinta},${(alfa * 0.35).toFixed(3)})`);
         halo.addColorStop(1, `rgba(${tinta},0)`);

@@ -3,10 +3,9 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import Desglose, { type Paso } from "../Desglose";
-import Particulas from "../Particulas";
 
-const TH = "font-size:12px;font-weight:590;color:var(--text-4);display:flex;align-items:center;justify-content:center;padding:6px 0;";
-const TD = "font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text-2);display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid var(--gold-soft);border-radius:var(--r-sm);background:color-mix(in srgb, var(--text) 4%, transparent);";
+const TH = "font-size:var(--t-mini);font-weight:590;color:var(--text-4);display:flex;align-items:center;justify-content:center;padding:6px 0;";
+const TD = "font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:var(--text-2);display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid var(--gold-soft);border-radius:var(--r-sm);background:color-mix(in srgb, var(--text) 4%, transparent);";
 const TD_TOT = TD.replace("var(--text-2)", "var(--text)").replace("color-mix(in srgb, var(--text) 4%, transparent)", "var(--border)");
 
 export default function SeccionCuentas() {
@@ -57,9 +56,10 @@ export default function SeccionCuentas() {
     : `El ${c.karmico} no está en los apuntes, así que su liberación se ha calculado con la regla de tensión. Conviene comprobarlo a mano.`;
 
   return (
-    <div data-dos="">
-      <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:16px;")}>Cuentas abiertas</div>
+    <div style={css("display:flex;flex-direction:column;gap:var(--gap-lg);")}>
+      <div data-dos="">
+      <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:16px;")}>Cuentas abiertas</div>
         <div style={css("display:grid;grid-template-columns:26px 1fr 1fr 1fr 1fr;gap:6px;")}>
           {tabla.map((cell, i) => (
             <div key={i} style={css(cell.style)}>
@@ -67,11 +67,8 @@ export default function SeccionCuentas() {
             </div>
           ))}
         </div>
-        <div style={css("font-family:var(--font-ui);font-size:16px;line-height:1.55;color:var(--text-3);margin-top:var(--s4);")}>
+        <div style={css("font-family:var(--font-ui);font-size:var(--t-body);line-height:1.55;color:var(--text-3);margin-top:var(--s4);")}>
           Cada potencial arcaico ayuda a cerrar la cuenta abierta de su fila: {c.potenciales[0]}→{c.cuentas[0]}, {c.potenciales[1]}→{c.cuentas[1]}, {c.potenciales[2]}→{c.cuentas[2]}.
-        </div>
-        <div style={css("margin-top:16px;")}>
-          <Desglose titulo="De dónde salen estos números" pasos={pasos} nota={notaLema} />
         </div>
       </div>
       <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
@@ -79,27 +76,17 @@ export default function SeccionCuentas() {
           <article
             key={i}
             style={css(
-              "border:1px solid " +
-                (k.mistica ? "var(--border-accent)" : "var(--border)") +
-                ";background:" +
-                (k.mistica ? "linear-gradient(155deg,var(--gold-soft),color-mix(in srgb, var(--surface-solid) 72%, transparent))" : "var(--surface)") +
-                ";backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);position:relative;overflow:hidden;isolation:isolate;"
+              "background:var(--surface);border:1px solid var(--border);" +
+                (k.mistica ? "border-left:2px solid var(--gold);" : "") +
+                "border-radius:var(--r);padding:var(--pad-card-sm);"
             )}
           >
-            {/* La afinidad es la lectura más amplia de la carta — la que mira
-             * la encarnación entera — así que es la única que lleva el polvo
-             * dorado detrás. */}
-            {k.mistica && (
-              <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
-                <Particulas cantidad={34} />
-              </div>
-            )}
-            <div style={css("position:relative;z-index:1;")}>
+            <div>
               <div style={css("display:flex;align-items:baseline;gap:var(--s3);")}>
-                <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>{k.label}</span>
-                <span style={css("font-family:var(--font-ui);font-weight:600;font-size:30px;color:var(--text);line-height:1;margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap;")}>{k.valor}</span>
+                <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);")}>{k.label}</span>
+                <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-hero);color:var(--text);line-height:1;margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap;")}>{k.valor}</span>
               </div>
-              <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.55;color:var(--text-2);margin:var(--s2) 0 0;text-wrap:pretty;")}>{k.desc}</p>
+              <p style={css("font-family:var(--font-ui);font-size:var(--t-body);line-height:1.55;color:var(--text-2);margin:var(--s2) 0 0;text-wrap:pretty;")}>{k.desc}</p>
               <div style={css("display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3);")}>
                 {chipsDeFicha(k.f, verNumero).map((cc, ci) => (
                   <button key={ci} onClick={cc.onClick} style={css(cc.style)}>
@@ -111,6 +98,10 @@ export default function SeccionCuentas() {
           </article>
         ))}
       </div>
+      </div>
+      {/* La derivación va a todo lo ancho: encajada en la columna estrecha
+       * partía cada operación en tres renglones. */}
+      <Desglose titulo="De dónde salen estos números" pasos={pasos} nota={notaLema} />
     </div>
   );
 }

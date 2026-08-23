@@ -36,11 +36,9 @@ export default function Lienzo({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       style={css(
-        "background:" +
-          (acento ? "linear-gradient(155deg,rgba(201,168,76,.10),color-mix(in srgb, var(--surface-solid) 74%, transparent))" : "var(--surface)") +
-          ";backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid " +
-          (acento ? "var(--border-accent)" : "var(--border)") +
-          ";border-radius:var(--r);padding:" +
+        "background:var(--surface);border:1px solid var(--border);" +
+          (acento ? "border-left:2px solid var(--gold);" : "") +
+          "border-radius:var(--r);padding:" +
           (compacto ? "var(--pad-card-sm)" : "var(--pad-card)") +
           ";min-width:0;" +
           (anclado ? "position:sticky;top:78px;align-self:start;max-height:calc(100vh - 96px);overflow-y:auto;" : "")

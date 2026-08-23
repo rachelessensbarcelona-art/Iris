@@ -31,7 +31,7 @@ export default function EstudioScreen() {
               key={k}
               onClick={() => setModo(k)}
               style={css(
-                "padding:7px 15px;border-radius:980px;border:none;cursor:pointer;font-size:14px;font-weight:590;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
+                "padding:7px 15px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:590;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
                   (modo === k ? "var(--surface-solid)" : "transparent") +
                   ";box-shadow:" +
                   (modo === k ? "0 3px 8px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.06)" : "none") +
@@ -44,21 +44,21 @@ export default function EstudioScreen() {
             </button>
           ))}
         </div>
-        <span className={styles.hint} style={css("font-size:15px;color:var(--text-4);")}>
+        <span className={styles.hint} style={css("font-size:var(--t-body);color:var(--text-4);")}>
           {hoja ? "Una página, sin fórmulas ni claves: lo que se lleva la persona." : "Haz clic en cualquier párrafo para reescribirlo con tus palabras."}
         </span>
         <div style={css("margin-left:auto;display:flex;gap:9px;")}>
           {!hoja && (
             <button
               onClick={restablecer}
-              style={css("background:none;border:1px solid var(--border-accent);color:var(--text-3);border-radius:980px;padding:9px 16px;font-size:15px;font-weight:590;cursor:pointer;")}
+              style={css("background:none;border:1px solid var(--border-accent);color:var(--text-3);border-radius:980px;padding:9px 16px;font-size:var(--t-body);font-weight:590;cursor:pointer;")}
             >
               Restablecer textos
             </button>
           )}
           <button
             onClick={imprimir}
-            style={css("background:linear-gradient(180deg,#B9942F,#93711F);border:1px solid var(--gold);color:#fff;border-radius:999px;padding:10px 22px;font-family:var(--font-ui);font-weight:600;font-size:15px;cursor:pointer;")}
+            style={css("background:linear-gradient(180deg,#B9942F,#93711F);border:1px solid var(--gold);color:#fff;border-radius:999px;padding:10px 22px;font-family:var(--font-ui);font-weight:600;font-size:var(--t-body);cursor:pointer;")}
           >
             {hoja ? "Exportar la hoja" : "Exportar PDF"}
           </button>
@@ -70,11 +70,11 @@ export default function EstudioScreen() {
         {!hoja && <section className={`${styles.page} ${styles.portada}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.jpeg" alt="" style={css("width:210px;height:210px;border-radius:50%;object-fit:cover;margin-bottom:34px;")} />
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:#9A7F32;")}>{marca}</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</div>
           <div style={css("width:78px;height:1px;background:var(--gold);margin:26px 0;")} />
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:19px;color:#6B6478;")}>Estudio de Kábala personal</div>
-          <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:40px;line-height:1.22;letter-spacing:-.022em;color:#241F2E;margin:30px 0 0;max-width:560px;")}>{titulo(r.nombre.texto)}</h1>
-          <div style={css("font-family:var(--font-ui);font-size:21px;font-style:italic;color:#7A7288;margin-top:var(--s4);")}>{fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio)}</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:#6B6478;")}>Estudio de Kábala personal</div>
+          <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:var(--t-hero);line-height:1.22;letter-spacing:-.022em;color:#241F2E;margin:30px 0 0;max-width:560px;")}>{titulo(r.nombre.texto)}</h1>
+          <div style={css("font-family:var(--font-ui);font-size:var(--t-title);font-style:italic;color:#7A7288;margin-top:var(--s4);")}>{fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio)}</div>
         </section>}
 
         {!hoja && capitulos.map((cap, i) => {
@@ -87,14 +87,14 @@ export default function EstudioScreen() {
             <header className={styles.header}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.jpeg" alt="" style={css("width:26px;height:26px;border-radius:50%;object-fit:cover;")} />
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:#9A7F32;")}>{marca}</span>
-              <span style={css("margin-left:auto;font-family:var(--font-ui);font-size:12px;font-weight:590;color:#9B93A8;")}>{cap.seccion}</span>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</span>
+              <span style={css("margin-left:auto;font-family:var(--font-ui);font-size:var(--t-mini);font-weight:590;color:#9B93A8;")}>{cap.seccion}</span>
             </header>
             <div className={styles.cuerpo}>
               {cap.kicker && (
                 <div>
                   <div style={css("font-family:var(--font-ui);font-size:9.5px;color:#B08A2E;margin-bottom:5px;")}>{cap.kicker}</div>
-                  <h2 style={css("font-family:var(--font-ui);font-weight:700;font-size:25px;line-height:1.2;letter-spacing:-.022em;color:#241F2E;margin:0;")}>{cap.titulo}</h2>
+                  <h2 style={css("font-family:var(--font-ui);font-weight:700;font-size:var(--t-head);line-height:1.2;letter-spacing:-.022em;color:#241F2E;margin:0;")}>{cap.titulo}</h2>
                 </div>
               )}
               {cap.bloques.map((b, bi) => (

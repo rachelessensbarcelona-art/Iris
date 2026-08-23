@@ -14,8 +14,8 @@ function saludo(): string {
 }
 
 const TARJETA =
-  "background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--pad-card);";
-const ROTULO = "font-size:13px;font-weight:590;color:var(--gold);";
+  "background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--pad-card);";
+const ROTULO = "font-size:var(--t-mini);font-weight:590;color:var(--gold);";
 
 export default function ConsultaScreen() {
   const { f, set, calcular, hist, abrir, borrar } = useApp();
@@ -26,14 +26,14 @@ export default function ConsultaScreen() {
 
   const campo = (label: string, key: "nombre" | "ap1" | "ap2" | "dia" | "mes" | "anio", numeric?: boolean) => (
     <label style={css("display:flex;flex-direction:column;gap:var(--s2);min-width:0;")}>
-      <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>{label}</span>
+      <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>{label}</span>
       <input
         size={4}
         value={f[key]}
         onChange={(e) => set(key, numeric ? e.target.value.replace(/\D/g, "").slice(0, key === "anio" ? 4 : 2) : e.target.value)}
         inputMode={numeric ? "numeric" : undefined}
         style={css(
-          "width:100%;min-width:0;background:color-mix(in srgb, var(--text) 6%, transparent);border:1px solid transparent;border-radius:var(--r-sm);padding:14px 16px;color:var(--text);font-family:var(--font-ui);font-size:17px;"
+          "width:100%;min-width:0;background:color-mix(in srgb, var(--text) 6%, transparent);border:1px solid transparent;border-radius:var(--r-sm);padding:14px 16px;color:var(--text);font-family:var(--font-ui);font-size:var(--t-read);"
         )}
       />
     </label>
@@ -69,7 +69,7 @@ export default function ConsultaScreen() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={css(
-              "background:linear-gradient(160deg,color-mix(in srgb, var(--surface-solid) 88%, transparent),color-mix(in srgb, var(--surface-solid) 58%, transparent));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow-lg);border:1px solid var(--border-accent);border-radius:var(--r-lg);padding:clamp(24px,3vw,36px);position:relative;"
+              "background:linear-gradient(160deg,color-mix(in srgb, var(--surface-solid) 88%, transparent),color-mix(in srgb, var(--surface-solid) 58%, transparent));box-shadow:var(--shadow-lg);border:1px solid var(--border-accent);border-radius:var(--r-lg);padding:clamp(24px,3vw,36px);position:relative;"
             )}
           >
             <div style={css("position:absolute;top:-1px;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);")} />
@@ -95,7 +95,7 @@ export default function ConsultaScreen() {
               style={css(
                 "width:100%;margin-top:var(--s7);padding:16px 0;border-radius:980px;border:none;cursor:" +
                   (listo ? "pointer" : "not-allowed") +
-                  ";font-family:var(--font-ui);font-weight:600;font-size:17px;letter-spacing:-.01em;background:" +
+                  ";font-family:var(--font-ui);font-weight:600;font-size:var(--t-read);letter-spacing:-.01em;background:" +
                   (listo ? "linear-gradient(180deg,#C9A84C,#8A6A1B)" : "color-mix(in srgb, var(--text) 9%, transparent)") +
                   ";box-shadow:" +
                   (listo ? "0 1px 2px rgba(0,0,0,.14),0 10px 26px rgba(154,123,46,.32)" : "none") +
@@ -106,7 +106,7 @@ export default function ConsultaScreen() {
             >
               Generar el estudio
             </motion.button>
-            <p style={css("margin:var(--s4) 0 0;font-size:15px;color:var(--text-4);line-height:1.5;text-align:center;")}>
+            <p style={css("margin:var(--s4) 0 0;font-size:var(--t-body);color:var(--text-4);line-height:1.5;text-align:center;")}>
               {err || "Se usa el nombre inscrito en el Registro Civil, sin diminutivos."}
             </p>
           </motion.section>
@@ -115,7 +115,7 @@ export default function ConsultaScreen() {
             <div style={css(TARJETA)}>
               <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Valor del nombre</div>
               {n.palabras.length === 0 ? (
-                <p style={css("font-size:16px;line-height:1.55;color:var(--text-4);margin:0;")}>
+                <p style={css("font-size:var(--t-body);line-height:1.55;color:var(--text-4);margin:0;")}>
                   Cada letra tiene su valor. En cuanto escribas el nombre verás aquí el desglose letra a letra.
                 </p>
               ) : (
@@ -139,12 +139,12 @@ export default function ConsultaScreen() {
                                 ";"
                             )}
                           >
-                            <span style={css("font-size:17px;line-height:1;")}>{l.g}</span>
-                            <span style={css("font-size:11px;font-weight:590;opacity:.7;")}>{l.v}</span>
+                            <span style={css("font-size:var(--t-read);line-height:1;")}>{l.g}</span>
+                            <span style={css("font-size:var(--t-micro);font-weight:590;opacity:.7;")}>{l.v}</span>
                           </motion.div>
                         ))}
                       </div>
-                      <div style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>
+                      <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);")}>
                         {w.palabra} · {w.total}
                       </div>
                     </div>
@@ -152,8 +152,8 @@ export default function ConsultaScreen() {
                 </div>
               )}
               <div style={css("display:flex;align-items:baseline;gap:var(--s3);border-top:1px solid var(--border);margin-top:var(--s5);padding-top:var(--s4);")}>
-                <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>Valor del nombre</span>
-                <span data-cifras="" style={css("font-weight:600;font-size:32px;color:var(--gold);line-height:1;margin-left:auto;letter-spacing:-.028em;")}>{n.total || 0}</span>
+                <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Valor del nombre</span>
+                <span data-cifras="" style={css("font-weight:600;font-size:var(--t-hero);color:var(--gold);line-height:1;margin-left:auto;letter-spacing:-.028em;")}>{n.total || 0}</span>
               </div>
               <div style={css("display:flex;gap:var(--s6);margin-top:var(--s3);")}>
                 {[
@@ -161,8 +161,8 @@ export default function ConsultaScreen() {
                   { l: "Ego", v: n.ego },
                 ].map((x) => (
                   <div key={x.l} style={css("display:flex;flex-direction:column;gap:2px;")}>
-                    <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>{x.l}</span>
-                    <span data-cifras="" style={css("font-weight:600;font-size:19px;color:var(--text-3);")}>{x.v || 0}</span>
+                    <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);")}>{x.l}</span>
+                    <span data-cifras="" style={css("font-weight:600;font-size:var(--t-title);color:var(--text-3);")}>{x.v || 0}</span>
                   </div>
                 ))}
               </div>
@@ -171,7 +171,7 @@ export default function ConsultaScreen() {
             <div style={css(TARJETA)}>
               <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Estudios guardados</div>
               {hist.length === 0 ? (
-                <p style={css("font-size:16px;line-height:1.55;color:var(--text-4);margin:0;")}>Todavía no hay estudios guardados. Los que generes se quedan aquí, en este equipo.</p>
+                <p style={css("font-size:var(--t-body);line-height:1.55;color:var(--text-4);margin:0;")}>Todavía no hay estudios guardados. Los que generes se quedan aquí, en este equipo.</p>
               ) : (
                 <div style={css("display:flex;flex-direction:column;gap:var(--s2);max-height:320px;overflow-y:auto;")}>
                   {hist.map((h) => (
@@ -181,15 +181,15 @@ export default function ConsultaScreen() {
                       style={css("display:flex;align-items:center;gap:var(--s3);padding:11px 13px;border:1px solid var(--border);border-radius:var(--r-sm);background:color-mix(in srgb, var(--text) 4%, transparent);")}
                     >
                       <button onClick={() => abrir(h)} style={css("flex:1;min-width:0;text-align:left;background:none;border:none;padding:0;cursor:pointer;color:var(--text);")}>
-                        <div style={css("font-size:17px;line-height:1.25;color:var(--text);overflow-wrap:anywhere;")}>{h.nombre}</div>
-                        <div style={css("font-size:13px;color:var(--text-4);margin-top:2px;")}>
+                        <div style={css("font-size:var(--t-read);line-height:1.25;color:var(--text);overflow-wrap:anywhere;")}>{h.nombre}</div>
+                        <div style={css("font-size:var(--t-mini);color:var(--text-4);margin-top:2px;")}>
                           {h.fecha} · corazón {h.corazon}
                         </div>
                       </button>
                       <button
                         onClick={() => borrar(h)}
                         title="Eliminar"
-                        style={css("flex:none;background:none;border:1px solid var(--red-border);color:var(--red);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:15px;line-height:1;")}
+                        style={css("flex:none;background:none;border:1px solid var(--red-border);color:var(--red);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:var(--t-body);line-height:1;")}
                       >
                         ×
                       </button>

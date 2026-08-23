@@ -51,7 +51,7 @@ export default function Tema() {
       title={oscuro ? "Pasar a claro" : "Pasar a oscuro"}
       aria-label={oscuro ? "Pasar a claro" : "Pasar a oscuro"}
       style={css(
-        "flex:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;cursor:pointer;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-2);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);"
+        "flex:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;cursor:pointer;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-2);"
       )}
     >
       <motion.svg

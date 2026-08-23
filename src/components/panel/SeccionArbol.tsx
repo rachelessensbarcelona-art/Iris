@@ -5,6 +5,7 @@ import { arbolGeometria } from "@/lib/arbol";
 import { COL } from "@/lib/tree";
 import { frase, recorta, titulo } from "@/lib/format";
 import Particulas from "../Particulas";
+import { tarjetaCon, PAD_SM } from "@/lib/ui";
 import Lienzo from "../Lienzo";
 import ArbolVida from "../ArbolVida";
 
@@ -29,7 +30,7 @@ export default function SeccionArbol() {
     <div data-dos="ancho">
       <Lienzo anclado>
         <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:var(--s2);")}>
-          <span style={css("font-size:17px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Árbol de la Vida</span>
+          <span style={css("font-size:var(--t-read);font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Árbol de la Vida</span>
         </div>
         <div style={css("position:relative;")}>
           <Particulas cantidad={26} />
@@ -38,13 +39,13 @@ export default function SeccionArbol() {
 
         <div style={css("display:flex;flex-direction:column;gap:var(--s2);margin-top:var(--s4);border-top:1px solid var(--border);padding-top:var(--s4);")}>
           {camDef.map((d, i) => (
-            <div key={i} style={css("display:flex;align-items:center;gap:var(--s3);font-size:14px;color:var(--text-3);")}>
+            <div key={i} style={css("display:flex;align-items:center;gap:var(--s3);font-size:var(--t-body);color:var(--text-3);")}>
               <span style={css("width:24px;height:3px;border-radius:2px;flex:none;background:" + COL[d.k] + ";")} />
               {d.etapa} · arcano {d.c.arcano}
             </div>
           ))}
           {rotulosComp.length > 0 && (
-            <div style={css("display:flex;align-items:baseline;gap:var(--s3);font-size:14px;color:var(--text-3);")}>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);font-size:var(--t-body);color:var(--text-3);")}>
               <span style={css("width:24px;height:0;flex:none;margin-top:8px;border-top:3px dashed var(--text-4);")} />
               <span>Complementarios · {rotulosComp.map((c) => c.nombre).join(" · ")}</span>
             </div>
@@ -58,21 +59,21 @@ export default function SeccionArbol() {
             key={ci}
             data-alza=""
             style={css(
-              "border:1px solid " + COL[c.k] + "33;background:linear-gradient(150deg," + COL[c.k] + "12,color-mix(in srgb, var(--surface-solid) 78%, transparent));border-left:3px solid " + COL[c.k] + ";border-radius:var(--r);padding:var(--pad-card-sm);"
+              tarjetaCon(COL[c.k]) + PAD_SM
             )}
           >
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
-              <span style={css("font-size:13px;font-weight:590;color:" + COL[c.k] + ";")}>{c.etapa}</span>
-              <span style={css("font-family:var(--font-display);font-weight:500;font-size:23px;line-height:1.25;color:var(--text);letter-spacing:-.022em;")}>
+              <span style={css("font-size:var(--t-mini);font-weight:590;color:" + COL[c.k] + ";")}>{c.etapa}</span>
+              <span style={css("font-family:var(--font-display);font-weight:500;font-size:var(--t-head);line-height:1.25;color:var(--text);letter-spacing:-.022em;")}>
                 {c.c.arcano} · {c.nombre}
               </span>
-              <span style={css("margin-left:auto;font-size:13px;color:var(--text-4);")}>{c.rango}</span>
+              <span style={css("margin-left:auto;font-size:var(--t-mini);color:var(--text-4);")}>{c.rango}</span>
             </div>
-            <div style={css("font-size:17px;color:var(--gold);margin-top:var(--s2);line-height:1.4;")}>{c.lema}</div>
-            <p style={css("font-size:17px;line-height:1.62;color:var(--text-2);margin:var(--s3) 0 0;text-wrap:pretty;")}>{c.extracto}</p>
+            <div style={css("font-size:var(--t-read);color:var(--gold);margin-top:var(--s2);line-height:1.4;")}>{c.lema}</div>
+            <p style={css("font-size:var(--t-read);line-height:1.62;color:var(--text-2);margin:var(--s3) 0 0;text-wrap:pretty;")}>{c.extracto}</p>
             <button
               onClick={() => verArcano(c.c.arcano)}
-              style={css("margin-top:var(--s3);background:color-mix(in srgb, var(--surface-solid) 70%, transparent);border:1px solid var(--border-accent);color:var(--gold);border-radius:980px;padding:8px 16px;font-size:14px;font-weight:590;cursor:pointer;")}
+              style={css("margin-top:var(--s3);background:color-mix(in srgb, var(--surface-solid) 70%, transparent);border:1px solid var(--border-accent);color:var(--gold);border-radius:980px;padding:8px 16px;font-size:var(--t-body);font-weight:590;cursor:pointer;")}
             >
               Texto completo
             </button>
@@ -80,16 +81,16 @@ export default function SeccionArbol() {
         ))}
 
         {r.turbulencias && (
-          <article style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-            <div style={css("font-weight:600;font-size:14px;color:var(--red);margin-bottom:var(--s3);")}>
+          <article style={css(tarjetaCon("var(--red)") + PAD_SM)}>
+            <div style={css("font-weight:600;font-size:var(--t-body);color:var(--red);margin-bottom:var(--s3);")}>
               Años de turbulencias · {r.turbulencias.desde} – {r.turbulencias.hasta} años
             </div>
             {r.turbulencias.lista.map((t, i) => (
               <div key={i} style={css("margin-bottom:var(--s3);")}>
-                <div style={css("font-size:13px;font-weight:590;color:var(--red);margin-bottom:2px;")}>
+                <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--red);margin-bottom:2px;")}>
                   Turbulencias en {t.tipo} · {t.causa}
                 </div>
-                <p style={css("font-size:17px;line-height:1.6;color:var(--text-2);margin:0;text-wrap:pretty;")}>{t.texto}</p>
+                <p style={css("font-size:var(--t-read);line-height:1.6;color:var(--text-2);margin:0;text-wrap:pretty;")}>{t.texto}</p>
               </div>
             ))}
           </article>

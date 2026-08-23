@@ -3,6 +3,7 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import { chipStyle, recorta } from "@/lib/format";
+import { tarjetaCon, PAD_SM } from "@/lib/ui";
 import TablaAlma from "./TablaAlma";
 
 export default function SeccionAlma() {
@@ -22,10 +23,10 @@ export default function SeccionAlma() {
 
   return (
     <div data-dos="">
-      <div style={css("position:sticky;top:78px;align-self:start;max-height:calc(100vh - 96px);overflow-y:auto;border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+      <div style={css("position:sticky;top:78px;align-self:start;max-height:calc(100vh - 96px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s4);")}>
-          <span style={css("font-size:13px;font-weight:590;color:var(--text-3);")}>Imagen del alma</span>
-          <span style={css("font-family:var(--font-display);font-size:26px;font-weight:500;color:var(--gold);line-height:1;")}>{ia.numero}</span>
+          <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Imagen del alma</span>
+          <span style={css("font-family:var(--font-display);font-size:var(--t-head);font-weight:500;color:var(--gold);line-height:1;")}>{ia.numero}</span>
         </div>
 
         <TablaAlma ia={ia} />
@@ -37,13 +38,13 @@ export default function SeccionAlma() {
             { l: "Ayudas espirituales", v: Object.keys(ia.ayudas).map(Number).sort((a, b) => a - b), c: "#C0392B" },
             { l: "Punto verde", v: ia.proyeccion ? [ia.proyeccion] : [], c: "#4C9A5A" },
           ].map((x) => (
-            <div key={x.l} style={css("display:flex;align-items:baseline;gap:var(--s3);font-size:14px;")}>
+            <div key={x.l} style={css("display:flex;align-items:baseline;gap:var(--s3);font-size:var(--t-body);")}>
               <span style={css("color:var(--text-3);min-width:130px;")}>{x.l}</span>
               <span style={css("font-weight:600;color:" + x.c + ";")}>{x.v.length ? x.v.map((n) => (n === 10 ? "0" : n)).join(" · ") : "ninguno"}</span>
             </div>
           ))}
           {ia.proyeccion && (
-            <p style={css("font-size:15px;line-height:1.5;color:var(--text-4);margin:var(--s2) 0 0;")}>
+            <p style={css("font-size:var(--t-body);line-height:1.5;color:var(--text-4);margin:var(--s2) 0 0;")}>
               El 0 cae en la casilla {ia.proyeccion}: eso es lo que proyectas de cara a los demás.
             </p>
           )}
@@ -54,20 +55,20 @@ export default function SeccionAlma() {
           <article
             key={i}
             style={css(
-              "border:1px solid var(--border-accent);background:rgba(142,68,173,.06);border-radius:var(--r);padding:var(--pad-card-sm);opacity:0;animation:es33-rise .55s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
+              tarjetaCon("var(--purple)") + PAD_SM + "opacity:0;animation:es33-rise .55s cubic-bezier(.22,1,.36,1) forwards;animation-delay:" +
                 (0.18 + i * 0.13).toFixed(2) +
                 "s;"
             )}
           >
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--purple);")}>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--purple);")}>
                 Bloqueo {b.casilla}
                 {b.veces > 1 ? " · ×" + b.veces : ""}
               </span>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:21px;color:var(--text);")}>{b.plano?.nombre || ""}</span>
-              <span style={css("margin-left:auto;font-size:13px;font-weight:590;color:var(--text-3);")}>se forma con el número {b.numero}</span>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:var(--text);")}>{b.plano?.nombre || ""}</span>
+              <span style={css("margin-left:auto;font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>se forma con el número {b.numero}</span>
             </div>
-            <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{extracto}</p>
+            <p style={css("font-family:var(--font-ui);font-size:var(--t-read);line-height:1.6;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{extracto}</p>
             <div style={css("display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);")}>
               {chips.map((cc, ci) => (
                 <button key={ci} onClick={cc.onClick} style={css(cc.style)}>

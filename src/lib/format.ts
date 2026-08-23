@@ -8,25 +8,22 @@ export function recorta(t: string | undefined | null, n: number): string {
 }
 
 /**
- * Chip tipo iOS: pastilla blanca, texto en color y borde teñido del mismo
- * color. El borde se calcula con color-mix en vez de pegar un "55" al final
- * del color, que sólo funciona si el color es un hexadecimal literal — y
- * aquí llegan también variables CSS.
+ * Chip tipo iOS. Van cuatro o cinco al pie de cada bloque, así que son la
+ * pieza que más se repite en toda la plataforma: si cada uno lleva su color de
+ * fondo, su borde teñido y su sombra, el pie de la tarjeta pesa más que el
+ * texto que hay encima.
+ *
+ * Ahora la pastilla es siempre la misma — gris muy suave, sin borde ni sombra —
+ * y del color sólo queda la letra. Se sigue distinguiendo qué chip es cuál y el
+ * conjunto deja de competir con la lectura.
  */
 export function chipStyle(color: string): string {
   return (
-    // El fondo va tomado del color propio del chip sobre la superficie del
-    // tema. En blanco fijo, en modo oscuro quedaba una pastilla clara con la
-    // letra clara encima y no se leía nada.
-    "display:inline-flex;align-items:center;background:color-mix(in srgb, " +
+    "display:inline-flex;align-items:center;background:color-mix(in srgb, var(--text) 5%, transparent);" +
+    "border:none;color:" +
     color +
-    " 10%, var(--surface-solid));" +
-    "border:1px solid color-mix(in srgb, " +
-    color +
-    " 32%, transparent);color:" +
-    color +
-    ";border-radius:999px;padding:7px 14px;font-family:var(--font-ui);font-size:12px;font-weight:500;" +
-    "letter-spacing:0;text-transform:none;cursor:pointer;box-shadow:var(--shadow-sm);"
+    ";border-radius:999px;padding:7px 13px;font-family:var(--font-ui);font-size:var(--t-mini);font-weight:590;" +
+    "letter-spacing:-.005em;text-transform:none;cursor:pointer;"
   );
 }
 
