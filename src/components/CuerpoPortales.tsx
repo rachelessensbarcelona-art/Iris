@@ -2,33 +2,27 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { css } from "@/lib/css";
 import type { Resultado } from "@/lib/engine";
-import {
-  CONOS,
-  CONO_APEX,
-  CONO_BOCA,
-  CONO_BOCA_X,
-  CONO_CORONA,
-  CONO_RAIZ,
-  EJE_CUERPO,
-  EJE_CURVO,
-  PORTALES_CUERPO,
-  RADIO_PORTAL,
-  RETICULA,
-  SILUETA_PERFIL,
-  VIEWBOX_CUERPO,
-} from "@/lib/cuerpo";
+import { CONOS, CONO_APEX, CONO_BOCA, CONO_CORONA, CONO_RAIZ, EJE_CUERPO, EJE_CURVO, PORTALES_CUERPO, RETICULA, SILUETA_PERFIL } from "@/lib/cuerpo";
 
 const FUENTE = "-apple-system, BlinkMacSystemFont, sans-serif";
 const GRIS = "#C6C4CB";
+const RADIO = 26;
+/* Margen a los lados para que las pastillas no toquen el borde, y corte por
+ * abajo antes de las piernas: de la rodilla para abajo no hay ningún portal y
+ * eran doscientas unidades de lienzo vacío. En vez de cortar en seco, la
+ * figura se disuelve. */
+const VISTA = "-26 -58 352 604";
 
 /**
- * La lámina de la ficha con los diez portales encima. Cada portal lleva su
- * número grande y, pegado abajo a la derecha, el dinámico en rojo; el relleno
- * dorado marca tarea abierta, el aro azul marca escudo, y el recuadro azul de
- * al lado es la cifra de la fecha que abrió ese aprendizaje.
+ * La lámina de la ficha con los diez portales encima.
  *
- * Los chakras laten muy despacio, cada uno con su propio compás, para que se
- * lea como energía y no como un parpadeo sincronizado.
+ * En los apuntes cada portal lleva anotados a mano hasta cuatro números
+ * distintos, y sobre la pantalla eso se convertía en un amontonamiento — un
+ * portal con cuatro aprendizajes llegaba a rotularse "6666". Aquí la misma
+ * información se cuenta con menos tinta: el portal y su dinámico comparten
+ * pastilla, uno encima del otro, y las repeticiones se dicen con un "×4" en
+ * vez de repitiendo la cifra. Una línea fina une cada portal con su altura
+ * en el cuerpo, que es lo que el dibujo a mano deja implícito.
  */
 export default function CuerpoPortales({ r }: { r: Resultado }) {
   const est = r.estructura;
@@ -38,49 +32,57 @@ export default function CuerpoPortales({ r }: { r: Resultado }) {
     quieto
       ? {}
       : {
-          animate: { opacity: [0.45, 0.85, 0.45], scaleX: [0.94, 1.04, 0.94] },
+          animate: { opacity: [0.5, 0.9, 0.5], scaleX: [0.95, 1.05, 0.95] },
           transition: { duration: 5.5 + i * 0.7, repeat: Infinity, ease: "easeInOut" as const },
         };
 
   return (
-    <svg viewBox={VIEWBOX_CUERPO} style={css("width:100%;height:auto;display:block;overflow:visible;")}>
+    <svg viewBox={VISTA} style={css("width:100%;height:auto;display:block;")}>
       <defs>
         {CONOS.map((c, i) => (
           <linearGradient key={i} id={`es33-cono-izq-${i}`} x1="1" y1="0" x2="0" y2="0">
-            <stop offset="0%" stopColor={c.tono} stopOpacity="0.55" />
+            <stop offset="0%" stopColor={c.tono} stopOpacity="0.5" />
             <stop offset="100%" stopColor={c.tono} stopOpacity="0" />
           </linearGradient>
         ))}
         {CONOS.map((c, i) => (
           <linearGradient key={"d" + i} id={`es33-cono-der-${i}`} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor={c.tono} stopOpacity="0.55" />
+            <stop offset="0%" stopColor={c.tono} stopOpacity="0.5" />
             <stop offset="100%" stopColor={c.tono} stopOpacity="0" />
           </linearGradient>
         ))}
         <linearGradient id="es33-corona" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stopColor="#7B5EA7" stopOpacity="0.6" />
+          <stop offset="0%" stopColor="#7B5EA7" stopOpacity="0.55" />
           <stop offset="100%" stopColor="#7B5EA7" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="es33-raiz" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#C0392B" stopOpacity="0.6" />
+          <stop offset="0%" stopColor="#C0392B" stopOpacity="0.55" />
           <stop offset="100%" stopColor="#C0392B" stopOpacity="0" />
         </linearGradient>
         <clipPath id="es33-recorte-cuerpo">
           <path d={SILUETA_PERFIL} />
         </clipPath>
+        <linearGradient id="es33-desvanece" x1="0" y1="446" x2="0" y2="540" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#fff" stopOpacity="1" />
+          <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+        </linearGradient>
+        <mask id="es33-pie">
+          <rect x="-26" y="-58" width="352" height="504" fill="#fff" />
+          <rect x="-26" y="446" width="352" height="100" fill="url(#es33-desvanece)" />
+        </mask>
       </defs>
 
-      {/* conos de energía, latiendo por debajo de la figura */}
+      {/* conos de energía */}
       {CONOS.map((c, i) => (
-        <g key={c.y} style={{ transformBox: "fill-box", transformOrigin: "center" }}>
+        <g key={c.y}>
           <motion.path
-            d={`M${EJE_CUERPO - CONO_APEX} ${c.y} L${CONO_BOCA_X} ${c.y - CONO_BOCA} L${CONO_BOCA_X} ${c.y + CONO_BOCA} Z`}
+            d={`M${EJE_CUERPO - CONO_APEX} ${c.y} L4 ${c.y - CONO_BOCA} L4 ${c.y + CONO_BOCA} Z`}
             fill={`url(#es33-cono-izq-${i})`}
             style={{ transformBox: "fill-box", transformOrigin: "right center" }}
             {...late(i)}
           />
           <motion.path
-            d={`M${EJE_CUERPO + CONO_APEX} ${c.y} L${300 - CONO_BOCA_X} ${c.y - CONO_BOCA} L${300 - CONO_BOCA_X} ${c.y + CONO_BOCA} Z`}
+            d={`M${EJE_CUERPO + CONO_APEX} ${c.y} L296 ${c.y - CONO_BOCA} L296 ${c.y + CONO_BOCA} Z`}
             fill={`url(#es33-cono-der-${i})`}
             style={{ transformBox: "fill-box", transformOrigin: "left center" }}
             {...late(i + 1)}
@@ -89,71 +91,92 @@ export default function CuerpoPortales({ r }: { r: Resultado }) {
       ))}
       <motion.path d={CONO_CORONA} fill="url(#es33-corona)" style={{ transformBox: "fill-box", transformOrigin: "bottom center" }} {...late(2)} />
 
-      {/* la figura, con su eje y su retícula recortados contra ella */}
-      <motion.g initial={quieto ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
+      {/* la figura, con su eje y su retícula */}
+      <motion.g mask="url(#es33-pie)" initial={quieto ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
         <path d={SILUETA_PERFIL} fill={GRIS} />
-        <g clipPath="url(#es33-recorte-cuerpo)" stroke="#fff" strokeLinecap="round" fill="none">
-          <path d={EJE_CURVO} strokeWidth={2.2} strokeOpacity={0.95} />
+        <g clipPath="url(#es33-recorte-cuerpo)" stroke="#fff" strokeLinecap="round" fill="none" strokeOpacity={0.92} strokeWidth={2.2}>
+          <path d={EJE_CURVO} />
           {RETICULA.map((l) => (
-            <line key={l.y} x1={l.x1 - 4} y1={l.y} x2={l.x2 + 4} y2={l.y} strokeWidth={2.2} strokeOpacity={0.95} />
+            <line key={l.y} x1={l.x1 - 4} y1={l.y} x2={l.x2 + 4} y2={l.y} />
           ))}
         </g>
       </motion.g>
-
-      {/* la raíz va después del cuerpo, si no queda tapada */}
       <motion.path d={CONO_RAIZ} fill="url(#es33-raiz)" style={{ transformBox: "fill-box", transformOrigin: "top center" }} {...late(4)} />
 
       {PORTALES_CUERPO.map((p, i) => {
         const veces = est.aprendizajes[p.portal] || 0;
         const escudo = !!est.escudos[p.portal];
-        const cifra = String(est.dinamicos[p.portal]).repeat(veces);
-        const ancho = 15 + cifra.length * 11;
-        const cajaX = p.lado === 0 ? p.x : p.x + p.lado * 26;
-        const cajaY = p.lado === 0 ? p.y - RADIO_PORTAL - 29 : p.y - 44;
+        const retraso = 0.3 + i * 0.06;
 
         return (
           <motion.g
             key={p.portal}
-            initial={quieto ? false : { opacity: 0, scale: 0.4 }}
+            initial={quieto ? false : { opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.35 + i * 0.07, duration: 0.55, ease: [0.34, 1.4, 0.64, 1] }}
+            transition={{ delay: retraso, duration: 0.5, ease: [0.34, 1.4, 0.64, 1] }}
             style={{ transformBox: "fill-box", transformOrigin: "center" }}
           >
-            {/* Los portales con tarea abierta respiran: son los que hay que mirar. */}
-            {/* El halo crece por escala, no por el radio: animar el atributo r
-             * lo deja indefinido en el primer cuadro y el navegador protesta. */}
+            {/* Cada portal se enlaza con su altura en el cuerpo: sin la línea
+             * hay que adivinar a qué chakra pertenece cada pastilla. */}
+            {p.lado !== 0 && (
+              <line
+                x1={p.x + p.lado * RADIO}
+                y1={p.y}
+                x2={EJE_CUERPO - p.lado * 4}
+                y2={p.y}
+                stroke="var(--text-4)"
+                strokeOpacity={0.28}
+                strokeWidth={1.2}
+              />
+            )}
+
             {veces > 0 && !quieto && (
               <motion.circle
                 cx={p.x}
                 cy={p.y}
-                r={RADIO_PORTAL}
+                r={RADIO}
                 fill="none"
                 stroke="#E5B63C"
                 strokeWidth={2}
-                animate={{ scale: [1, 1.55], opacity: [0.55, 0] }}
-                transition={{ duration: 2.6, repeat: Infinity, ease: "easeOut", delay: i * 0.35 }}
+                animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                transition={{ duration: 2.8, repeat: Infinity, ease: "easeOut", delay: i * 0.35 }}
                 style={{ transformBox: "fill-box", transformOrigin: "center" }}
               />
             )}
+
             <circle
               cx={p.x}
               cy={p.y}
-              r={RADIO_PORTAL}
-              fill={veces ? "#E5B63C" : "#FFFFFF"}
-              stroke={escudo ? "#3E77C4" : "rgba(90,80,60,.4)"}
+              r={RADIO}
+              fill={veces ? "#E5B63C" : "var(--surface-solid)"}
+              stroke={escudo ? "#3E77C4" : "var(--border-strong)"}
               strokeWidth={escudo ? 3 : 1.2}
             />
-            <text x={p.x} y={p.y + 7} fill={veces ? "#241F2E" : "#4A4550"} fontSize={20} fontFamily={FUENTE} fontWeight={700} textAnchor="middle">
+            {/* Portal arriba, dinámico debajo: los dos números que el manual
+             * escribe uno junto al otro, ahora dentro de la misma pastilla. */}
+            <text x={p.x} y={p.y - 1} fill={veces ? "#241F2E" : "var(--text)"} fontSize={21} fontFamily={FUENTE} fontWeight={650} textAnchor="middle">
               {p.etiqueta}
             </text>
-            <text x={p.x + RADIO_PORTAL - 2} y={p.y + RADIO_PORTAL + 2} fill="#C0392B" fontSize={15} fontFamily={FUENTE} fontWeight={600} textAnchor="start">
+            <text
+              x={p.x}
+              y={p.y + 15}
+              fill={veces ? "rgba(36,31,46,.62)" : "var(--red)"}
+              fontSize={12}
+              fontFamily={FUENTE}
+              fontWeight={600}
+              textAnchor="middle"
+              letterSpacing="0.02em"
+            >
               {est.dinamicos[p.portal]}
             </text>
-            {veces > 0 && (
+
+            {/* Un aprendizaje repetido se dice con un multiplicador, no
+             * repitiendo la cifra: "6666" no cabía y no se leía. */}
+            {veces > 1 && (
               <g>
-                <rect x={cajaX - ancho / 2} y={cajaY} width={ancho} height={23} rx={5} fill="#fff" stroke="#3E77C4" strokeWidth={1.8} />
-                <text x={cajaX} y={cajaY + 17} fill="#2C5D9E" fontSize={15} fontFamily={FUENTE} fontWeight={700} textAnchor="middle">
-                  {cifra}
+                <circle cx={p.x + RADIO - 4} cy={p.y - RADIO + 4} r={11} fill="#2C5D9E" />
+                <text x={p.x + RADIO - 4} y={p.y - RADIO + 8} fill="#fff" fontSize={12} fontFamily={FUENTE} fontWeight={700} textAnchor="middle">
+                  ×{veces}
                 </text>
               </g>
             )}

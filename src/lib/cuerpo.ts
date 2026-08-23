@@ -74,19 +74,21 @@ export const CONO_CORONA = "M138 64 L162 64 L186 -18 L114 -18 Z";
 export const CONO_RAIZ = "M138 316 L162 316 L150 392 Z";
 
 /**
- * Los cuatro pares se sientan sobre su cono: cabeza, garganta, pecho y
- * vientre. El del plexo (232.6) se queda sin pareja, igual que en la lámina.
- * En x van justo al borde del cuerpo, que mide 50 unidades de medio ancho.
+ * Los cuatro pares bajan por el cuerpo a intervalos iguales: cabeza, garganta,
+ * pecho y vientre. No se clavan en la altura exacta de cada cono de la lámina
+ * porque dos de ellos caen muy juntos y las pastillas se solapaban — en la
+ * ficha a mano pasa lo mismo, los círculos no coinciden con las cuñas
+ * impresas. En x van fuera del cuerpo, que mide 50 unidades de medio ancho.
  */
 export const PORTALES_CUERPO: PortalCuerpo[] = [
-  { portal: 2, etiqueta: "2", x: 150, y: 22, lado: 0 },
-  { portal: 3, etiqueta: "3", x: 76, y: 86.9, lado: -1 },
-  { portal: 1, etiqueta: "1", x: 224, y: 86.9, lado: 1 },
-  { portal: 4, etiqueta: "4", x: 76, y: 140.7, lado: -1 },
-  { portal: 10, etiqueta: "0", x: 224, y: 140.7, lado: 1 },
-  { portal: 5, etiqueta: "5", x: 76, y: 185.9, lado: -1 },
-  { portal: 9, etiqueta: "9", x: 224, y: 185.9, lado: 1 },
-  { portal: 6, etiqueta: "6", x: 76, y: 298.3, lado: -1 },
-  { portal: 8, etiqueta: "8", x: 224, y: 298.3, lado: 1 },
+  { portal: 2, etiqueta: "2", x: 150, y: 12, lado: 0 },
+  { portal: 3, etiqueta: "3", x: 58, y: 90, lado: -1 },
+  { portal: 1, etiqueta: "1", x: 242, y: 90, lado: 1 },
+  { portal: 4, etiqueta: "4", x: 58, y: 165, lado: -1 },
+  { portal: 10, etiqueta: "0", x: 242, y: 165, lado: 1 },
+  { portal: 5, etiqueta: "5", x: 58, y: 240, lado: -1 },
+  { portal: 9, etiqueta: "9", x: 242, y: 240, lado: 1 },
+  { portal: 6, etiqueta: "6", x: 58, y: 315, lado: -1 },
+  { portal: 8, etiqueta: "8", x: 242, y: 315, lado: 1 },
   { portal: 7, etiqueta: "7", x: 150, y: 412, lado: 0 },
 ];
