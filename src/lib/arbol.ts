@@ -1,11 +1,14 @@
 import { SEF, SENDEROS, COL, IZQ, ORDEN_CAMINOS, type SefKey } from "./tree";
 import type { Resultado } from "./engine";
+import { KDATA } from "./kdata";
 
 export type Rol = "origen" | "transformacion" | "destino";
 
 export type SenderoView = { x1: number; y1: number; x2: number; y2: number; color: string; w: number; o: number; delay: number };
 export type SefiraView = { x: number; y: number; fill: string; nombre: string; tx: number; ty: number; anchor: "start" | "middle" | "end"; delay: number; delayT: number };
 export type MarcaCaminoView = { x: number; y: number; n: number; color: string; delay: number };
+/** Sendero complementario de uno de los tuyos: mismo color, trazo discontinuo. */
+export type ComplementarioView = { x1: number; y1: number; x2: number; y2: number; color: string; n: number; de: number; delay: number };
 
 /** Senderos ocupados por cada camino. Un mismo sendero puede llevar más de un
  *  camino (el de origen y el de destino pueden ser el mismo arcano), por eso
@@ -106,5 +109,30 @@ export function arbolGeometria(r: Resultado) {
     });
   });
 
-  return { arcos, senderos, sefirot, marcasCamino };
+  // Caminos complementarios: los senderos que hacen pareja con los tuyos.
+  // No son tu recorrido, así que van en discontinuo y por debajo — es la
+  // energía que te acompaña, no la que te toca andar.
+  const complementarios: ComplementarioView[] = [];
+  const yaTuyos = new Set(Object.keys(arcos).map(Number));
+  Object.entries(arcos).forEach(([clave, roles]) => {
+    (KDATA.caminosComplementarios?.[clave] || []).forEach((comp, k) => {
+      if (yaTuyos.has(comp)) return;
+      const s = SENDEROS[comp];
+      if (!s) return;
+      const a = SEF[s[0]],
+        b = SEF[s[1]];
+      complementarios.push({
+        x1: a.x,
+        y1: a.y,
+        x2: b.x,
+        y2: b.y,
+        color: COL[roles[0]],
+        n: comp,
+        de: +clave,
+        delay: 2.1 + k * 0.2,
+      });
+    });
+  });
+
+  return { arcos, senderos, sefirot, marcasCamino, complementarios };
 }

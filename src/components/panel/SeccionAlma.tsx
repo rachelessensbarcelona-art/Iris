@@ -51,14 +51,14 @@ export default function SeccionAlma() {
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:var(--gap-lg);align-items:start;")}>
       <div style={css("position:sticky;top:78px;align-self:start;max-height:calc(100vh - 96px);overflow-y:auto;border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:14px;")}>Imagen del alma · número {ia.numero}</div>
-        <div style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:8px;margin-bottom:6px;")}>
+        <div style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:var(--s2);margin-bottom:6px;")}>
           <span />
           {["Espíritu", "Alma", "Materia"].map((h) => (
             <span key={h} style={css("font-size:12px;font-weight:590;color:var(--text-3);text-align:center;")}>{h}</span>
           ))}
         </div>
         {filasAlma.map((f, fi) => (
-          <div key={fi} style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:8px;margin-bottom:8px;align-items:center;")}>
+          <div key={fi} style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:var(--s2);margin-bottom:var(--s2);align-items:center;")}>
             <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>{f.label}</span>
             {f.celdas.map((cc, ci) => (
               <div key={ci} style={css(cc.style)}>
@@ -69,7 +69,7 @@ export default function SeccionAlma() {
             ))}
           </div>
         ))}
-        <div style={css("display:grid;grid-template-columns:66px 1fr;gap:8px;align-items:center;")}>
+        <div style={css("display:grid;grid-template-columns:66px 1fr;gap:var(--s2);align-items:center;")}>
           <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>Evolución</span>
           <div style={css(celda10.style)}>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--text-3);")}>10 / 0</span>
@@ -77,12 +77,12 @@ export default function SeccionAlma() {
             <span style={css(A_STYLE)}>{celda10.ayuda}</span>
           </div>
         </div>
-        <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:13px;font-weight:590;color:var(--text-3);")}>
-          <div style={css("display:flex;align-items:center;gap:8px;")}>
+        <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:var(--s4);font-size:13px;font-weight:590;color:var(--text-3);")}>
+          <div style={css("display:flex;align-items:center;gap:var(--s2);")}>
             <span style={css("width:11px;height:11px;border-radius:3px;background:var(--red);")} />
             Bloqueos (estructura fija)
           </div>
-          <div style={css("display:flex;align-items:center;gap:8px;")}>
+          <div style={css("display:flex;align-items:center;gap:var(--s2);")}>
             <span style={css("width:11px;height:11px;border-radius:50%;background:var(--green);")} />
             Ayudas espirituales (estructura móvil)
           </div>
@@ -101,7 +101,7 @@ export default function SeccionAlma() {
                 "s;"
             )}
           >
-            <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--purple);")}>
                 Bloqueo {b.casilla}
                 {b.veces > 1 ? " · ×" + b.veces : ""}
@@ -110,7 +110,7 @@ export default function SeccionAlma() {
               <span style={css("margin-left:auto;font-size:13px;font-weight:590;color:var(--text-3);")}>se forma con el número {b.numero}</span>
             </div>
             <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{extracto}</p>
-            <div style={css("display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;")}>
+            <div style={css("display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);")}>
               {chips.map((cc, ci) => (
                 <button key={ci} onClick={cc.onClick} style={css(cc.style)}>
                   {cc.label}

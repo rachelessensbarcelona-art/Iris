@@ -64,18 +64,18 @@ export default function DetalleModal() {
         >
           ×
         </button>
-        <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:8px;")}>{tipo}</div>
+        <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:var(--s2);")}>{tipo}</div>
         <h2 style={css("font-family:var(--font-ui);font-weight:700;font-size:28px;color:var(--text);margin:0 0 6px;letter-spacing:-.022em;")}>{titulo}</h2>
-        <div style={css("font-family:var(--font-ui);font-style:normal;font-size:19px;color:var(--gold);margin-bottom:18px;")}>{subtitulo}</div>
-        <p style={css("font-family:var(--font-ui);font-size:18px;line-height:1.68;color:var(--text-2);margin:0;white-space:pre-line;text-wrap:pretty;")}>{texto}</p>
+        <div style={css("font-family:var(--font-ui);font-style:normal;font-size:19px;color:var(--gold);margin-bottom:var(--s5);")}>{subtitulo}</div>
+        <p style={css("font-family:var(--font-ui);font-size:18px;line-height:1.68;color:var(--text-2);margin:0;text-wrap:pretty;white-space:pre-line;text-wrap:pretty;")}>{texto}</p>
         {extras.map((e, i) => (
-          <div key={i} style={css("margin-top:18px;border-top:1px solid var(--border);padding-top:14px;")}>
+          <div key={i} style={css("margin-top:18px;border-top:1px solid var(--border);padding-top:var(--s4);")}>
             <div style={css("font-size:12px;font-weight:590;color:var(--gold);margin-bottom:6px;")}>{e.label}</div>
-            <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:0;")}>{e.texto}</p>
+            <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:0;text-wrap:pretty;")}>{e.texto}</p>
           </div>
         ))}
         {chips.length > 0 && (
-          <div style={css("display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;")}>
+          <div style={css("display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:20px;")}>
             {chips.map((c, i) => (
               <button key={i} onClick={c.onClick} style={css(c.style)}>
                 {c.label}

@@ -39,7 +39,7 @@ export type KData = {
   numerologia: Record<string, { pos: string; neg: string }>;
   ejes: Array<{ nombre: string; a: number; b: number }>;
   planosTension: Array<{ nombre: string; a: number; b: number }>;
-  caminosComplementarios: unknown;
+  caminosComplementarios: Record<string, number[]>;
   parejas: {
     cuentas: { mismaCuenta: string; mismoPotencial: string; cruzado: string; afinidad: string };
     estructuras: { iguales: string; distintas: string };

@@ -45,7 +45,7 @@ export default function EstudioScreen() {
           <div style={css("width:78px;height:1px;background:var(--gold);margin:26px 0;")} />
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:19px;color:#6B6478;")}>Estudio de Kábala personal</div>
           <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:40px;line-height:1.22;letter-spacing:-.022em;color:#241F2E;margin:30px 0 0;max-width:560px;")}>{r.nombre.texto}</h1>
-          <div style={css("font-family:var(--font-ui);font-size:21px;font-style:italic;color:#7A7288;margin-top:14px;")}>{fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio)}</div>
+          <div style={css("font-family:var(--font-ui);font-size:21px;font-style:italic;color:#7A7288;margin-top:var(--s4);")}>{fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio)}</div>
         </section>
 
         {capitulos.map((cap, i) => {

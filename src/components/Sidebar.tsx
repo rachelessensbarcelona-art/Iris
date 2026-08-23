@@ -39,7 +39,7 @@ export default function Sidebar() {
         </span>
         <span style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Kábala</span>
       </div>
-      <div style={css("font-size:12px;font-weight:590;color:var(--text-4);padding:0 10px;margin-bottom:8px;")}>El estudio</div>
+      <div style={css("font-size:12px;font-weight:590;color:var(--text-4);padding:0 10px;margin-bottom:var(--s2);")}>El estudio</div>
 
       <nav style={css("display:flex;flex-direction:column;gap:2px;")}>
         {KABALA.map(({ k, label, Ico }) => {

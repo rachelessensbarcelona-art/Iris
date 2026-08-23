@@ -4,6 +4,14 @@ import { useApp, valida } from "@/lib/app-context";
 import { analizaNombre, esVocal } from "@/lib/engine";
 import Particulas from "../Particulas";
 
+function saludo(): string {
+  const h = new Date().getHours();
+  if (h < 6) return "Buenas noches";
+  if (h < 14) return "Buenos días";
+  if (h < 21) return "Buenas tardes";
+  return "Buenas noches";
+}
+
 export default function ConsultaScreen() {
   const { f, set, calcular, hist, abrir, borrar } = useApp();
 
@@ -34,13 +42,13 @@ export default function ConsultaScreen() {
 
   return (
     <main style={css("max-width:1180px;margin:0 auto;padding:var(--s7) var(--gutter) var(--s8);")}>
-      <div style={css("text-align:center;margin-bottom:40px;")}>
-        <div style={css("font-size:13px;font-weight:590;color:var(--text-3);margin-bottom:14px;")}>Nueva consulta</div>
-        <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(25px,4.6vw,38px);line-height:1.16;letter-spacing:-.022em;color:var(--text);margin:0 0 12px;")}>
-          El nombre es la contraseña del alma
+      <div style={css("text-align:center;margin-bottom:var(--s7);")}>
+        <div style={css("font-size:13px;font-weight:590;color:var(--gold);margin-bottom:var(--s3);")}>{saludo()}, Iris</div>
+        <h1 style={css("font-weight:700;font-size:clamp(26px,4.6vw,40px);line-height:1.12;letter-spacing:-.028em;color:var(--text);margin:0 0 var(--s3);text-wrap:balance;")}>
+          ¿A quién estudiamos hoy?
         </h1>
-        <p style={css("font-family:var(--font-ui);font-size:clamp(16px,2vw,19px);line-height:1.55;color:var(--text-3);max-width:620px;margin:0 auto;")}>
-          Escribe el nombre tal y como figura en la partida de nacimiento y la fecha exacta. Todo lo demás se calcula solo.
+        <p style={css("font-size:clamp(16px,2vw,19px);line-height:1.55;color:var(--text-3);max-width:640px;margin:0 auto;text-wrap:pretty;")}>
+          Dime el nombre de la partida de nacimiento y la fecha exacta. Yo hago las cuentas, te enseño de dónde sale cada número y te dejo el estudio listo para imprimir.
         </p>
       </div>
 
@@ -59,11 +67,11 @@ export default function ConsultaScreen() {
 
           <div style={css("display:flex;flex-direction:column;gap:var(--s4);")}>
             {campo("Nombre", "nombre", "")}
-            <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;")}>
+            <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4);")}>
               {campo("Primer apellido", "ap1", "")}
               {campo("Segundo apellido", "ap2", "")}
             </div>
-            <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;")}>
+            <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4);")}>
               {campo("Día", "dia", "", true)}
               {campo("Mes", "mes", "", true)}
               {campo("Año", "anio", "", true)}
@@ -74,7 +82,7 @@ export default function ConsultaScreen() {
             onClick={calcular}
             disabled={!listo}
             style={css(
-              "width:100%;margin-top:26px;padding:15px 0;border-radius:980px;border:none;cursor:" +
+              "width:100%;margin-top:var(--s6);padding:15px 0;border-radius:980px;border:none;cursor:" +
                 (listo ? "pointer" : "not-allowed") +
                 ";font-family:var(--font-ui);font-weight:600;font-size:17px;letter-spacing:-.01em;background:" +
                 (listo ? "linear-gradient(180deg,#B9942F,#8A6A1B)" : "rgba(120,120,128,.12)") +
@@ -95,7 +103,7 @@ export default function ConsultaScreen() {
 
         <aside data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
           <div style={css("background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:8px;")}>Valor del nombre</div>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s2);")}>Valor del nombre</div>
             {n.palabras.length === 0 && (
               <p style={css("font-size:16px;line-height:1.5;color:var(--text-4);margin:var(--s3) 0 0;text-wrap:pretty;")}>
                 Cada letra tiene un valor. En cuanto escribas el nombre verás aquí su desglose letra a letra.
@@ -129,7 +137,7 @@ export default function ConsultaScreen() {
                 </div>
               ))}
             </div>
-            <div style={css("display:flex;align-items:baseline;gap:10px;border-top:1px solid var(--border);margin-top:14px;padding-top:14px;")}>
+            <div style={css("display:flex;align-items:baseline;gap:10px;border-top:1px solid var(--border);margin-top:var(--s4);padding-top:var(--s4);")}>
               <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>Valor del nombre</span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:30px;color:var(--gold);line-height:1;margin-left:auto;")}>{n.total || 0}</span>
             </div>

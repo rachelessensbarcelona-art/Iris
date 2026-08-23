@@ -67,7 +67,7 @@ export default function SeccionCuentas() {
             </div>
           ))}
         </div>
-        <div style={css("font-family:var(--font-ui);font-size:16px;line-height:1.55;color:var(--text-3);margin-top:14px;")}>
+        <div style={css("font-family:var(--font-ui);font-size:16px;line-height:1.55;color:var(--text-3);margin-top:var(--s4);")}>
           Cada potencial arcaico ayuda a cerrar la cuenta abierta de su fila: {c.potenciales[0]}→{c.cuentas[0]}, {c.potenciales[1]}→{c.cuentas[1]}, {c.potenciales[2]}→{c.cuentas[2]}.
         </div>
         <div style={css("margin-top:16px;")}>

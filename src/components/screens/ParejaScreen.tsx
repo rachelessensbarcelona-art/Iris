@@ -67,13 +67,13 @@ export default function ParejaScreen() {
   return (
     <main style={css("max-width:1120px;margin:0 auto;padding:var(--s7) var(--gutter) var(--s8);")}>
       <div style={css("text-align:center;margin-bottom:30px;")}>
-        <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:10px;")}>Comparativa</div>
+        <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:var(--s3);")}>Comparativa</div>
         <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(21px,3.4vw,30px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.2;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)} &amp; su pareja</h1>
       </div>
 
-      <section style={css("background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:var(--pad-card-sm);margin-bottom:22px;")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:18px;")}>Datos de la segunda persona</div>
-        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:12px;align-items:end;")}>
+      <section style={css("background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:var(--pad-card-sm);margin-bottom:var(--s5);")}>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s5);")}>Datos de la segunda persona</div>
+        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:var(--s3);align-items:end;")}>
           {campo("Nombre", "nombre")}
           {campo("Primer apellido", "ap1")}
           {campo("Segundo apellido", "ap2")}
@@ -130,11 +130,11 @@ export default function ParejaScreen() {
           </div>
           {comparativa.map((sec, si) => (
             <article key={si} style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:10px;")}>{sec.titulo}</div>
+              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s3);")}>{sec.titulo}</div>
               {sec.items.map((it, ii) => (
-                <div key={ii} style={css("display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--border);")}>
+                <div key={ii} style={css("display:flex;gap:var(--s3);padding:8px 0;border-top:1px solid var(--border);")}>
                   <span style={css("font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--gold);min-width:96px;")}>{it.clave}</span>
-                  <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;flex:1;")}>{it.texto}</p>
+                  <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;flex:1;")}>{it.texto}</p>
                 </div>
               ))}
             </article>

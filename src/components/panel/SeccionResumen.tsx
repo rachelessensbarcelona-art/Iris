@@ -5,17 +5,11 @@ import { COL } from "@/lib/tree";
 import { arbolGeometria } from "@/lib/arbol";
 import { frase, recorta, titulo } from "@/lib/format";
 import Particulas from "../Particulas";
+import Cifra from "../Cifra";
 
 const TARJETA = "background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);";
 const ROTULO = "font-size:13px;font-weight:590;color:var(--text-3);";
 
-function saludo(): string {
-  const h = new Date().getHours();
-  if (h < 6) return "Buenas noches";
-  if (h < 14) return "Buenos días";
-  if (h < 21) return "Buenas tardes";
-  return "Buenas noches";
-}
 
 /**
  * Portada del panel: un vistazo a todo el estudio antes de entrar en cada
@@ -56,10 +50,12 @@ export default function SeccionResumen() {
   return (
     <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
       <div>
-        <h2 style={css("font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.024em;color:var(--text);margin:0;")}>
-          {saludo()}, {nombreCorto}
+        <h2 style={css("font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.026em;color:var(--text);margin:0;text-wrap:balance;")}>
+          Aquí tienes a {nombreCorto}, Iris
         </h2>
-        <p style={css("font-size:17px;color:var(--text-3);margin:5px 0 0;")}>Este es el mapa completo de tu lectura. Pulsa cualquier bloque para abrirlo entero.</p>
+        <p style={css("font-size:17px;line-height:1.5;color:var(--text-3);margin:var(--s2) 0 0;max-width:62ch;text-wrap:pretty;")}>
+          Todo el estudio de un vistazo. Pulsa cualquier bloque para abrirlo entero, y cualquier número para corregirlo si en esta carta lo lees distinto.
+        </p>
       </div>
 
       <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:var(--gap);align-items:start;")}>
@@ -75,7 +71,9 @@ export default function SeccionResumen() {
             </div>
             <div style={css("position:relative;z-index:1;")}>
             <div style={css(ROTULO)}>Número de corazón</div>
-            <div style={css("font-size:clamp(38px,6vw,52px);font-weight:700;letter-spacing:-.03em;color:var(--text);line-height:1.05;margin-top:var(--s1);font-variant-numeric:tabular-nums;")}>{r.corazon.valor}</div>
+            <div style={css("margin-top:var(--s1);line-height:1.05;")}>
+              <Cifra id="corazon" valor={r.corazon.valor} tam={50} />
+            </div>
             <div style={css("font-size:15px;color:var(--text-3);margin-top:2px;")}>
               Esencia {r.esencia.valor} · Ego {r.ego.valor}
             </div>
@@ -130,7 +128,7 @@ export default function SeccionResumen() {
             <div style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);margin-top:6px;")}>
               {cicloActual.nombre} · {cicloActual.numero}
             </div>
-            <div style={css("height:9px;border-radius:980px;background:rgba(120,120,128,.14);overflow:hidden;margin-top:12px;")}>
+            <div style={css("height:9px;border-radius:980px;background:rgba(120,120,128,.14);overflow:hidden;margin-top:var(--s3);")}>
               <div style={css("height:100%;width:" + avance.toFixed(1) + "%;border-radius:980px;background:linear-gradient(90deg,#C9A84C,#9A7B2E);")} />
             </div>
             <div style={css("display:flex;justify-content:space-between;font-size:13px;color:var(--text-4);margin-top:7px;")}>
@@ -139,7 +137,7 @@ export default function SeccionResumen() {
             </div>
             <button
               onClick={() => setSeccion("ciclos")}
-              style={css("margin-top:14px;padding:9px 16px;border:1px solid var(--border-strong);border-radius:980px;cursor:pointer;background:rgba(255,255,255,.7);color:var(--text-2);font-size:14px;font-weight:590;")}
+              style={css("margin-top:var(--s4);padding:9px 16px;border:1px solid var(--border-strong);border-radius:980px;cursor:pointer;background:rgba(255,255,255,.7);color:var(--text-2);font-size:14px;font-weight:590;")}
             >
               Ver ciclos vitales
             </button>
@@ -148,7 +146,7 @@ export default function SeccionResumen() {
           {/* El árbol, en pequeño y sin animación: aquí es una miniatura para
            * reconocer el dibujo, no la lámina que se estudia. */}
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
-            <div style={css("display:flex;align-items:baseline;gap:12px;margin-bottom:6px;")}>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:6px;")}>
               <span style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Árbol de la Vida</span>
               <button
                 onClick={() => setSeccion("arbol")}
@@ -196,7 +194,7 @@ export default function SeccionResumen() {
           </div>
 
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
-            <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
               <div>
                 <div style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Año personal {c.anioPersonal}</div>
                 <div style={css("font-size:14px;color:var(--text-3);margin-top:2px;")}>Dónde estás dentro de la rueda de nueve años</div>
@@ -227,7 +225,7 @@ export default function SeccionResumen() {
           </section>
 
           <section style={css(TARJETA + "padding:var(--pad-card-sm);")}>
-            <div style={css("display:flex;align-items:baseline;gap:12px;margin-bottom:4px;")}>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:4px;")}>
               <span style={css("font-size:19px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Aprendizajes abiertos</span>
               <button
                 onClick={() => setSeccion("estructura")}

@@ -4,15 +4,16 @@ import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import { chipStyle } from "@/lib/format";
 import Desglose from "../Desglose";
+import Cifra from "../Cifra";
 
 export default function SeccionNumeros() {
   const { r, verNumero } = useApp();
   if (!r) return null;
 
   const nDef = [
-    { label: "Número de corazón", o: r.corazon, desc: "el número pin de tu alma, cómo vibras" },
-    { label: "Número de esencia", o: r.esencia, desc: "tus valores internos más profundos" },
-    { label: "Número de ego", o: r.ego, desc: "la conexión que tienes con las personas" },
+    { id: "corazon", label: "Número de corazón", o: r.corazon, desc: "el número pin del alma, cómo vibra" },
+    { id: "esencia", label: "Número de esencia", o: r.esencia, desc: "los valores internos más profundos" },
+    { id: "ego", label: "Número de ego", o: r.ego, desc: "la conexión que tiene con las personas" },
   ];
 
   return (
@@ -25,20 +26,20 @@ export default function SeccionNumeros() {
           <article key={i} style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:var(--gap);flex-wrap:wrap;")}>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>{d.label}</span>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:42px;line-height:1;color:var(--text);")}>{d.o.valor}</span>
+              <Cifra id={d.id} valor={d.o.valor} tam={42} />
               <span style={css("font-family:var(--font-ui);font-style:normal;font-size:18px;color:var(--text-3);")}>{d.desc}</span>
             </div>
-            <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:var(--s4);")}>
+            <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:var(--s4);margin-top:var(--s4);")}>
               <div style={css("border-left:2px solid var(--red);padding:2px 0 2px 12px;")}>
                 <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>En negativo</div>
-                <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;")}>{d.o.lectura.negativo}</p>
+                <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;")}>{d.o.lectura.negativo}</p>
               </div>
               <div style={css("border-left:2px solid var(--green);padding:2px 0 2px 12px;")}>
                 <div style={css("font-size:12px;font-weight:590;color:var(--green);margin-bottom:4px;")}>En positivo</div>
-                <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;")}>{d.o.lectura.positivo}</p>
+                <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;")}>{d.o.lectura.positivo}</p>
               </div>
             </div>
-            <div style={css("display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--s4);")}>
+            <div style={css("display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);")}>
               {chips.map((c, ci) => (
                 <button key={ci} onClick={c.onClick} style={css(c.style)}>
                   {c.label}
@@ -63,8 +64,8 @@ export default function SeccionNumeros() {
       />
 
       <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:12px;")}>Tus días de fuerza</div>
-        <div style={css("display:flex;gap:12px;align-items:center;flex-wrap:wrap;")}>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s3);")}>Tus días de fuerza</div>
+        <div style={css("display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap;")}>
           {r.diasFuerza.dias.map((n, i) => (
             <span
               key={i}

@@ -121,7 +121,7 @@ export default function SeccionEstructura() {
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap-lg);align-items:start;")}>
       <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px;")}>
+          <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s3);")}>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);")}>Estructura energética</span>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:26px;color:var(--gold);line-height:1;")}>tipo {est.tipo}</span>
           </div>
@@ -215,7 +215,7 @@ export default function SeccionEstructura() {
         </div>
 
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:8px;")}>Ejes y planos en tensión</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:var(--s2);")}>Ejes y planos en tensión</div>
           <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>{TENSIONES.intro.ejes}</p>
           <div style={css("display:flex;flex-direction:column;gap:7px;")}>
             {tensiones.map((t, idx) => (
@@ -229,7 +229,7 @@ export default function SeccionEstructura() {
                     ";"
                 )}
               >
-                <div style={css("display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:12px;color:" + (t.activo ? "var(--red)" : "var(--text-3)") + ";")}>
+                <div style={css("display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;font-size:12px;color:" + (t.activo ? "var(--red)" : "var(--text-3)") + ";")}>
                   <span>
                     {t.tipo} {t.a}–{t.b} · {t.info?.nombre || t.nombre}
                   </span>
@@ -260,7 +260,7 @@ export default function SeccionEstructura() {
 
         {enfermedades.length > 0 && (
           <div style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--red);margin-bottom:8px;")}>Enfermedades y debilidades</div>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--red);margin-bottom:var(--s2);")}>Enfermedades y debilidades</div>
             <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>
               Si el aprendizaje del portal no se trabaja, la energía se somatiza en los órganos que rige ese chakra.
             </p>
@@ -271,7 +271,7 @@ export default function SeccionEstructura() {
                     Portal {a.portal} · {a.tarea?.nombre || ""}
                   </div>
                   {enf.nota ? (
-                    <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{enf.nota}</p>
+                    <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;text-wrap:pretty;")}>{enf.nota}</p>
                   ) : (
                     <div style={css("display:flex;flex-direction:column;gap:5px;")}>
                       {([["Psicológicas", enf.psico], ["Órganos", enf.organos], ["Físicas", enf.fisicas]] as const).map(([k, v]) =>
@@ -293,22 +293,22 @@ export default function SeccionEstructura() {
 
       <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
         <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:10px;")}>Estructura número {est.tipo}</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s3);")}>Estructura número {est.tipo}</div>
           <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:0;text-wrap:pretty;")}>{r.tipoEstructura?.texto || ""}</p>
-          <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:14px;")}>
+          <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:var(--s4);margin-top:var(--s4);")}>
             <div style={css("border-left:2px solid var(--red);padding-left:12px;")}>
               <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>Vivido en negativo</div>
-              <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{r.tipoEstructura?.negativo || ""}</p>
+              <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;text-wrap:pretty;")}>{r.tipoEstructura?.negativo || ""}</p>
             </div>
             <div style={css("border-left:2px solid var(--green);padding-left:12px;")}>
               <div style={css("font-size:12px;font-weight:590;color:var(--green);margin-bottom:4px;")}>Vivido en positivo</div>
-              <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{r.tipoEstructura?.positivo || ""}</p>
+              <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;text-wrap:pretty;")}>{r.tipoEstructura?.positivo || ""}</p>
             </div>
           </div>
         </article>
         {aprendizajes.map(({ a, ai, card, chips }) => (
           <article key={ai} style={css(card)}>
-            <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
+            <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>
                 Aprendizaje {a.portal}
                 {a.veces > 1 ? " · ×" + a.veces : ""}
@@ -317,21 +317,21 @@ export default function SeccionEstructura() {
               <span style={css("margin-left:auto;font-size:13px;font-weight:590;color:var(--text-3);")}>viene del número {a.numero}</span>
             </div>
             <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{recorta(a.tarea?.texto || "", 460)}</p>
-            <div style={css("display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;")}>
+            <div style={css("display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);")}>
               {chips.map((c, ci) => (
                 <button key={ci} onClick={c.onClick} style={css(c.style)}>
                   {c.label}
                 </button>
               ))}
             </div>
-            <div style={css("margin-top:14px;border-top:1px solid var(--border);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;")}>
+            <div style={css("margin-top:var(--s4);border-top:1px solid var(--border);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--s3);")}>
               <div>
                 <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:3px;")}>Hilo rojo</div>
-                <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{recorta(a.tarea?.hiloRojo || "", 210)}</p>
+                <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;text-wrap:pretty;")}>{recorta(a.tarea?.hiloRojo || "", 210)}</p>
               </div>
               <div>
                 <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:3px;")}>Principio sanador</div>
-                <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{recorta(a.tarea?.sanador || "", 210)}</p>
+                <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;text-wrap:pretty;")}>{recorta(a.tarea?.sanador || "", 210)}</p>
               </div>
             </div>
           </article>
