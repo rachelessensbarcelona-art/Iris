@@ -22,7 +22,7 @@ function celda(n: number, bloqueos: Record<number, number>, ayudas: Record<numbe
   };
 }
 const B_STYLE = "font-family:var(--font-ui);font-weight:600;font-size:17px;letter-spacing:1px;color:var(--red);line-height:1;min-height:17px;";
-const A_STYLE = "font-size:9px;letter-spacing:2px;color:var(--green);line-height:1;min-height:9px;";
+const A_STYLE = "font-size:12px;font-weight:590;letter-spacing:2px;color:var(--green);line-height:1;min-height:9px;";
 
 export default function SeccionAlma() {
   const { r, verNumero, verTexto } = useApp();
@@ -50,16 +50,16 @@ export default function SeccionAlma() {
   return (
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:30px;align-items:start;")}>
       <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(16px,2.2vw,22px);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px;")}>Imagen del alma · número {ia.numero}</div>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:14px;")}>Imagen del alma · número {ia.numero}</div>
         <div style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:8px;margin-bottom:6px;")}>
           <span />
           {["Espíritu", "Alma", "Materia"].map((h) => (
-            <span key={h} style={css("font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);text-align:center;")}>{h}</span>
+            <span key={h} style={css("font-size:12px;font-weight:590;color:var(--text-3);text-align:center;")}>{h}</span>
           ))}
         </div>
         {filasAlma.map((f, fi) => (
           <div key={fi} style={css("display:grid;grid-template-columns:66px 1fr 1fr 1fr;gap:8px;margin-bottom:8px;align-items:center;")}>
-            <span style={css("font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-4);")}>{f.label}</span>
+            <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>{f.label}</span>
             {f.celdas.map((cc, ci) => (
               <div key={ci} style={css(cc.style)}>
                 <span style={css("font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--text-3);")}>{cc.n}</span>
@@ -70,14 +70,14 @@ export default function SeccionAlma() {
           </div>
         ))}
         <div style={css("display:grid;grid-template-columns:66px 1fr;gap:8px;align-items:center;")}>
-          <span style={css("font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-4);")}>Evolución</span>
+          <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>Evolución</span>
           <div style={css(celda10.style)}>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--text-3);")}>10 / 0</span>
             <span style={css(B_STYLE)}>{celda10.bloqueo}</span>
             <span style={css(A_STYLE)}>{celda10.ayuda}</span>
           </div>
         </div>
-        <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:11px;letter-spacing:.1em;color:var(--text-3);")}>
+        <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:13px;font-weight:590;color:var(--text-3);")}>
           <div style={css("display:flex;align-items:center;gap:8px;")}>
             <span style={css("width:11px;height:11px;border-radius:3px;background:var(--red);")} />
             Bloqueos (estructura fija)
@@ -102,12 +102,12 @@ export default function SeccionAlma() {
             )}
           >
             <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--purple);")}>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--purple);")}>
                 Bloqueo {b.casilla}
                 {b.veces > 1 ? " · ×" + b.veces : ""}
               </span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:21px;color:var(--text);")}>{b.plano?.nombre || ""}</span>
-              <span style={css("margin-left:auto;font-size:11px;letter-spacing:.18em;color:var(--text-3);")}>se forma con el número {b.numero}</span>
+              <span style={css("margin-left:auto;font-size:13px;font-weight:590;color:var(--text-3);")}>se forma con el número {b.numero}</span>
             </div>
             <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{extracto}</p>
             <div style={css("display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;")}>

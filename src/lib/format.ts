@@ -25,6 +25,30 @@ export function chipStyle(color: string): string {
   );
 }
 
+/* Los apuntes vienen escritos en mayúsculas de máquina de escribir. En pantalla
+ * pedían caja normal, así que se convierten al vuelo; el dato original no se
+ * toca, sólo cómo se muestra. */
+const MINUSCULAS = new Set(["de", "del", "la", "las", "el", "los", "y", "en", "a", "con", "sin", "por", "para", "un", "una", "al", "o", "u"]);
+
+/** "EL ERMITAÑO" → "El Ermitaño". Respeta un texto que ya venga en caja mixta. */
+export function titulo(t: string | undefined | null): string {
+  if (!t) return "";
+  if (t !== t.toLocaleUpperCase("es")) return t;
+  return t
+    .toLocaleLowerCase("es")
+    .split(/(\s+)/)
+    .map((p, i) => (i > 0 && MINUSCULAS.has(p) ? p : p.replace(/^[a-záéíóúüñ]/, (c) => c.toLocaleUpperCase("es"))))
+    .join("");
+}
+
+/** "CAMINO CONSCIENTE DE META" → "Camino consciente de meta". */
+export function frase(t: string | undefined | null): string {
+  if (!t) return "";
+  if (t !== t.toLocaleUpperCase("es")) return t;
+  const b = t.toLocaleLowerCase("es");
+  return b.replace(/^[a-záéíóúüñ]/, (c) => c.toLocaleUpperCase("es"));
+}
+
 const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 export function fechaLarga(dia: number, mes: number, anio: number): string {
   return `${dia} de ${MESES[mes - 1]} de ${anio}`;

@@ -1,5 +1,6 @@
 "use client";
 import { css } from "@/lib/css";
+import { titulo } from "@/lib/format";
 import { useApp, valida } from "@/lib/app-context";
 import { KDATA } from "@/lib/kdata";
 
@@ -13,20 +14,20 @@ export default function ParejaScreen() {
 
   const campo = (label: string, key: "nombre" | "ap1" | "ap2" | "dia" | "mes" | "anio", numeric?: boolean) => (
     <label style={css("display:flex;flex-direction:column;gap:6px;min-width:0;")}>
-      <span style={css("font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);")}>{label}</span>
+      <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>{label}</span>
       <input
         size={4}
         value={p[key]}
         onChange={(e) => setP(key, numeric ? e.target.value.replace(/\D/g, "").slice(0, key === "anio" ? 4 : 2) : e.target.value)}
         inputMode={numeric ? "numeric" : undefined}
-        style={css("width:100%;min-width:0;background:rgba(255,255,255,.9);border:1px solid var(--border-accent);border-radius:var(--r-sm);padding:10px 12px;color:var(--text);font-family:var(--font-ui);font-size:18px;")}
+        style={css("width:100%;min-width:0;background:rgba(120,120,128,.08);border:1px solid transparent;border-radius:var(--r-sm);padding:12px 14px;color:var(--text);font-family:var(--font-ui);font-size:17px;")}
       />
     </label>
   );
 
   let comparativa: Array<{ titulo: string; items: Array<{ clave: string | number; texto: string }> }> = [];
   if (comp && pr) {
-    const caminos = [{ clave: "Arcano " + comp.caminoConjunto, texto: (comp.cartaConjunta?.nombre || "") + ". " + (comp.cartaConjunta?.pareja || "") }];
+    const caminos = [{ clave: "Arcano " + comp.caminoConjunto, texto: titulo(comp.cartaConjunta?.nombre) + ". " + (comp.cartaConjunta?.pareja || "") }];
     ([
       ["Origen", r.caminos.origen, pr.caminos.origen],
       ["Transformación", r.caminos.transformacion, pr.caminos.transformacion],
@@ -34,7 +35,7 @@ export default function ParejaScreen() {
     ] as const).forEach(([et, x, y]) => {
       caminos.push({
         clave: et,
-        texto: `${x.carta?.nombre} (${x.arcano}) · ${y.carta?.nombre} (${y.arcano})` + (x.arcano === y.arcano ? " — mismo camino: gran comprensión mutua en este plano." : ""),
+        texto: `${titulo(x.carta?.nombre)} (${x.arcano}) · ${titulo(y.carta?.nombre)} (${y.arcano})` + (x.arcano === y.arcano ? " — mismo camino: gran comprensión mutua en este plano." : ""),
       });
     });
 
@@ -65,16 +66,16 @@ export default function ParejaScreen() {
   return (
     <main style={css("max-width:1120px;margin:0 auto;padding:clamp(22px,4vw,38px) clamp(14px,3vw,28px) 80px;animation:es33-in .45s ease both;")}>
       <div style={css("text-align:center;margin-bottom:30px;")}>
-        <div style={css("font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;")}>Comparativa</div>
-        <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(21px,3.4vw,30px);letter-spacing:.04em;color:var(--text);margin:0;line-height:1.2;overflow-wrap:anywhere;")}>{r.nombre.texto} &amp; su pareja</h1>
+        <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:10px;")}>Comparativa</div>
+        <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(21px,3.4vw,30px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.2;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)} &amp; su pareja</h1>
       </div>
 
       <section style={css("background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border-accent);border-radius:var(--r);padding:clamp(18px,2.4vw,26px) clamp(18px,2.6vw,28px);margin-bottom:22px;")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;")}>Datos de la segunda persona</div>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:18px;")}>Datos de la segunda persona</div>
         <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:12px;align-items:end;")}>
           {campo("Nombre", "nombre")}
-          {campo("1er apellido", "ap1")}
-          {campo("2º apellido", "ap2")}
+          {campo("Primer apellido", "ap1")}
+          {campo("Segundo apellido", "ap2")}
           {campo("Día", "dia", true)}
           {campo("Mes", "mes", true)}
           {campo("Año", "anio", true)}
@@ -83,12 +84,12 @@ export default function ParejaScreen() {
           onClick={comparar}
           disabled={!listo}
           style={css(
-            "margin-top:20px;padding:12px 34px;border-radius:var(--r-sm);cursor:" +
+            "margin-top:20px;padding:13px 34px;border-radius:980px;border:none;cursor:" +
               (listo ? "pointer" : "not-allowed") +
-              ";font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.26em;text-transform:uppercase;border:1px solid " +
-              (listo ? "var(--gold)" : "var(--border-accent)") +
-              ";background:" +
-              (listo ? "linear-gradient(180deg,#B9942F,#93711F)" : "rgba(0,0,0,.025)") +
+              ";font-family:var(--font-ui);font-weight:600;font-size:17px;letter-spacing:-.01em;background:" +
+              (listo ? "linear-gradient(180deg,#B9942F,#8A6A1B)" : "rgba(120,120,128,.12)") +
+              ";box-shadow:" +
+              (listo ? "0 1px 2px rgba(0,0,0,.10),0 8px 20px rgba(154,123,46,.26)" : "none") +
               ";color:" +
               (listo ? "#fff" : "var(--text-4)") +
               ";"
@@ -106,26 +107,26 @@ export default function ParejaScreen() {
             )}
           >
             <div style={css("text-align:right;")}>
-              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text);line-height:1.25;")}>{r.nombre.texto}</div>
-              <div style={css("font-size:11px;letter-spacing:.14em;color:var(--text-3);margin-top:4px;")}>
+              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text);line-height:1.25;")}>{titulo(r.nombre.texto)}</div>
+              <div style={css("font-size:13px;font-weight:590;color:var(--text-3);margin-top:4px;")}>
                 corazón {r.corazon.valor} · estructura {r.estructura.tipo}
               </div>
             </div>
             <div style={css("text-align:center;padding:0 10px;")}>
-              <div style={css("font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-3);")}>Camino conjunto</div>
+              <div style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>Camino conjunto</div>
               <div style={css("font-family:var(--font-ui);font-weight:600;font-size:38px;color:var(--gold);line-height:1.1;")}>{comp.caminoConjunto}</div>
-              <div style={css("font-family:var(--font-ui);font-style:normal;font-size:16px;color:var(--text-3);")}>{comp.cartaConjunta?.nombre || ""}</div>
+              <div style={css("font-family:var(--font-ui);font-style:normal;font-size:16px;color:var(--text-3);")}>{titulo(comp.cartaConjunta?.nombre)}</div>
             </div>
             <div>
-              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text);line-height:1.25;")}>{pr.nombre.texto}</div>
-              <div style={css("font-size:11px;letter-spacing:.14em;color:var(--text-3);margin-top:4px;")}>
+              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text);line-height:1.25;")}>{titulo(pr.nombre.texto)}</div>
+              <div style={css("font-size:13px;font-weight:590;color:var(--text-3);margin-top:4px;")}>
                 corazón {pr.corazon.valor} · estructura {pr.estructura.tipo}
               </div>
             </div>
           </div>
           {comparativa.map((sec, si) => (
             <article key={si} style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px) clamp(16px,2.4vw,24px);")}>
-              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;")}>{sec.titulo}</div>
+              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:10px;")}>{sec.titulo}</div>
               {sec.items.map((it, ii) => (
                 <div key={ii} style={css("display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--border);")}>
                   <span style={css("font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--gold);min-width:96px;")}>{it.clave}</span>

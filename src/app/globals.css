@@ -54,8 +54,19 @@ body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
+  font-family: var(--font-ui);
+  /* San Francisco viene ya bien ajustada: el texto va con el tracking natural
+   * y sólo los titulares se cierran un poco, como en las páginas de Apple. */
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+h1,
+h2,
+h3 {
+  letter-spacing: -0.022em;
+  font-weight: 600;
 }
 * {
   box-sizing: border-box;
@@ -99,6 +110,10 @@ input:focus {
 /* Campos y botones: reacción suave al foco, como en iOS. */
 input {
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  letter-spacing: -0.01em;
+}
+input::placeholder {
+  color: var(--text-4);
 }
 input:focus {
   border-color: var(--gold) !important;

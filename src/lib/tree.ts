@@ -4,16 +4,16 @@ export type SefKey =
   | "tiphereth" | "netsaj" | "hod" | "yesod" | "malkut";
 
 export const SEF: Record<SefKey, { x: number; y: number; c: string; n: string }> = {
-  keter: { x: 190, y: 46, c: "#F5F2EA", n: "KETER" },
-  hokmah: { x: 300, y: 130, c: "#C3C7CE", n: "HOKMAH" },
-  binah: { x: 80, y: 130, c: "#2F333B", n: "BINAH" },
-  jesed: { x: 300, y: 266, c: "#3E77C4", n: "JESED" },
-  gevurah: { x: 80, y: 266, c: "#CE4237", n: "GEVURAH" },
-  tiphereth: { x: 190, y: 336, c: "#E5B63C", n: "TIPHERETH" },
-  netsaj: { x: 300, y: 438, c: "#4C9A5A", n: "NETSAJ" },
-  hod: { x: 80, y: 438, c: "#DE8631", n: "HOD" },
-  yesod: { x: 190, y: 510, c: "#A8449B", n: "YESOD" },
-  malkut: { x: 190, y: 606, c: "#6C5A38", n: "MALKUT" },
+  keter: { x: 190, y: 46, c: "#F5F2EA", n: "Keter" },
+  hokmah: { x: 300, y: 130, c: "#C3C7CE", n: "Hokmah" },
+  binah: { x: 80, y: 130, c: "#2F333B", n: "Binah" },
+  jesed: { x: 300, y: 266, c: "#3E77C4", n: "Jesed" },
+  gevurah: { x: 80, y: 266, c: "#CE4237", n: "Gevurah" },
+  tiphereth: { x: 190, y: 336, c: "#E5B63C", n: "Tiphereth" },
+  netsaj: { x: 300, y: 438, c: "#4C9A5A", n: "Netsaj" },
+  hod: { x: 80, y: 438, c: "#DE8631", n: "Hod" },
+  yesod: { x: 190, y: 510, c: "#A8449B", n: "Yesod" },
+  malkut: { x: 190, y: 606, c: "#6C5A38", n: "Malkut" },
 };
 
 export const SENDEROS: [SefKey, SefKey][] = [

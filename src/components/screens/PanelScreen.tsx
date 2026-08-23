@@ -1,5 +1,6 @@
 "use client";
 import { css } from "@/lib/css";
+import { titulo } from "@/lib/format";
 import { useApp, type Seccion } from "@/lib/app-context";
 import SeccionArbol from "../panel/SeccionArbol";
 import SeccionNumeros from "../panel/SeccionNumeros";
@@ -34,8 +35,8 @@ export default function PanelScreen() {
     <main style={css("max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,30px) clamp(14px,3vw,28px) 80px;animation:es33-in .45s ease both;")}>
       <div style={css("display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px;")}>
         <div>
-          <div style={css("font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px;")}>Estudio de Kábala</div>
-          <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(22px,3.6vw,31px);letter-spacing:.04em;color:var(--text);margin:0;line-height:1.15;overflow-wrap:anywhere;")}>{r.nombre.texto}</h1>
+          <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:6px;")}>Estudio de Kábala</div>
+          <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(22px,3.6vw,31px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.15;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)}</h1>
           <div style={css("font-family:var(--font-ui);font-size:17px;color:var(--text-3);margin-top:5px;")}>
             {r.fecha.dia} / {r.fecha.mes} / {r.fecha.anio}
           </div>
@@ -43,14 +44,16 @@ export default function PanelScreen() {
         <div style={css("display:flex;gap:clamp(14px,2.4vw,26px);flex-wrap:wrap;margin-left:auto;")}>
           {resumen.map((k, i) => (
             <div key={i} style={css("display:flex;flex-direction:column;gap:3px;align-items:flex-end;")}>
-              <span style={css("font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-4);")}>{k.label}</span>
+              <span style={css("font-size:12px;font-weight:590;color:var(--text-4);")}>{k.label}</span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:22px;color:var(--gold);line-height:1;")}>{k.valor}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <nav style={css("display:flex;gap:5px;flex-wrap:wrap;margin-bottom:28px;")}>
+      {/* Igual que la cabecera: pista gris con pastilla blanca, y en móvil se
+       * desliza en horizontal en lugar de partirse en dos filas. */}
+      <nav data-nav="" style={css("display:flex;gap:2px;margin-bottom:28px;background:rgba(120,120,128,.1);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
         {SECCIONES.map((s) => {
           const on = seccion === s.k;
           return (
@@ -58,12 +61,12 @@ export default function PanelScreen() {
               key={s.k}
               onClick={() => setSeccion(s.k)}
               style={css(
-                "padding:8px 15px;border-radius:var(--r-sm);cursor:pointer;font-size:10px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;transition:all .2s;border:1px solid " +
-                  (on ? "var(--gold)" : "var(--border)") +
-                  ";background:" +
-                  (on ? "var(--gold-soft)" : "transparent") +
+                "padding:8px 16px;border-radius:980px;border:none;cursor:pointer;font-size:14px;font-weight:590;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
+                  (on ? "var(--surface-solid)" : "transparent") +
+                  ";box-shadow:" +
+                  (on ? "0 3px 8px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.06)" : "none") +
                   ";color:" +
-                  (on ? "var(--gold)" : "var(--text-3)") +
+                  (on ? "var(--text)" : "var(--text-3)") +
                   ";"
               )}
             >

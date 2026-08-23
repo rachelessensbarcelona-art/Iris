@@ -21,7 +21,7 @@ export function DocArbol({ r }: { r: Resultado }) {
   ];
   return (
     <div className={styles.split} style={col1("210px")}>
-      <svg viewBox="0 0 380 660" style={css("width:100%;height:auto;")}>
+      <svg viewBox="-54 -8 488 676" style={css("width:100%;height:auto;")}>
         {senderos.map((s, i) => (
           <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={s.w > 2 ? s.color : "#B9B2C4"} strokeWidth={s.w} strokeOpacity={s.o} strokeLinecap="round" />
         ))}

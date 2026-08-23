@@ -3,7 +3,7 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { arbolGeometria } from "@/lib/arbol";
 import { COL } from "@/lib/tree";
-import { recorta } from "@/lib/format";
+import { frase, recorta, titulo } from "@/lib/format";
 
 export default function SeccionArbol() {
   const { r, verArcano } = useApp();
@@ -20,8 +20,8 @@ export default function SeccionArbol() {
     const carta = d.c.carta || ({} as NonNullable<typeof d.c.carta>);
     return {
       ...d,
-      nombre: carta.nombre || "",
-      lema: carta.lema || "",
+      nombre: titulo(carta.nombre),
+      lema: frase(carta.lema),
       extracto: recorta((carta.texto || "").replace(/^[“"][^”"]*[”"]\.?\s*/, ""), 400),
     };
   });
@@ -29,8 +29,8 @@ export default function SeccionArbol() {
   return (
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:start;")}>
       <div style={css("background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.6));backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border:1px solid var(--border);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.28em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px;")}>Árbol de la Vida</div>
-        <svg viewBox="0 0 380 660" style={css("width:100%;height:auto;display:block;")}>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:6px;")}>Árbol de la Vida</div>
+        <svg viewBox="-54 -8 488 676" style={css("width:100%;height:auto;display:block;")}>
           {senderos.map((s, i) => (
             <line
               key={i}
@@ -57,7 +57,7 @@ export default function SeccionArbol() {
                 strokeWidth={1}
                 style={css(`transform-box:fill-box;transform-origin:center;opacity:0;animation:es33-pop .62s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:${p.delay.toFixed(2)}s;`)}
               />
-              <text x={p.tx} y={p.ty} fill="var(--text-3)" fontSize={10} fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" letterSpacing={1.4} textAnchor={p.anchor} style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${p.delayT.toFixed(2)}s;`)}>
+              <text x={p.tx} y={p.ty} fill="var(--text-3)" fontSize={13} fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" fontWeight={510} textAnchor={p.anchor} style={css(`opacity:0;animation:es33-in .5s ease forwards;animation-delay:${p.delayT.toFixed(2)}s;`)}>
                 {p.nombre}
               </text>
             </g>
@@ -70,7 +70,7 @@ export default function SeccionArbol() {
         </svg>
         <div style={css("display:flex;flex-direction:column;gap:7px;margin-top:14px;border-top:1px solid var(--gold-soft);padding-top:14px;")}>
           {camDef.map((d, i) => (
-            <div key={i} style={css("display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--text-3);")}>
+            <div key={i} style={css("display:flex;align-items:center;gap:9px;font-size:13px;font-weight:590;color:var(--text-3);")}>
               <span style={css("width:22px;height:3px;border-radius:var(--r-xs);background:" + COL[d.k] + ";")} />
               {d.etapa} · arcano {d.c.arcano}
             </div>
@@ -95,15 +95,15 @@ export default function SeccionArbol() {
             )}
           >
             <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
-              <span style={css("font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:" + COL[c.k] + ";")}>{c.etapa}</span>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:23px;line-height:1.25;color:var(--text);letter-spacing:.03em;")}>
+              <span style={css("font-size:12px;font-weight:590;color:" + COL[c.k] + ";")}>{c.etapa}</span>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:23px;line-height:1.25;color:var(--text);letter-spacing:-.022em;")}>
                 {c.c.arcano} · {c.nombre}
               </span>
-              <span style={css("margin-left:auto;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-4);")}>{c.rango}</span>
+              <span style={css("margin-left:auto;font-size:12px;font-weight:590;color:var(--text-4);")}>{c.rango}</span>
             </div>
             <div style={css("font-family:var(--font-ui);font-style:normal;font-size:18px;color:var(--gold);margin-top:6px;")}>{c.lema}</div>
             <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{c.extracto}</p>
-            <button onClick={() => verArcano(c.c.arcano)} style={css("margin-top:12px;background:none;border:1px solid var(--border-accent);color:var(--gold);border-radius:var(--r-sm);padding:7px 15px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;")}>
+            <button onClick={() => verArcano(c.c.arcano)} style={css("margin-top:12px;background:none;border:1px solid var(--border-accent);color:var(--gold);border-radius:980px;padding:7px 15px;font-size:15px;font-weight:590;cursor:pointer;")}>
               Texto completo
             </button>
           </article>
@@ -111,12 +111,12 @@ export default function SeccionArbol() {
 
         {r.turbulencias && (
           <article style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--red);margin-bottom:10px;")}>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--red);margin-bottom:10px;")}>
               Años de turbulencias · {r.turbulencias.desde} – {r.turbulencias.hasta} años
             </div>
             {r.turbulencias.lista.map((t, i) => (
               <div key={i} style={css("margin-bottom:10px;")}>
-                <div style={css("font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:3px;")}>
+                <div style={css("font-size:13px;font-weight:590;color:var(--red);margin-bottom:3px;")}>
                   Turbulencias en {t.tipo} · {t.causa}
                 </div>
                 <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:0;")}>{t.texto}</p>

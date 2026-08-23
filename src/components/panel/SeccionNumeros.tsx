@@ -23,17 +23,17 @@ export default function SeccionNumeros() {
         return (
           <article key={i} style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
             <div style={css("display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);")}>{d.label}</span>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>{d.label}</span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:42px;line-height:1;color:var(--text);")}>{d.o.valor}</span>
               <span style={css("font-family:var(--font-ui);font-style:normal;font-size:18px;color:var(--text-3);")}>{d.desc}</span>
             </div>
             <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:16px;")}>
               <div style={css("border-left:2px solid var(--red);padding:2px 0 2px 12px;")}>
-                <div style={css("font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:4px;")}>En negativo</div>
+                <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>En negativo</div>
                 <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;")}>{d.o.lectura.negativo}</p>
               </div>
               <div style={css("border-left:2px solid var(--green);padding:2px 0 2px 12px;")}>
-                <div style={css("font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:4px;")}>En positivo</div>
+                <div style={css("font-size:12px;font-weight:590;color:var(--green);margin-bottom:4px;")}>En positivo</div>
                 <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text-2);margin:0;")}>{d.o.lectura.positivo}</p>
               </div>
             </div>
@@ -49,7 +49,7 @@ export default function SeccionNumeros() {
       })}
 
       <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;")}>Tus días de fuerza</div>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:12px;")}>Tus días de fuerza</div>
         <div style={css("display:flex;gap:12px;align-items:center;flex-wrap:wrap;")}>
           {r.diasFuerza.dias.map((n, i) => (
             <span

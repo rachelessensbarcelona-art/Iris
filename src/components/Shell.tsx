@@ -39,8 +39,8 @@ export default function Shell() {
             style={css("width:38px;height:38px;flex:none;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px rgba(201,168,76,.4),0 0 22px var(--border-accent);")}
           />
           <div style={css("display:flex;flex-direction:column;gap:2px;")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:clamp(11px,1.4vw,14px);letter-spacing:.16em;color:var(--gold);line-height:1.1;")}>ESCUELA DE SABIDURÍA 33</div>
-            <div style={css("font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-4);")}>Estudio de Kábala</div>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:clamp(14px,1.6vw,17px);letter-spacing:-.022em;color:var(--text);line-height:1.15;")}>Escuela de Sabiduría 33</div>
+            <div style={css("font-size:13px;color:var(--text-4);letter-spacing:-.01em;")}>Estudio de Kábala</div>
           </div>
         </div>
         {view !== "inicio" && (
@@ -48,7 +48,7 @@ export default function Shell() {
             onClick={() => setView(view === "panel" ? "inicio" : "panel")}
             title={view === "panel" ? "Volver a la consulta" : "Volver al panel"}
             style={css(
-              "display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:var(--r-sm);cursor:pointer;border:1px solid var(--border-accent);background:rgba(0,0,0,.025);color:var(--gold);font-size:10px;letter-spacing:.18em;text-transform:uppercase;transition:all .2s;"
+              "display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:980px;cursor:pointer;border:1px solid var(--border-accent);background:rgba(0,0,0,.025);color:var(--gold);font-size:15px;font-weight:590;transition:all .2s;"
             )}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -58,7 +58,9 @@ export default function Shell() {
             Volver
           </button>
         )}
-        <nav data-nav="" style={css("display:flex;gap:4px;flex-wrap:wrap;margin-left:auto;")}>
+        {/* Control segmentado de iOS: una pista gris y una pastilla blanca
+         * elevada sobre la sección activa. */}
+        <nav data-nav="" style={css("display:flex;gap:2px;margin-left:auto;background:rgba(120,120,128,.12);border-radius:980px;padding:3px;")}>
           {TABS.map((t) => {
             const on = view === t.k;
             const bloqueado = t.k !== "inicio" && !r;
@@ -69,14 +71,14 @@ export default function Shell() {
                   if (!bloqueado) setView(t.k);
                 }}
                 style={css(
-                  "padding:9px 17px;border-radius:var(--r-sm);cursor:" +
+                  "padding:7px 16px;border-radius:980px;border:none;white-space:nowrap;cursor:" +
                     (bloqueado ? "not-allowed" : "pointer") +
-                    ";font-size:11px;letter-spacing:.19em;text-transform:uppercase;border:1px solid " +
-                    (on ? "var(--gold)" : "transparent") +
-                    ";background:" +
-                    (on ? "var(--gold-soft)" : "transparent") +
+                    ";font-size:14px;font-weight:590;letter-spacing:-.01em;background:" +
+                    (on ? "var(--surface-solid)" : "transparent") +
+                    ";box-shadow:" +
+                    (on ? "0 3px 8px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.06)" : "none") +
                     ";color:" +
-                    (on ? "var(--gold)" : bloqueado ? "var(--text-4)" : "var(--text-3)") +
+                    (on ? "var(--text)" : bloqueado ? "var(--text-4)" : "var(--text-3)") +
                     ";transition:all .22s;"
                 )}
               >

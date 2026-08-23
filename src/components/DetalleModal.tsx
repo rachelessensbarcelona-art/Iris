@@ -3,6 +3,8 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { KDATA } from "@/lib/kdata";
 import { chipsDeFicha } from "@/lib/chips";
+// Se renombran porque aquí ya hay variables locales llamadas titulo y frase.
+import { frase as enFrase, titulo as enTitulo } from "@/lib/format";
 
 export default function DetalleModal() {
   const { detalle, cerrarDetalle, verNumero } = useApp();
@@ -31,8 +33,8 @@ export default function DetalleModal() {
   } else if (detalle.tipo === "arcano") {
     const c = KDATA.arcanos[String(detalle.a)] || ({} as (typeof KDATA.arcanos)[string]);
     tipo = "Arcano " + detalle.a;
-    titulo = c.nombre || "";
-    subtitulo = c.lema || "";
+    titulo = enTitulo(c.nombre);
+    subtitulo = enFrase(c.lema);
     texto = (c.texto || "").replace(/^[“"][^”"]*[”"]\.?\s*/, "");
     extras = c.pareja ? [{ label: "Este camino en pareja", texto: c.pareja }] : [];
   } else {
@@ -58,17 +60,17 @@ export default function DetalleModal() {
       >
         <button
           onClick={cerrarDetalle}
-          style={css("position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border-accent);color:var(--gold);border-radius:var(--r-sm);width:30px;height:30px;cursor:pointer;font-size:15px;line-height:1;")}
+          style={css("position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border-accent);color:var(--gold);border-radius:980px;width:30px;height:30px;cursor:pointer;font-size:15px;line-height:1;")}
         >
           ×
         </button>
-        <div style={css("font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;")}>{tipo}</div>
-        <h2 style={css("font-family:var(--font-ui);font-weight:700;font-size:28px;color:var(--text);margin:0 0 6px;letter-spacing:.03em;")}>{titulo}</h2>
+        <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:8px;")}>{tipo}</div>
+        <h2 style={css("font-family:var(--font-ui);font-weight:700;font-size:28px;color:var(--text);margin:0 0 6px;letter-spacing:-.022em;")}>{titulo}</h2>
         <div style={css("font-family:var(--font-ui);font-style:normal;font-size:19px;color:var(--gold);margin-bottom:18px;")}>{subtitulo}</div>
         <p style={css("font-family:var(--font-ui);font-size:18px;line-height:1.68;color:var(--text-2);margin:0;white-space:pre-line;text-wrap:pretty;")}>{texto}</p>
         {extras.map((e, i) => (
           <div key={i} style={css("margin-top:18px;border-top:1px solid var(--border);padding-top:14px;")}>
-            <div style={css("font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;")}>{e.label}</div>
+            <div style={css("font-size:12px;font-weight:590;color:var(--gold);margin-bottom:6px;")}>{e.label}</div>
             <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:0;")}>{e.texto}</p>
           </div>
         ))}

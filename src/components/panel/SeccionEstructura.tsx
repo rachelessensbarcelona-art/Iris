@@ -65,11 +65,11 @@ export default function SeccionEstructura() {
       <div style={css("display:flex;flex-direction:column;gap:16px;")}>
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
           <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px;")}>
-            <span style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--text-3);")}>Estructura energética</span>
+            <span style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);")}>Estructura energética</span>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:26px;color:var(--gold);line-height:1;")}>tipo {est.tipo}</span>
           </div>
           <CuerpoPortales r={r} />
-          <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:11px;letter-spacing:.1em;color:var(--text-3);")}>
+          <div style={css("display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:13px;font-weight:590;color:var(--text-3);")}>
             <div style={css("display:flex;align-items:center;gap:8px;")}>
               <span style={css("width:11px;height:11px;border-radius:50%;background:var(--gold);")} />
               Portal con aprendizaje
@@ -92,7 +92,7 @@ export default function SeccionEstructura() {
         />
 
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;")}>Número dinámico de cada portal</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:10px;")}>Número dinámico de cada portal</div>
           <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:7px;")}>
             {PORTALES_CUERPO.map((p) => {
               const tieneTarea = !!est.aprendizajes[p.portal];
@@ -116,7 +116,7 @@ export default function SeccionEstructura() {
         </div>
 
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;")}>Ejes y planos en tensión</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--text-3);margin-bottom:8px;")}>Ejes y planos en tensión</div>
           <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>{TENSIONES.intro.ejes}</p>
           <div style={css("display:flex;flex-direction:column;gap:7px;")}>
             {tensiones.map((t, idx) => (
@@ -134,7 +134,7 @@ export default function SeccionEstructura() {
                   <span>
                     {t.tipo} {t.a}–{t.b} · {t.info?.nombre || t.nombre}
                   </span>
-                  <span style={css("margin-left:auto;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:" + (t.activo ? "var(--red)" : "var(--text-4)") + ";")}>
+                  <span style={css("margin-left:auto;font-size:12px;font-weight:590;color:" + (t.activo ? "var(--red)" : "var(--text-4)") + ";")}>
                     {t.activo ? "en tensión" : "libre"}
                   </span>
                 </div>
@@ -144,7 +144,7 @@ export default function SeccionEstructura() {
                   </p>
                 )}
                 {t.info?.tension && (
-                  <div style={css("font-size:11px;letter-spacing:.1em;color:var(--red);margin-top:6px;")}>Se tensa en: {t.info.tension}</div>
+                  <div style={css("font-size:13px;font-weight:590;color:var(--red);margin-top:6px;")}>Se tensa en: {t.info.tension}</div>
                 )}
                 {t.info && (
                   <button
@@ -161,14 +161,14 @@ export default function SeccionEstructura() {
 
         {enfermedades.length > 0 && (
           <div style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:clamp(15px,2vw,20px);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--red);margin-bottom:8px;")}>Enfermedades y debilidades</div>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--red);margin-bottom:8px;")}>Enfermedades y debilidades</div>
             <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>
               Si el aprendizaje del portal no se trabaja, la energía se somatiza en los órganos que rige ese chakra.
             </p>
             <div style={css("display:flex;flex-direction:column;gap:11px;")}>
               {enfermedades.map(({ a, enf }) => (
                 <div key={a.portal} style={css("border-left:2px solid var(--red);padding-left:12px;")}>
-                  <div style={css("font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:4px;")}>
+                  <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>
                     Portal {a.portal} · {a.tarea?.nombre || ""}
                   </div>
                   {enf.nota ? (
@@ -178,7 +178,7 @@ export default function SeccionEstructura() {
                       {([["Psicológicas", enf.psico], ["Órganos", enf.organos], ["Físicas", enf.fisicas]] as const).map(([k, v]) =>
                         v ? (
                           <div key={k}>
-                            <span style={css("font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);")}>{k}: </span>
+                            <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>{k}: </span>
                             <span style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);")}>{v}</span>
                           </div>
                         ) : null
@@ -194,15 +194,15 @@ export default function SeccionEstructura() {
 
       <div style={css("display:flex;flex-direction:column;gap:16px;")}>
         <article style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,24px);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;")}>Estructura número {est.tipo}</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:10px;")}>Estructura número {est.tipo}</div>
           <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.62;color:var(--text-2);margin:0;text-wrap:pretty;")}>{r.tipoEstructura?.texto || ""}</p>
           <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:14px;")}>
             <div style={css("border-left:2px solid var(--red);padding-left:12px;")}>
-              <div style={css("font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:4px;")}>Vivido en negativo</div>
+              <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>Vivido en negativo</div>
               <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{r.tipoEstructura?.negativo || ""}</p>
             </div>
             <div style={css("border-left:2px solid var(--green);padding-left:12px;")}>
-              <div style={css("font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:4px;")}>Vivido en positivo</div>
+              <div style={css("font-size:12px;font-weight:590;color:var(--green);margin-bottom:4px;")}>Vivido en positivo</div>
               <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{r.tipoEstructura?.positivo || ""}</p>
             </div>
           </div>
@@ -210,12 +210,12 @@ export default function SeccionEstructura() {
         {aprendizajes.map(({ a, ai, card, chips }) => (
           <article key={ai} style={css(card)}>
             <div style={css("display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);")}>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);")}>
                 Aprendizaje {a.portal}
                 {a.veces > 1 ? " · ×" + a.veces : ""}
               </span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:21px;color:var(--text);")}>{a.tarea?.nombre || ""}</span>
-              <span style={css("margin-left:auto;font-size:11px;letter-spacing:.18em;color:var(--text-3);")}>viene del número {a.numero}</span>
+              <span style={css("margin-left:auto;font-size:13px;font-weight:590;color:var(--text-3);")}>viene del número {a.numero}</span>
             </div>
             <p style={css("font-family:var(--font-ui);font-size:17px;line-height:1.6;color:var(--text-2);margin:12px 0 0;text-wrap:pretty;")}>{recorta(a.tarea?.texto || "", 460)}</p>
             <div style={css("display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;")}>
@@ -227,11 +227,11 @@ export default function SeccionEstructura() {
             </div>
             <div style={css("margin-top:14px;border-top:1px solid var(--border);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;")}>
               <div>
-                <div style={css("font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:3px;")}>Hilo rojo</div>
+                <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:3px;")}>Hilo rojo</div>
                 <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{recorta(a.tarea?.hiloRojo || "", 210)}</p>
               </div>
               <div>
-                <div style={css("font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:3px;")}>Principio sanador</div>
+                <div style={css("font-size:12px;font-weight:590;color:var(--text-3);margin-bottom:3px;")}>Principio sanador</div>
                 <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;")}>{recorta(a.tarea?.sanador || "", 210)}</p>
               </div>
             </div>

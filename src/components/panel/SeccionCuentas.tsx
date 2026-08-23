@@ -4,7 +4,7 @@ import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import Desglose, { type Paso } from "../Desglose";
 
-const TH = "font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-4);display:flex;align-items:center;justify-content:center;padding:6px 0;";
+const TH = "font-size:12px;font-weight:590;color:var(--text-4);display:flex;align-items:center;justify-content:center;padding:6px 0;";
 const TD = "font-family:var(--font-ui);font-weight:600;font-size:19px;color:var(--text-2);display:flex;align-items:center;justify-content:center;padding:11px 0;border:1px solid var(--gold-soft);border-radius:var(--r-sm);background:rgba(0,0,0,.025);";
 const TD_TOT = TD.replace("var(--text-2)", "var(--text)").replace("rgba(0,0,0,.025)", "var(--border)");
 
@@ -58,7 +58,7 @@ export default function SeccionCuentas() {
   return (
     <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:22px;align-items:start;")}>
       <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(18px,2.4vw,24px) clamp(18px,2.6vw,26px);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;")}>Cuentas abiertas</div>
+        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:16px;")}>Cuentas abiertas</div>
         <div style={css("display:grid;grid-template-columns:26px 1fr 1fr 1fr 1fr;gap:6px;")}>
           {tabla.map((cell, i) => (
             <div key={i} style={css(cell.style)}>
@@ -77,7 +77,7 @@ export default function SeccionCuentas() {
         {tarjetas.map((k, i) => (
           <article key={i} style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:clamp(15px,2vw,20px) clamp(16px,2.2vw,22px);")}>
             <div style={css("display:flex;align-items:baseline;gap:12px;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);")}>{k.label}</span>
+              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--gold);")}>{k.label}</span>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:30px;color:var(--text);line-height:1;margin-left:auto;")}>{k.valor}</span>
             </div>
             <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.55;color:var(--text-2);margin:8px 0 0;")}>{k.desc}</p>
