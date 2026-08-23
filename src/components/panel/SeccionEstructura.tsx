@@ -5,6 +5,7 @@ import { chipsDeFicha } from "@/lib/chips";
 import { chipStyle, recorta } from "@/lib/format";
 import CuerpoPortales from "../CuerpoPortales";
 import Desglose, { type Paso } from "../Desglose";
+import Carrusel from "../Carrusel";
 import { PORTALES_CUERPO } from "@/lib/cuerpo";
 import { KDATA, TENSIONES, type TensionEntry } from "@/lib/kdata";
 
@@ -28,8 +29,6 @@ export default function SeccionEstructura() {
   const est = r.estructura;
   const fc = est.fechaConvertida;
 
-  // Sobre la figura conviven cuatro números distintos y sin esta leyenda no
-  // hay forma de saber cuál es cuál.
   // Sobre la figura conviven cuatro anotaciones distintas — las mismas que
   // Iris escribe a mano en la ficha — y sin esta leyenda no hay forma de
   // saber cuál es cuál.
@@ -156,8 +155,7 @@ export default function SeccionEstructura() {
         />
 
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:var(--s3);")}>Los diez portales, uno a uno</div>
-          <div style={css("display:flex;flex-direction:column;")}>
+          <Carrusel titulo="Los diez portales" ancho={228}>
             {PORTALES_CUERPO.slice()
               .sort((a, b) => a.portal - b.portal)
               .map((p) => {
@@ -167,6 +165,7 @@ export default function SeccionEstructura() {
                 return (
                   <button
                     key={p.portal}
+                    data-alza=""
                     onClick={() =>
                       verTexto(
                         "Portal " + p.etiqueta,
@@ -178,41 +177,41 @@ export default function SeccionEstructura() {
                           (tarea?.sanador ? "\n\nPrincipio sanador: " + tarea.sanador : "")
                       )
                     }
-                    style={css("display:grid;grid-template-columns:34px 1fr auto;gap:var(--s3);align-items:center;text-align:left;width:100%;padding:10px 2px;border:none;border-top:1px solid var(--border);background:none;cursor:pointer;")}
+                    style={css(
+                      "display:flex;flex-direction:column;gap:var(--s2);align-items:flex-start;text-align:left;width:100%;height:100%;padding:var(--s4);border-radius:var(--r);cursor:pointer;border:1px solid " +
+                        (veces ? "var(--border-accent)" : "var(--border)") +
+                        ";background:" +
+                        (veces ? "var(--gold-soft)" : "var(--surface)") +
+                        ";"
+                    )}
                   >
-                    <span
-                      style={css(
-                        "justify-self:center;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;font-size:15px;font-weight:700;background:" +
-                          (veces ? "#E5B63C" : "rgba(0,0,0,.04)") +
-                          ";color:" +
-                          (veces ? "#241F2E" : "var(--text-3)") +
-                          ";border:" +
-                          (escudo ? "2.5px solid var(--blue)" : "1px solid var(--border)") +
-                          ";"
-                      )}
-                    >
-                      {p.etiqueta}
-                    </span>
-                    <span style={css("min-width:0;")}>
-                      <span style={css("display:block;font-size:15px;font-weight:590;color:var(--text);line-height:1.3;")}>{tarea?.nombre || "—"}</span>
-                      <span style={css("display:block;font-size:13px;color:var(--text-4);margin-top:1px;")}>
-                        {LUGAR[p.portal]} · dinámico <span style={css("color:var(--red);font-weight:590;")}>{est.dinamicos[p.portal]}</span>
+                    <span style={css("display:flex;align-items:center;gap:var(--s2);width:100%;")}>
+                      <span
+                        style={css(
+                          "flex:none;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font-size:16px;font-weight:700;background:" +
+                            (veces ? "#E5B63C" : "color-mix(in srgb, var(--text) 5%, transparent)") +
+                            ";color:" +
+                            (veces ? "#241F2E" : "var(--text-3)") +
+                            ";border:" +
+                            (escudo ? "2.5px solid var(--blue)" : "1px solid var(--border)") +
+                            ";"
+                        )}
+                      >
+                        {p.etiqueta}
+                      </span>
+                      <span style={css("margin-left:auto;font-size:12px;font-weight:590;color:" + (veces ? "var(--gold-deep)" : "var(--green)") + ";white-space:nowrap;")}>
+                        {veces ? "Aprendizaje" + (veces > 1 ? " ×" + veces : "") : "Maestría"}
                       </span>
                     </span>
-                    <span style={css("justify-self:end;display:flex;flex-direction:column;align-items:flex-end;gap:2px;white-space:nowrap;")}>
-                      {veces > 0 ? (
-                        <span style={css("font-size:12px;font-weight:590;color:var(--gold-deep);background:var(--gold-soft);border-radius:980px;padding:3px 9px;")}>
-                          Aprendizaje{veces > 1 ? " ×" + veces : ""}
-                        </span>
-                      ) : (
-                        <span style={css("font-size:12px;font-weight:590;color:var(--green);")}>Maestría</span>
-                      )}
-                      {escudo && <span style={css("font-size:12px;font-weight:590;color:var(--blue);")}>Escudo</span>}
+                    <span style={css("font-size:15px;font-weight:590;color:var(--text);line-height:1.3;")}>{tarea?.nombre || "—"}</span>
+                    <span style={css("font-size:13px;color:var(--text-4);line-height:1.35;")}>
+                      {LUGAR[p.portal]} · dinámico <span style={css("color:var(--red);font-weight:590;")}>{est.dinamicos[p.portal]}</span>
+                      {escudo ? " · escudo" : ""}
                     </span>
                   </button>
                 );
               })}
-          </div>
+          </Carrusel>
           <p style={css("font-size:14px;line-height:1.5;color:var(--text-4);margin:var(--s3) 0 0;text-wrap:pretty;")}>
             Los portales sin aprendizaje son maestrías: vienen resueltos y sostienen el trabajo de los demás. Pulsa cualquiera para leer su texto completo.
           </p>

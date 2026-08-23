@@ -393,6 +393,12 @@ button:not(:disabled):active {
   }
 }
 
+/* La tira del carrusel se arrastra pero no enseña barra: la navegación va en
+ * las flechas y en el propio gesto. */
+[data-tira]::-webkit-scrollbar {
+  display: none;
+}
+
 /* En un móvil las tres columnas del desglose no caben: la etiqueta pasa a
  * ocupar su propia línea y debajo van la operación y su resultado. */
 @media (max-width: 560px) {

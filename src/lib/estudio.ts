@@ -25,20 +25,36 @@ export type Bloque =
 
 export type Capitulo = { id: string; kicker: string; titulo: string; seccion: string; bloques: Bloque[] };
 
+/**
+ * Los apuntes traen intercaladas las claves de trabajo de la escuela —
+ * "2/33-3/22-6/11-M15-M51-C11-T11-L77-P313" y parecidas: divisores, corazón,
+ * tensión, liberación, potencial. A Iris le sirven; al cliente que recibe su
+ * lectura no le dicen nada y le ensucian la página. Se quitan de todo lo que
+ * entra en el documento — en el panel siguen, que es su mesa de trabajo.
+ */
+const CLAVES = /(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+)(?:\s*[-–]\s*(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+))+\.?/g;
+export function paraCliente(t: string): string {
+  return t
+    .replace(CLAVES, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([,.;:])/g, "$1")
+    .trim();
+}
+
 function bH(texto: string): Bloque {
-  return { tipo: "h", texto };
+  return { tipo: "h", texto: paraCliente(texto) };
 }
 function bP(editId: string, textoDef: string): Bloque {
-  return { tipo: "p", editId, textoDef };
+  return { tipo: "p", editId, textoDef: paraCliente(textoDef) };
 }
 function bLead(editId: string, textoDef: string): Bloque {
-  return { tipo: "lead", editId, textoDef };
+  return { tipo: "lead", editId, textoDef: paraCliente(textoDef) };
 }
 function bDato(editId: string, label: string, valor: string | number, textoDef: string): Bloque {
-  return { tipo: "dato", editId, label, valor, textoDef };
+  return { tipo: "dato", editId, label, valor, textoDef: paraCliente(textoDef) };
 }
 function bPolos(editId: string, negDef: string, posDef: string): Bloque {
-  return { tipo: "polos", editIdNeg: editId + ".neg", editIdPos: editId + ".pos", negDef, posDef };
+  return { tipo: "polos", editIdNeg: editId + ".neg", editIdPos: editId + ".pos", negDef: paraCliente(negDef), posDef: paraCliente(posDef) };
 }
 function bRefsFicha(F: ReturnType<typeof ficha>): Bloque | null {
   const items = refItems(F);
