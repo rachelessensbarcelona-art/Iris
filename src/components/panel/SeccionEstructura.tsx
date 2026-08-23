@@ -121,7 +121,7 @@ export default function SeccionEstructura() {
   }));
 
   return (
-    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap-lg);align-items:start;")}>
+    <div data-dos="ancho">
       <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
         <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s3);")}>
@@ -261,37 +261,6 @@ export default function SeccionEstructura() {
           </div>
         </div>
 
-        {enfermedades.length > 0 && (
-          <div style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--red);margin-bottom:var(--s2);")}>Enfermedades y debilidades</div>
-            <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>
-              Si el aprendizaje del portal no se trabaja, la energía se somatiza en los órganos que rige ese chakra.
-            </p>
-            <div style={css("display:flex;flex-direction:column;gap:11px;")}>
-              {enfermedades.map(({ a, enf }) => (
-                <div key={a.portal} style={css("border-left:2px solid var(--red);padding-left:12px;")}>
-                  <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>
-                    Portal {a.portal} · {a.tarea?.nombre || ""}
-                  </div>
-                  {enf.nota ? (
-                    <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;text-wrap:pretty;")}>{enf.nota}</p>
-                  ) : (
-                    <div style={css("display:flex;flex-direction:column;gap:5px;")}>
-                      {([["Psicológicas", enf.psico], ["Órganos", enf.organos], ["Físicas", enf.fisicas]] as const).map(([k, v]) =>
-                        v ? (
-                          <div key={k}>
-                            <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>{k}: </span>
-                            <span style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);")}>{v}</span>
-                          </div>
-                        ) : null
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
@@ -339,6 +308,41 @@ export default function SeccionEstructura() {
             </div>
           </article>
         ))}
+
+        {/* Los dos bloques largos — tensiones y somatizaciones — son
+         * lectura, no dibujo: van con el resto de la lectura para que la
+         * columna del cuerpo no se estire el triple que ésta. */}
+        {enfermedades.length > 0 && (
+          <div style={css("border:1px solid var(--red-border);background:var(--red-soft);border-radius:var(--r);padding:var(--pad-card-sm);")}>
+            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:12px;color:var(--red);margin-bottom:var(--s2);")}>Enfermedades y debilidades</div>
+            <p style={css("font-family:var(--font-ui);font-size:15px;line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>
+              Si el aprendizaje del portal no se trabaja, la energía se somatiza en los órganos que rige ese chakra.
+            </p>
+            <div style={css("display:flex;flex-direction:column;gap:11px;")}>
+              {enfermedades.map(({ a, enf }) => (
+                <div key={a.portal} style={css("border-left:2px solid var(--red);padding-left:12px;")}>
+                  <div style={css("font-size:12px;font-weight:590;color:var(--red);margin-bottom:4px;")}>
+                    Portal {a.portal} · {a.tarea?.nombre || ""}
+                  </div>
+                  {enf.nota ? (
+                    <p style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);margin:0;text-wrap:pretty;")}>{enf.nota}</p>
+                  ) : (
+                    <div style={css("display:flex;flex-direction:column;gap:5px;")}>
+                      {([["Psicológicas", enf.psico], ["Órganos", enf.organos], ["Físicas", enf.fisicas]] as const).map(([k, v]) =>
+                        v ? (
+                          <div key={k}>
+                            <span style={css("font-size:12px;font-weight:590;color:var(--text-3);")}>{k}: </span>
+                            <span style={css("font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--text-2);")}>{v}</span>
+                          </div>
+                        ) : null
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

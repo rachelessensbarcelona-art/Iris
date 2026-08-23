@@ -57,7 +57,7 @@ export default function SeccionCuentas() {
     : `El ${c.karmico} no está en los apuntes, así que su liberación se ha calculado con la regla de tensión. Conviene comprobarlo a mano.`;
 
   return (
-    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--gap-lg);align-items:start;")}>
+    <div data-dos="">
       <div style={css("border:1px solid var(--border);background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--gold);margin-bottom:16px;")}>Cuentas abiertas</div>
         <div style={css("display:grid;grid-template-columns:26px 1fr 1fr 1fr 1fr;gap:6px;")}>

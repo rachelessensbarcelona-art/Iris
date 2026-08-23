@@ -57,7 +57,17 @@ export default function PanelScreen() {
 
       {/* Duplica la barra lateral, así que sólo aparece cuando ésta se esconde
        * por falta de ancho. */}
-      <nav data-nav="" data-tabs-panel="" style={css("display:flex;gap:2px;margin-bottom:var(--s6);background:color-mix(in srgb, var(--text) 10%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
+      {/* La tira se desliza dentro de su propia pastilla. Sin el overflow las
+       * pestañas que no caben empujaban el ancho de la página entera y
+       * aparecía una barra horizontal en toda la pantalla. */}
+      <nav
+        data-nav=""
+        data-tabs-panel=""
+        data-tira=""
+        style={css(
+          "display:flex;gap:2px;margin-bottom:var(--s6);background:color-mix(in srgb, var(--text) 10%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;"
+        )}
+      >
         {SECCIONES.map((s) => {
           const on = seccion === s.k;
           return (
@@ -65,7 +75,7 @@ export default function PanelScreen() {
               key={s.k}
               onClick={() => setSeccion(s.k)}
               style={css(
-                "padding:8px 16px;border-radius:980px;border:none;cursor:pointer;font-size:14px;font-weight:590;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
+                "flex:none;padding:8px 16px;border-radius:980px;border:none;cursor:pointer;font-size:14px;font-weight:590;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
                   (on ? "var(--surface-solid)" : "transparent") +
                   ";box-shadow:" +
                   (on ? "0 3px 8px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.06)" : "none") +

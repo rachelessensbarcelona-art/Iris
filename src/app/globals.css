@@ -399,6 +399,30 @@ button:not(:disabled):active {
   display: none;
 }
 
+/* Las secciones del panel están cortadas por el mismo patrón: a la izquierda
+ * un cuadro fijo — el diagrama, la tabla, la lista de números — y a la derecha
+ * la lectura. Repartirlo al 50 % dejaba la columna de la izquierda con un
+ * hueco enorme por debajo y obligaba a la derecha a leerse en renglones
+ * cortos. Aquí la izquierda pide sólo lo que necesita y la lectura se queda
+ * con el resto, que es lo que hace que las dos columnas acaben más o menos a
+ * la misma altura. */
+[data-dos] {
+  display: grid;
+  grid-template-columns: minmax(0, clamp(300px, 30vw, 400px)) minmax(0, 1fr);
+  gap: var(--gap-lg);
+  align-items: start;
+}
+/* Cuando lo de la izquierda es un dibujo — el árbol, la figura — necesita más
+ * sitio que una tabla para que se lean los rótulos. */
+[data-dos="ancho"] {
+  grid-template-columns: minmax(0, clamp(340px, 36vw, 500px)) minmax(0, 1fr);
+}
+@media (max-width: 900px) {
+  [data-dos] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* En un móvil las tres columnas del desglose no caben: la etiqueta pasa a
  * ocupar su propia línea y debajo van la operación y su resultado. */
 @media (max-width: 560px) {

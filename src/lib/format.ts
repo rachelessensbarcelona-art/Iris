@@ -15,7 +15,12 @@ export function recorta(t: string | undefined | null, n: number): string {
  */
 export function chipStyle(color: string): string {
   return (
-    "display:inline-flex;align-items:center;background:rgba(255,255,255,.8);" +
+    // El fondo va tomado del color propio del chip sobre la superficie del
+    // tema. En blanco fijo, en modo oscuro quedaba una pastilla clara con la
+    // letra clara encima y no se leía nada.
+    "display:inline-flex;align-items:center;background:color-mix(in srgb, " +
+    color +
+    " 10%, var(--surface-solid));" +
     "border:1px solid color-mix(in srgb, " +
     color +
     " 32%, transparent);color:" +

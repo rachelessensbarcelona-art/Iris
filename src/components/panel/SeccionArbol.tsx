@@ -28,7 +28,7 @@ export default function SeccionArbol() {
   });
 
   return (
-    <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap);align-items:start;")}>
+    <div data-dos="ancho">
       <Lienzo anclado>
         <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:var(--s2);")}>
           <span style={css("font-size:17px;font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Árbol de la Vida</span>

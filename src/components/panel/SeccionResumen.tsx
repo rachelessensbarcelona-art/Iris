@@ -58,6 +58,8 @@ export default function SeccionResumen() {
         </p>
       </div>
 
+      {/* Aquí las dos columnas son tarjetas del mismo peso, no un cuadro y su
+       * lectura: se reparten a partes iguales. */}
       <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:var(--gap);align-items:start;")}>
         {/* ------------------------------------------------ columna izquierda */}
         <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
