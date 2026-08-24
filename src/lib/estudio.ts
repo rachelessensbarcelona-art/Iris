@@ -112,28 +112,46 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
    */
   const g = r.entrada.genero || "f";
   const ao = (fem: string, masc: string, neutro?: string) => (g === "m" ? masc : g === "n" ? (neutro ?? fem) : fem);
+  /**
+   * Una empresa se estudia con los mismos números —salen del nombre y de la
+   * fecha igual que en una persona— pero no se le puede hablar de haber
+   * nacido. Sólo cambia el marco: la bienvenida y las frases nuestras que
+   * dicen «naciste». Los textos de los manuales describen el número, no a
+   * quien lo lleva, y se quedan tal cual están escritos.
+   */
+  const esEmpresa = r.entrada.tipo === "empresa";
+  const pn = (persona: string, empresa: string) => (esEmpresa ? empresa : persona);
   const push = (o: Partial<Capitulo> & Pick<Capitulo, "seccion" | "titulo" | "bloques">) =>
     cap.push({ id: "c" + cap.length, kicker: "", ...o });
 
   push({
     seccion: "Bienvenida",
     kicker: "Tu mapa de luz",
-    titulo: ao("Bienvenida a tu estudio", "Bienvenido a tu estudio", "Te damos la bienvenida a tu estudio"),
+    titulo: pn(ao("Bienvenida a tu estudio", "Bienvenido a tu estudio", "Te damos la bienvenida a tu estudio"), "Te damos la bienvenida a este estudio"),
     bloques: [
       bLead(
         "p2.lead",
-        "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día y la hora en que naciste, junto con el nombre con el que " +
-          ao("fuiste nombrada", "fuiste nombrado", "te nombraron") +
-          ", constituyen una contraseña única de acceso a tu potencial supremo."
+        pn(
+          "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día y la hora en que naciste, junto con el nombre con el que " +
+            ao("fuiste nombrada", "fuiste nombrado", "te nombraron") +
+            ", constituyen una contraseña única de acceso a tu potencial supremo.",
+          "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día en que esta empresa quedó constituida, junto con el nombre con el que se la nombró, constituyen una contraseña única de acceso a su potencial supremo."
+        )
       ),
       bP(
         "p2.a",
-        "Todo lo que leerás en las siguientes páginas habla de ti: de lo que ya has conquistado, de lo que aún está por despertar y de los aprendizajes que han venido a impulsarte. Léelo con apertura, amor y la certeza de que posees la fuerza para transformar cada aspecto de tu vida."
+        pn(
+          "Todo lo que leerás en las siguientes páginas habla de ti: de lo que ya has conquistado, de lo que aún está por despertar y de los aprendizajes que han venido a impulsarte. Léelo con apertura, amor y la certeza de que posees la fuerza para transformar cada aspecto de tu vida.",
+          "Todo lo que leerás en las siguientes páginas habla de esta empresa: de lo que ya ha conquistado, de lo que aún está por despertar y de los aprendizajes que han venido a impulsarla. Léelo con apertura y con la certeza de que tiene la fuerza para transformar cada aspecto de su actividad."
+        )
       ),
-      bH("Un viaje de retorno a tu esencia"),
+      bH(pn("Un viaje de retorno a tu esencia", "Un viaje de retorno a su esencia")),
       bP(
         "p2.b",
-        "Este estudio es una hoja de ruta para comprender la arquitectura de tu ser. A través de la Kábala desciframos los códigos de tu nacimiento para ofrecerte claridad, sentido y dirección: tus dones, las virtudes y herramientas con las que viniste a habitar el mundo; tus desafíos de evolución, esos bloqueos o patrones repetitivos transformados en tu mayor fuente de sabiduría; y tu propósito, la dirección hacia donde orientar tu energía para vivir en plenitud."
+        pn(
+          "Este estudio es una hoja de ruta para comprender la arquitectura de tu ser. A través de la Kábala desciframos los códigos de tu nacimiento para ofrecerte claridad, sentido y dirección: tus dones, las virtudes y herramientas con las que viniste a habitar el mundo; tus desafíos de evolución, esos bloqueos o patrones repetitivos transformados en tu mayor fuente de sabiduría; y tu propósito, la dirección hacia donde orientar tu energía para vivir en plenitud.",
+          "Este estudio es una hoja de ruta para comprender la arquitectura de esta empresa. A través de la Kábala desciframos los códigos de su nombre y de su constitución para ofrecer claridad, sentido y dirección: sus dones, las virtudes y herramientas con las que vino a ocupar su sitio; sus desafíos de evolución, esos bloqueos o patrones repetitivos transformados en su mayor fuente de sabiduría; y su propósito, la dirección hacia donde orientar su energía para desplegarse en plenitud."
+        )
       ),
       bP(
         "p2.c",
@@ -170,7 +188,7 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
       c: r.caminos.origen,
       kicker: "Sesión 1 · Tus caminos",
       titulo: "Tu camino de origen",
-      intro: `Te habla de esa cualidad que traes de serie: el camino de origen es lo que vienes a recordar y a compartir con otros en esta existencia. En tu caso, desde tu nacimiento hasta los ${r.caminos.edadCambio} años, que es tu edad de cambio.`,
+      intro: `Te habla de esa cualidad que traes de serie: el camino de origen es lo que vienes a recordar y a compartir con otros en esta existencia. En tu caso, desde ${pn("tu nacimiento", "la constitución")} hasta los ${r.caminos.edadCambio} años, que es ${pn("tu", "su")} edad de cambio.`,
     },
     {
       k: "transformacion" as const,
@@ -369,7 +387,9 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
     bloques: [
       bLead(
         "p14b.lead",
-        "Son la visión más amplia de la carta: qué has venido a hacer en esta encarnación. Van en pareja, y cada uno mira una mitad — el primero sale del día y el mes de nacimiento; el segundo, del mes y el año."
+        "Son la visión más amplia de la carta: qué has venido a hacer en esta encarnación. Van en pareja, y cada uno mira una mitad — el primero sale del día y el mes de " +
+          pn("nacimiento", "constitución") +
+          "; el segundo, del mes y el año."
       ),
       ...bLectura("p14b.a", r.afinidad.diaMes, `día ${r.fecha.dia} + mes ${r.fecha.mes}`),
       ...bLectura("p14b.b", r.afinidad.mesAnio, `mes ${r.fecha.mes} + año ${String(r.fecha.anio).slice(2)}`),
@@ -419,7 +439,7 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
     kicker: "Ciclos vitales",
     titulo: `Tu año personal: ${r.ciclos.anioPersonal}`,
     bloques: [
-      bDato("p17.anio", `Año ${r.ciclos.anioUniversal}`, r.ciclos.anioPersonal, textoAnio || "Se calcula sumando tu día y tu mes de nacimiento al año en curso."),
+      bDato("p17.anio", `Año ${r.ciclos.anioUniversal}`, r.ciclos.anioPersonal, textoAnio || `Se calcula sumando el día y el mes de ${pn("nacimiento", "constitución")} al año en curso.`),
     ],
   });
 

@@ -574,6 +574,55 @@ button:not(:disabled):active {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   El banner de la persona en pantalla estrecha.
+   Seis cifras en fila no caben, y envueltas dejaban las separaciones a media
+   altura: la línea de un pelo de la izquierda quedaba colgando entre filas.
+   Por debajo de 1100 px la tira se desliza en horizontal, como una fila de
+   datos de iOS; por debajo de 700 se reparte en tres columnas con sus líneas
+   entre casillas.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  [data-tira-cifras] {
+    margin-left: 0 !important;
+    width: 100%;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    padding-top: var(--s4);
+    border-top: 1px solid var(--border);
+  }
+  [data-tira-cifras]::-webkit-scrollbar {
+    display: none;
+  }
+  [data-tira-cifras] > * {
+    flex: none;
+  }
+  [data-tira-cifras] > *:first-child {
+    padding-left: 0 !important;
+  }
+}
+
+@media (max-width: 700px) {
+  [data-tira-cifras] {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s4) 0;
+    overflow: visible;
+  }
+  /* En rejilla las líneas van entre columnas, no según el orden: la primera
+   * de cada fila no lleva. */
+  [data-tira-cifras] > * {
+    padding: 0 var(--s3) !important;
+    border-left: 1px solid var(--border);
+  }
+  [data-tira-cifras] > *:nth-child(3n + 1) {
+    border-left: none;
+    padding-left: 0 !important;
+  }
+}
+
 /* En un móvil las tres columnas del desglose no caben: la etiqueta pasa a
  * ocupar su propia línea y debajo van la operación y su resultado. */
 @media (max-width: 560px) {

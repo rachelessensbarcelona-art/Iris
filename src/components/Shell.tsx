@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { css } from "@/lib/css";
 import { useApp, type View } from "@/lib/app-context";
 import ConsultaScreen from "./screens/ConsultaScreen";
@@ -18,8 +18,17 @@ const TABS: Array<{ k: View; label: string }> = [
 ];
 
 export default function Shell() {
-  const { view, setView, r } = useApp();
+  const { view, setView, r, rehidratado } = useApp();
   const [menu, setMenu] = useState(false);
+
+  // Ahora que cada pantalla tiene su dirección, se puede llegar a /panel con
+  // el enlace guardado. Si el estudio que estaba abierto sigue en este equipo
+  // se recupera solo; si no hay ninguno se vuelve a la consulta, que es donde
+  // se empieza. Se espera a que se haya intentado recuperarlo: antes de eso
+  // no hay estudio todavía y se saldría siempre.
+  useEffect(() => {
+    if (rehidratado && view !== "inicio" && !r) setView("inicio");
+  }, [view, r, rehidratado, setView]);
 
   return (
     <div

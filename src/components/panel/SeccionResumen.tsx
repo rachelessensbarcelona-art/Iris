@@ -17,11 +17,13 @@ const ROTULO = "font-size:var(--t-mini);font-weight:590;color:var(--text-3);";
  * salen esos números.
  */
 export default function SeccionResumen() {
-  const { r, setSeccion, setView, verNumero, verArcano } = useApp();
+  const { r, f, setSeccion, setView, verNumero, verArcano } = useApp();
   if (!r) return null;
 
   const c = r.ciclos;
-  const nombreCorto = titulo(r.nombre.texto).split(" ")[0];
+  // A una persona se la llama por el nombre de pila; a una empresa, por su
+  // nombre entero — «Construcciones» a secas no es nadie.
+  const nombreCorto = f.tipo === "empresa" ? titulo(r.nombre.texto) : titulo(r.nombre.texto).split(" ")[0];
 
   const caminos = [
     { k: "origen" as const, etapa: "Origen", d: r.caminos.origen, rango: `0 – ${r.caminos.edadCambio} años` },

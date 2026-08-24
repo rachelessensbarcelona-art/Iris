@@ -40,23 +40,65 @@ export default function PanelScreen() {
 
   return (
     <main style={css("max-width:var(--ancho);margin:0 auto;padding:var(--s6) var(--gutter) var(--s8);")}>
-      <div style={css("display:flex;align-items:flex-end;gap:var(--s5);flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:var(--s5);margin-bottom:var(--s5);")}>
-        <div>
-          <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:6px;")}>
-            Estudio de {DISCIPLINAS.find((d) => d.k === disciplina)?.label}
+      {/* La cabecera de la persona, en su propio banner.
+       * Era texto suelto sobre el fondo con una raya debajo: el nombre, la
+       * fecha y las seis cifras flotaban sin nada que los reuniera. Ahora van
+       * dentro de una pieza — nombre a la izquierda, cifras a la derecha
+       * separadas por una línea de un pelo, como una fila de datos de iOS. */}
+      <div
+        data-banner=""
+        style={css(
+          "position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;gap:var(--gap-lg);flex-wrap:wrap;" +
+            "background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);" +
+            "padding:var(--pad-card);margin-bottom:var(--gap-lg);"
+        )}
+      >
+        {/* Un velo dorado muy flojo en la esquina, para que el banner no sea
+         * un rectángulo plano. No lleva partículas: detrás del nombre se leen
+         * como suciedad. */}
+        <div
+          aria-hidden="true"
+          style={css(
+            "position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(520px 220px at 0% 0%, var(--gold-soft), transparent 70%);"
+          )}
+        />
+
+        <div style={css("position:relative;z-index:1;min-width:0;flex:1 1 260px;")}>
+          <div style={css("display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:980px;background:var(--gold-soft);color:var(--gold-deep);font-size:var(--t-mini);font-weight:590;")}>
+            {DISCIPLINAS.find((d) => d.k === disciplina)?.label}
           </div>
-          <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(22px,3.6vw,31px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.15;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)}</h1>
-          <div style={css("font-family:var(--font-ui);font-size:var(--t-read);color:var(--text-3);margin-top:5px;")}>
+          <h1
+            style={css(
+              "font-family:var(--font-ui);font-weight:700;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.026em;color:var(--text);margin:var(--s3) 0 0;line-height:1.1;overflow-wrap:anywhere;text-wrap:balance;"
+            )}
+          >
+            {titulo(r.nombre.texto)}
+          </h1>
+          <div style={css("font-size:var(--t-body);color:var(--text-3);margin-top:6px;")} data-cifras="">
             {r.fecha.dia} / {r.fecha.mes} / {r.fecha.anio}
           </div>
         </div>
+
         {/* En el resumen estas mismas cifras ya salen en las tarjetas, así que
          * la tira sólo aparece en las demás secciones. */}
-        <div style={css("display:" + (disciplina !== "kabala" || seccion === "resumen" ? "none" : "flex") + ";gap:clamp(14px,2.4vw,26px);flex-wrap:wrap;margin-left:auto;")}>
+        <div
+          data-tira-cifras=""
+          style={css(
+            "display:" +
+              (disciplina !== "kabala" || seccion === "resumen" ? "none" : "flex") +
+              ";position:relative;z-index:1;flex-wrap:wrap;margin-left:auto;"
+          )}
+        >
           {resumen.map((k, i) => (
-            <div key={i} style={css("display:flex;flex-direction:column;gap:3px;align-items:flex-end;")}>
-              <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);")}>{k.label}</span>
-              <span style={css("font-weight:600;font-size:var(--t-title);color:var(--text);line-height:1;")}>{k.valor}</span>
+            <div
+              key={i}
+              style={css(
+                "display:flex;flex-direction:column;gap:5px;align-items:flex-start;padding:0 clamp(12px,1.6vw,20px);" +
+                  (i ? "border-left:1px solid var(--border);" : "")
+              )}
+            >
+              <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);white-space:nowrap;")}>{k.label}</span>
+              <span data-cifras="" style={css("font-weight:600;font-size:var(--t-head);color:var(--text);line-height:1;letter-spacing:-.02em;")}>{k.valor}</span>
             </div>
           ))}
         </div>

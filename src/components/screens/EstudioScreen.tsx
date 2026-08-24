@@ -11,7 +11,7 @@ import HojaCliente from "../estudio/HojaCliente";
 import styles from "../estudio/Estudio.module.css";
 
 export default function EstudioScreen() {
-  const { r, marca, txt, guardaEdit, restablecer } = useApp();
+  const { r, f, marca, txt, guardaEdit, restablecer } = useApp();
   const capitulos = useMemo(() => (r ? construyeCapitulos(r) : []), [r]);
   // Dos documentos distintos con el mismo botón de imprimir: el estudio
   // entero, que es la herramienta de Iris, y la hoja que se lleva el cliente.
@@ -76,7 +76,9 @@ export default function EstudioScreen() {
           <img src="/logo.jpeg" alt="" style={css("width:210px;height:210px;border-radius:50%;object-fit:cover;margin-bottom:34px;")} />
           <div style={css("font-weight:590;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</div>
           <div style={css("width:78px;height:1px;background:var(--gold);margin:26px 0;")} />
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:#6B6478;")}>Estudio de Kábala personal</div>
+          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:#6B6478;")}>
+            {f.tipo === "empresa" ? "Estudio de Kábala empresarial" : "Estudio de Kábala personal"}
+          </div>
           <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:var(--t-hero);line-height:1.22;letter-spacing:-.022em;color:#241F2E;margin:30px 0 0;max-width:560px;")}>{titulo(r.nombre.texto)}</h1>
           <div style={css("font-family:var(--font-ui);font-size:var(--t-title);font-style:italic;color:#7A7288;margin-top:var(--s4);")}>{fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio)}</div>
         </section>}

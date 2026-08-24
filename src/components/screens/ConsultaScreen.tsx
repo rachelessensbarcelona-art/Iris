@@ -21,7 +21,9 @@ const ROTULO = "font-size:var(--t-mini);font-weight:590;color:var(--gold);";
 export default function ConsultaScreen() {
   const { f, set, calcular, hist, abrir, borrar } = useApp();
 
-  const n = analizaNombre([f.nombre, f.ap1, f.ap2].filter(Boolean).join(" "));
+  const empresa = f.tipo === "empresa";
+  // De una empresa se lee el nombre comercial entero; no tiene apellidos.
+  const n = analizaNombre((empresa ? [f.nombre] : [f.nombre, f.ap1, f.ap2]).filter(Boolean).join(" "));
   const err = valida(f);
   const listo = !err;
 
@@ -92,11 +94,13 @@ export default function ConsultaScreen() {
             </div>
           </div>
           <h1 style={css("font-size:clamp(28px,3.8vw,40px);line-height:1.08;letter-spacing:-.018em;color:var(--text);margin:0 0 var(--s3);")}>
-            ¿A quién estudiamos hoy?
+            {empresa ? "¿Qué empresa estudiamos hoy?" : "¿A quién estudiamos hoy?"}
           </h1>
           <p style={css("font-size:var(--t-read);line-height:1.5;color:var(--text-3);margin:0 auto;max-width:56ch;")}>
-            <span style={css("color:var(--gold);font-weight:590;")}>{saludo()}, Iris.</span> Dime el nombre de la partida de
-            nacimiento y la fecha exacta, y te dejo el estudio listo para imprimir.
+            <span style={css("color:var(--gold);font-weight:590;")}>{saludo()}, Iris.</span>{" "}
+            {empresa
+              ? "Dime el nombre comercial completo y la fecha de constitución, y te dejo el estudio listo para imprimir."
+              : "Dime el nombre de la partida de nacimiento y la fecha exacta, y te dejo el estudio listo para imprimir."}
           </p>
         </motion.div>
 
@@ -109,24 +113,60 @@ export default function ConsultaScreen() {
               "background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--gold);border-radius:var(--r);padding:var(--pad-card);position:relative;"
             )}
           >
-            <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Datos de nacimiento</div>
+            {/* De quién es el estudio. Una empresa se lee igual que una
+             * persona, pero su nombre completo es el nombre comercial y la
+             * fecha es la de constitución. */}
+            <div style={css("display:flex;gap:2px;background:color-mix(in srgb, var(--text) 6%, transparent);border-radius:980px;padding:3px;margin-bottom:var(--s4);")}>
+              {([
+                ["persona", "Persona"],
+                ["empresa", "Nombre para empresas"],
+              ] as const).map(([k, label]) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => set("tipo", k)}
+                  style={css(
+                    "flex:1;padding:8px 12px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:590;white-space:nowrap;transition:all .2s;background:" +
+                      (f.tipo === k ? "var(--surface-solid)" : "transparent") +
+                      ";box-shadow:" +
+                      (f.tipo === k ? "0 2px 6px rgba(0,0,0,.09)" : "none") +
+                      ";color:" +
+                      (f.tipo === k ? "var(--text)" : "var(--text-3)") +
+                      ";"
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div style={css(ROTULO + "margin-bottom:var(--s4);")}>{empresa ? "Datos de la empresa" : "Datos de nacimiento"}</div>
 
             <div style={css("display:flex;flex-direction:column;gap:var(--s3);")}>
-              {campo("Nombre", "nombre")}
-              <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3);")}>
-                {campo("Primer apellido", "ap1")}
-                {campo("Segundo apellido", "ap2")}
-              </div>
-              <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3);")}>
-                {campo("Día", "dia", true)}
-                {campo("Mes", "mes", true)}
-                {campo("Año", "anio", true)}
+              {campo(empresa ? "Nombre de la empresa" : "Nombre", "nombre")}
+              {!empresa && (
+                <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3);")}>
+                  {campo("Primer apellido", "ap1")}
+                  {campo("Segundo apellido", "ap2")}
+                </div>
+              )}
+              {/* Una empresa no nace: se constituye. Es la misma fecha para el
+               * cálculo, pero llamarla «de nacimiento» confunde al rellenarla. */}
+              <div style={css("display:flex;flex-direction:column;gap:5px;")}>
+                <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>
+                  {empresa ? "Fecha de constitución" : "Fecha de nacimiento"}
+                </span>
+                <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3);")}>
+                  {campo("Día", "dia", true)}
+                  {campo("Mes", "mes", true)}
+                  {campo("Año", "anio", true)}
+                </div>
               </div>
 
               {/* El estudio se dirige a la persona en segunda persona —
                * «bienvenida», «fuiste nombrada» — así que necesita saber cómo
-               * tratarla. No entra en ningún cálculo. */}
-              <div style={css("display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;")}>
+               * tratarla. No entra en ningún cálculo. Una empresa va siempre
+               * en neutro, así que no se pregunta. */}
+              <div style={css("display:" + (empresa ? "none" : "flex") + ";align-items:center;gap:var(--s3);flex-wrap:wrap;")}>
                 <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Se dirige a</span>
                 <div style={css("margin-left:auto;display:flex;gap:2px;background:color-mix(in srgb, var(--text) 6%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
                   {([
@@ -166,7 +206,10 @@ botonPrincipal(listo) + "width:100%;margin-top:var(--s5);"
               Generar el estudio
             </motion.button>
             <p style={css("margin:var(--s3) 0 0;font-size:var(--t-mini);color:var(--text-4);line-height:1.45;text-align:center;")}>
-              {err || "Se usa el nombre inscrito en el Registro Civil, sin diminutivos."}
+              {err ||
+                (empresa
+                  ? "Se usa la razón social tal y como está registrada, con la fecha de constitución."
+                  : "Se usa el nombre inscrito en el Registro Civil, sin diminutivos.")}
             </p>
           </motion.section>
 

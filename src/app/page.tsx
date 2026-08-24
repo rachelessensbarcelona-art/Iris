@@ -1,10 +1,6 @@
-import { AppProvider } from "@/lib/app-context";
 import Shell from "@/components/Shell";
 
-export default function Home() {
-  return (
-    <AppProvider>
-      <Shell />
-    </AppProvider>
-  );
+/** La consulta: donde se escriben los datos. Es la raíz del sitio. */
+export default function Inicio() {
+  return <Shell />;
 }

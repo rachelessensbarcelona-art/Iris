@@ -18,6 +18,9 @@ export type Entrada = {
   anio: number;
   anioUniversal: number;
   genero?: Genero;
+  /** Persona o empresa. No entra en ningún cálculo —los números salen igual—
+   *  pero el estudio se redacta distinto: una empresa no nace, se constituye. */
+  tipo?: "persona" | "empresa";
 };
 
 function digits(str: string | number): number[] {

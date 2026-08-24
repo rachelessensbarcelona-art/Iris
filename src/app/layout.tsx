@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Karla } from "next/font/google";
 import "./globals.css";
+import { AppProvider } from "@/lib/app-context";
 
 // Karla es sólo la red de seguridad: en un Mac o un iPad la interfaz va en San
 // Francisco y los titulares en New York, que ya trae el sistema. Cinzel y
@@ -37,7 +38,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: ELIGE_TEMA }} />
       </head>
-      <body>{children}</body>
+      {/* El estado vive en el layout y no en la página: al cambiar de ruta,
+       * App Router conserva el árbol del layout, así que el estudio calculado
+       * sigue ahí en vez de recalcularse o perderse. */}
+      <body>
+        <AppProvider>{children}</AppProvider>
+      </body>
     </html>
   );
 }
