@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { css } from "@/lib/css";
 import { useApp, type Seccion, type Disciplina } from "@/lib/app-context";
 import {
@@ -45,9 +47,19 @@ export const DISCIPLINAS: Array<{ k: Disciplina; label: string; Ico: Ico }> = [
  */
 export default function Sidebar() {
   const { r, seccion, setSeccion, disciplina, setDisciplina } = useApp();
+  const quieto = useReducedMotion();
+  // Qué disciplinas están desplegadas. Se abre la que se está mirando, y
+  // pulsando su nombre se cierra: en cuanto haya partes en las tres, la
+  // columna entera abierta no cabría de una vez.
+  const [abiertas, setAbiertas] = useState<Disciplina[]>(["kabala"]);
   if (!r) return null;
 
-  const fila = (activo: boolean, Ico: Ico, label: string, onClick: () => void, grande?: boolean) => (
+  const alterna = (d: Disciplina) => {
+    setDisciplina(d);
+    setAbiertas((s) => (s.includes(d) ? s.filter((x) => x !== d) : [...s, d]));
+  };
+
+  const fila = (activo: boolean, Ico: Ico, label: string, onClick: () => void, grande?: boolean, abierta?: boolean) => (
     <button
       key={label}
       onClick={onClick}
@@ -73,6 +85,19 @@ export default function Sidebar() {
         <Ico size={grande ? 16 : 19} />
       </span>
       {label}
+      {/* La flecha dice si el grupo está abierto y sirve para cerrarlo. */}
+      {abierta !== undefined && (
+        <motion.span
+          aria-hidden="true"
+          animate={{ rotate: abierta ? 0 : -90 }}
+          transition={quieto ? { duration: 0 } : { duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          style={css("margin-left:auto;display:grid;place-items:center;color:var(--text-4);")}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </motion.span>
+      )}
     </button>
   );
 
@@ -87,17 +112,51 @@ export default function Sidebar() {
       <nav style={css("display:flex;flex-direction:column;gap:var(--s5);")}>
         {DISCIPLINAS.map((d) => {
           const dentro = disciplina === d.k;
+          // Sólo Kábala tiene partes por ahora; las otras dos no llevan flecha
+          // porque no hay nada que desplegar todavía.
+          const partes = d.k === "kabala" ? KABALA : [];
+          const abierta = partes.length > 0 && abiertas.includes(d.k);
           return (
             <div key={d.k} style={css("display:flex;flex-direction:column;gap:2px;")}>
               {/* La disciplina abierta no se resalta si es Kábala: ya se ve
                * cuál está por la sección marcada de dentro. */}
-              {fila(dentro && d.k !== "kabala", d.Ico, d.label, () => setDisciplina(d.k), true)}
-              {d.k === "kabala" && dentro && (
-                <>
-                  <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);padding:var(--s2) 10px 2px;")}>El estudio</div>
-                  {KABALA.map(({ k, label, Ico }) => fila(seccion === k, Ico, label, () => setSeccion(k)))}
-                </>
+              {fila(
+                dentro && !partes.length,
+                d.Ico,
+                d.label,
+                () => (partes.length ? alterna(d.k) : setDisciplina(d.k)),
+                true,
+                partes.length ? abierta : undefined
               )}
+              <AnimatePresence initial={false}>
+                {abierta && (
+                  <motion.div
+                    key="partes"
+                    initial={quieto ? false : { height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={quieto ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                    transition={{ height: { duration: 0.34, ease: [0.22, 1, 0.36, 1] }, opacity: { duration: 0.22 } }}
+                    style={css("overflow:hidden;")}
+                  >
+                    <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);padding:var(--s2) 10px 2px;")}>El estudio</div>
+                    {partes.map(({ k, label, Ico }, i) => (
+                      <motion.div
+                        key={k}
+                        initial={quieto ? false : { opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.05 + i * 0.035, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        {fila(seccion === k && dentro, Ico, label, () => {
+                          // Pulsar una parte de Kábala devuelve a Kábala, aunque
+                          // se estuviera mirando otra disciplina.
+                          setDisciplina("kabala");
+                          setSeccion(k);
+                        })}
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}

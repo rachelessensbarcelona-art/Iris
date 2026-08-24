@@ -39,27 +39,51 @@ export default function ConsultaScreen() {
     </label>
   );
 
+  // Sin cabecera arriba, la entrada se centra en la ventana: queda el
+  // formulario y nada más, que es lo único que hay que hacer aquí.
   return (
-    <main style={css("position:relative;max-width:1140px;margin:0 auto;padding:clamp(40px,7vh,84px) var(--gutter) var(--s8);")}>
+    <main
+      style={css(
+        "position:relative;min-height:100vh;display:flex;flex-direction:column;max-width:1140px;margin:0 auto;padding:clamp(28px,4vh,56px) var(--gutter);"
+      )}
+    >
       {/* El polvo cubre la pantalla entera, no una tarjeta: es la puerta de
        * entrada al estudio y se lee mejor como atmósfera que como adorno. */}
       <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
         <Particulas cantidad={64} />
       </div>
 
-      <div style={css("position:relative;z-index:1;")}>
+      {/* margin:auto en vez de justify-content:center: si el contenido pasa
+       * de la ventana, el centrado con flex recorta por arriba y se pierde la
+       * marca; con margen automático se apoya arriba y baja. */}
+      <div style={css("position:relative;z-index:1;margin:auto 0;width:100%;")}>
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={css("text-align:center;max-width:660px;margin:0 auto var(--s8);")}
+          style={css("text-align:center;max-width:660px;margin:0 auto var(--s6);")}
         >
-          <div style={css(ROTULO + "margin-bottom:var(--s4);")}>{saludo()}, Iris</div>
-          <h1 style={css("font-size:clamp(34px,6vw,58px);line-height:1.06;letter-spacing:-.018em;color:var(--text);margin:0 0 var(--s5);")}>
+          {/* La marca en una sola línea: sin cabecera arriba hace falta, pero
+           * apilada se comía la mitad de la pantalla y dejaba el formulario
+           * por debajo del borde. */}
+          <div style={css("display:inline-flex;align-items:center;gap:11px;margin-bottom:var(--s5);")}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.jpeg"
+              alt="Escuela de Sabiduría 33"
+              style={css("width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px rgba(201,168,76,.4),0 0 24px var(--border-accent);")}
+            />
+            <div style={css("text-align:left;")}>
+              <div style={css("font-family:var(--font-display);font-weight:500;font-size:var(--t-read);letter-spacing:-.008em;color:var(--text);line-height:1.15;")}>Escuela de Sabiduría 33</div>
+              <div style={css("font-size:var(--t-mini);color:var(--text-4);margin-top:1px;")}>Kábala · Feng Shui · Numerología</div>
+            </div>
+          </div>
+          <h1 style={css("font-size:clamp(28px,3.8vw,40px);line-height:1.08;letter-spacing:-.018em;color:var(--text);margin:0 0 var(--s3);")}>
             ¿A quién estudiamos hoy?
           </h1>
-          <p style={css("font-size:clamp(17px,2vw,20px);line-height:1.55;color:var(--text-3);margin:0;")}>
-            Dime el nombre de la partida de nacimiento y la fecha exacta. Yo hago las cuentas, te enseño de dónde sale cada número y te dejo el estudio listo para imprimir.
+          <p style={css("font-size:var(--t-read);line-height:1.5;color:var(--text-3);margin:0 auto;max-width:56ch;")}>
+            <span style={css("color:var(--gold);font-weight:590;")}>{saludo()}, Iris.</span> Dime el nombre de la partida de
+            nacimiento y la fecha exacta, y te dejo el estudio listo para imprimir.
           </p>
         </motion.div>
 

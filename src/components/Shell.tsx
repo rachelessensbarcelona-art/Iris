@@ -25,6 +25,17 @@ export default function Shell() {
         "min-height:100vh;color:var(--text);font-family:var(--font-ui);"
       )}
     >
+      {/* La entrada no lleva cabecera: sólo el formulario, centrado. La marca,
+       * la navegación y el botón de volver no pintan nada mientras no haya un
+       * estudio abierto, y quitarlos deja la pantalla en lo único que hay que
+       * hacer ahí. El cambio de tema sí se queda, suelto en una esquina. */}
+      {view === "inicio" && (
+        <div data-chrome="1" style={css("position:fixed;top:16px;right:clamp(14px,3vw,28px);z-index:40;")}>
+          <Tema />
+        </div>
+      )}
+
+      {view !== "inicio" && (
       <header
         data-chrome="1"
         data-app-header=""
@@ -45,8 +56,7 @@ export default function Shell() {
             <div style={css("font-size:var(--t-mini);color:var(--text-4);letter-spacing:-.01em;")}>Kábala · Feng Shui · Numerología</div>
           </div>
         </div>
-        {view !== "inicio" && (
-          <button
+        <button
             onClick={() => setView(view === "panel" ? "inicio" : "panel")}
             title={view === "panel" ? "Volver a la consulta" : "Volver al panel"}
             style={css(
@@ -59,7 +69,6 @@ export default function Shell() {
             </svg>
             Volver
           </button>
-        )}
         {/* Control segmentado de iOS: una pista gris y una pastilla blanca
          * elevada sobre la sección activa. */}
         <nav data-nav="" style={css("display:flex;gap:2px;margin-left:auto;background:color-mix(in srgb, var(--text) 8%, transparent);border-radius:980px;padding:3px;")}>
@@ -91,6 +100,7 @@ export default function Shell() {
         </nav>
         <Tema />
       </header>
+      )}
 
       {/* En el panel la barra lateral va pegada al contenido; el resto de
        * pantallas ocupan el ancho completo. */}
