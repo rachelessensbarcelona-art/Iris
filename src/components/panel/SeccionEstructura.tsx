@@ -3,6 +3,7 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import { tarjetaCon, PAD_SM } from "@/lib/ui";
+import EjesTension from "./EjesTension";
 import { chipStyle, recorta } from "@/lib/format";
 import CuerpoPortales from "../CuerpoPortales";
 import Desglose, { type Paso } from "../Desglose";
@@ -220,7 +221,14 @@ export default function SeccionEstructura() {
 
         <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("font-weight:590;font-size:var(--t-mini);color:var(--text-3);margin-bottom:var(--s2);")}>Ejes y planos en tensión</div>
-          <p style={css("font-family:var(--font-ui);font-size:var(--t-body);line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>{TENSIONES.intro.ejes}</p>
+          <p style={css("font-size:var(--t-body);line-height:1.5;color:var(--text-4);margin:0 0 var(--s4);")}>{TENSIONES.intro.ejes}</p>
+
+          {/* La escalera E/M de la hoja, que hasta ahora sólo estaba como
+           * lista: puestos los diez portales en su sitio, cada eje es una
+           * línea que cruza de un lado al otro. */}
+          <div style={css("padding-bottom:var(--s4);margin-bottom:var(--s4);border-bottom:1px solid var(--border);")}>
+            <EjesTension r={r} />
+          </div>
           <div style={css("display:flex;flex-direction:column;gap:7px;")}>
             {tensiones.map((t, idx) => (
               <button

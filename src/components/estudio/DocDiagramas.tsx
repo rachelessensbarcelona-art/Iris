@@ -7,6 +7,20 @@ import styles from "./Estudio.module.css";
 import CuerpoPortales from "../CuerpoPortales";
 import ArbolVida from "../ArbolVida";
 
+/** Dónde cae cada portal en la escalera E/M de la ficha (pág. 2). */
+const SITIO_EM: Record<number, { x: number; y: number }> = {
+  2: { x: 108, y: 30 },
+  3: { x: 62, y: 78 },
+  1: { x: 154, y: 78 },
+  4: { x: 62, y: 124 },
+  10: { x: 154, y: 124 },
+  5: { x: 62, y: 170 },
+  9: { x: 154, y: 170 },
+  6: { x: 62, y: 216 },
+  8: { x: 154, y: 216 },
+  7: { x: 108, y: 264 },
+};
+
 /** Ancho de la primera columna de una maqueta .split (ver Estudio.module.css). */
 const col1 = (w: string) => ({ "--doc-col1": w }) as CSSProperties;
 
@@ -54,9 +68,37 @@ export function DocEstructura({ r }: { r: Resultado }) {
     .concat(r.planosTension.map((p) => ({ nombre: p.plano.nombre, a: p.plano.a, b: p.plano.b, activo: p.activo, tipo: "Plano" })));
 
   return (
-    <div className={styles.split} style={col1("210px")}>
+    <div style={css("display:grid;grid-template-columns:186px 124px 1fr;gap:16px;align-items:center;")}>
       <CuerpoPortales r={r} />
-      <div style={css("display:flex;flex-direction:column;gap:7px;")}>
+      {/* La escalera E/M de la pág. 2 de la ficha: los diez portales puestos en
+       * su sitio, y cada eje como una línea que cruza de un lado al otro. Va al
+       * lado de su lista y no encima: apilada, el bloque no cabía al pie de la
+       * hoja y se llevaba media página en blanco. */}
+      <svg viewBox="0 0 216 294" style={css("width:100%;height:auto;")}>
+          <text x="62" y="12" textAnchor="middle" fontSize="11" fill="#9B93A8">E</text>
+          <text x="154" y="12" textAnchor="middle" fontSize="11" fill="#9B93A8">M</text>
+          {tensiones.map((l, i) => {
+            const A = SITIO_EM[l.a], B = SITIO_EM[l.b];
+            if (!A || !B) return null;
+            return (
+              <line key={i} x1={A.x} y1={A.y} x2={B.x} y2={B.y}
+                stroke={l.activo ? "#B0564C" : "#C7C0D0"} strokeWidth={l.activo ? 2.2 : 1.1}
+                strokeDasharray={l.tipo === "Eje" ? undefined : "5 5"} strokeLinecap="round" />
+            );
+          })}
+          {Object.entries(SITIO_EM).map(([n, pt]) => {
+            const tenso = tensiones.some((l) => l.activo && (l.a === +n || l.b === +n));
+            return (
+              <g key={n}>
+                <circle cx={pt.x} cy={pt.y} r="15" fill="#FBF8F1" stroke={tenso ? "#B0564C" : "#C7C0D0"} strokeWidth={tenso ? 1.6 : 1.1} />
+                <text x={pt.x} y={pt.y + 6} textAnchor="middle" fontFamily="Cinzel, serif" fontSize="16" fill={tenso ? "#B0564C" : "#4A4456"}>
+                  {+n === 10 ? "0" : n}
+                </text>
+              </g>
+            );
+          })}
+      </svg>
+      <div style={css("display:flex;flex-direction:column;gap:6px;")}>
         {tensiones.map((t, i) => (
           <div
             key={i}
