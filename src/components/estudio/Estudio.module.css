@@ -174,19 +174,31 @@
     padding: 0;
     display: block;
   }
+
+  /* ---------------------------------------------------------------------
+     Los márgenes del papel los pone la hoja, no el capítulo.
+     Iban como relleno de .page, y el relleno de un elemento se aplica una
+     vez arriba y una vez abajo: en cuanto un capítulo se repartía entre dos
+     folios, el texto de en medio salía pegado al borde — sin margen ninguno
+     arriba de la hoja siguiente. Puestos en @page, cada folio tiene su aire,
+     se corte por donde se corte, y da igual desde qué equipo se exporte.
+     --------------------------------------------------------------------- */
   @page {
     size: letter;
-    margin: 0;
+    margin: 15mm 17mm;
   }
-  /* El color del papel se pinta en la hoja, no en el capítulo. Cuando iba en
-   * .page y un capítulo se pasaba a la hoja siguiente, el crema terminaba
-   * donde terminaba el elemento y el resto del folio salía blanco: la hoja
-   * aparecía cortada por una raya de otro color a media altura. */
   .page {
     width: auto;
     box-shadow: none;
     border-radius: 0;
+    /* El color del papel se pinta en la hoja (globals.css), no aquí: si va
+     * en el capítulo, el crema termina donde termina el elemento y el resto
+     * del folio sale blanco — la hoja partida por una raya de otro color. */
     background: transparent;
+    padding: 0;
+  }
+  .interior {
+    padding: 0;
   }
   .page + .page {
     break-before: page;
@@ -198,32 +210,34 @@
    * encabezado de página fuera de sitio. */
   .continua {
     break-before: auto !important;
-    padding-top: 0 !important;
   }
   .continua .header {
     display: none;
   }
   .continua .cuerpo {
-    margin-top: 26px;
+    margin-top: 22px;
   }
   /* Un título no debe quedarse solo al pie de una hoja. */
   .cuerpo h2 {
     break-after: avoid;
   }
-  /* Ni un dato, ni un diagrama, ni una cita se parten por la mitad entre dos
-   * hojas: o caben enteros o pasan a la siguiente. */
+  /* Los párrafos se parten si hace falta — impedirlo dejaba medio folio en
+   * blanco cada vez que uno no cabía entero — pero nunca por una o dos
+   * líneas sueltas a un lado del corte. */
+  .cuerpo p,
   .cuerpo > * {
-    break-inside: avoid;
-  }
-  /* Los párrafos largos sí pueden partirse — si no, dejarían medio folio en
-   * blanco — pero nunca por una sola línea suelta. */
-  .cuerpo p {
-    break-inside: auto;
     orphans: 3;
     widows: 3;
   }
+  /* Lo único que no se parte nunca es lo que no se entiende a medias: un
+   * diagrama y una cita. Marcado en el componente, no por tipo de etiqueta,
+   * para no volver a dejar huecos por avisar de más. */
+  .page [data-nocorte] {
+    break-inside: avoid;
+  }
   .portada {
     aspect-ratio: auto;
-    height: 11in;
+    /* La hoja menos sus márgenes. */
+    min-height: calc(11in - 30mm);
   }
 }

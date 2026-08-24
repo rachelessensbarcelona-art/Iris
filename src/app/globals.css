@@ -504,11 +504,10 @@ button:not(:disabled):active {
   canvas {
     display: none !important;
   }
-  /* Una tarjeta no se parte entre dos hojas si cabe entera en la siguiente.
-   * Vale para la comparativa de pareja y para el panel, que también se
-   * imprimen aunque no sean el documento maquetado. */
-  article,
-  section {
+  /* Una tarjeta suelta no se parte entre dos hojas — vale para la
+   * comparativa de pareja y para el panel. El documento maquetado tiene su
+   * propia regla, más fina, en Estudio.module.css. */
+  article {
     break-inside: avoid;
   }
 }

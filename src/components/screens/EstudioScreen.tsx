@@ -81,10 +81,13 @@ export default function EstudioScreen() {
         </section>}
 
         {!hoja && capitulos.map((cap, i) => {
-          // En papel, solo abre hoja nueva el capítulo que estrena sección.
-          // Los que continúan una sección ya abierta fluyen a continuación,
-          // que es lo que evita las páginas con cuatro líneas sueltas.
-          const abreSeccion = i === 0 || cap.seccion !== capitulos[i - 1].seccion;
+          // En papel solo estrena hoja el capítulo que abre una sesión nueva.
+          // Antes bastaba con cambiar de sección — y como dentro de una misma
+          // sesión hay varias, salían hojas con tres líneas arriba y el resto
+          // en blanco. Lo que va detrás de «·» son capítulos de la misma
+          // sesión: fluyen uno tras otro.
+          const sesion = (c: (typeof capitulos)[number]) => c.seccion.split("·")[0].trim();
+          const abreSeccion = i === 0 || sesion(cap) !== sesion(capitulos[i - 1]);
           return (
           <section key={cap.id} className={`${styles.page} ${styles.interior} ${abreSeccion ? styles.abreSeccion : styles.continua}`}>
             <header className={styles.header}>

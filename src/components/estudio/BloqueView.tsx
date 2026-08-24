@@ -84,15 +84,15 @@ export default function BloqueView({
         </div>
       );
     case "arbol":
-      return <DocArbol r={r} />;
+      return <div data-nocorte=""><DocArbol r={r} /></div>;
     case "estructura":
-      return <DocEstructura r={r} />;
+      return <div data-nocorte=""><DocEstructura r={r} /></div>;
     case "alma":
-      return <DocAlma r={r} />;
+      return <div data-nocorte=""><DocAlma r={r} /></div>;
     case "cuentas":
-      return <DocCuentas r={r} />;
+      return <div data-nocorte=""><DocCuentas r={r} /></div>;
     case "ciclos":
-      return <DocCiclos r={r} />;
+      return <div data-nocorte=""><DocCiclos r={r} /></div>;
     case "cifras":
       return (
         <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 26px;")}>
@@ -113,6 +113,7 @@ export default function BloqueView({
     case "cita":
       return (
         <p
+          data-nocorte=""
           style={css(
             "font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-title);line-height:1.5;color:#6B6478;text-align:center;border-top:1px solid rgba(201,168,76,.3);border-bottom:1px solid rgba(201,168,76,.3);padding:16px 30px;margin:0;"
           )}
