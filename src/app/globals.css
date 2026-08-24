@@ -503,6 +503,16 @@ button:not(:disabled):active {
   [data-dos] {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* Y con una sola columna, el cuadro de arriba deja de ir anclado.
+   * Anclado tiene sentido al lado de la lectura —se queda a la vista mientras
+   * se baja—, pero apilado se quedaba clavado y las tarjetas de texto le
+   * pasaban por debajo: el árbol, la tabla del alma y la de cuentas aparecían
+   * cortados por encima de lo que se estaba leyendo. */
+  [data-anclado] {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
 
 /* ---------------------------------------------------------------------------

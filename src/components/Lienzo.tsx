@@ -32,6 +32,7 @@ export default function Lienzo({
     <motion.section
       className={className}
       data-alza={alza ? "" : undefined}
+      data-anclado={anclado ? "" : undefined}
       initial={quieto ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
