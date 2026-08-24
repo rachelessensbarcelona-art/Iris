@@ -3,13 +3,26 @@ import { useEffect, useRef } from "react";
 import { css } from "@/lib/css";
 
 /**
- * Polvo dorado suspendido. Va en canvas y no en decenas de nodos animados por
- * CSS: son partículas que se mueven todas a la vez, y así el navegador pinta
- * un solo elemento en lugar de recalcular la disposición de la página.
+ * Polvo dorado suspendido en el aire.
  *
- * Se queda quieto si el sistema pide menos movimiento, y también cuando la
- * tarjeta no está a la vista: no tiene sentido gastar cuadros en algo que
- * nadie está mirando.
+ * Va en canvas y no en decenas de nodos animados por CSS: son partículas que
+ * se mueven todas a la vez, y así el navegador pinta un solo elemento en lugar
+ * de recalcular la disposición de la página.
+ *
+ * Lo que hace que se lea como polvo y no como una lluvia de puntos:
+ *
+ *   · cada mota tiene una profundidad. Las de delante son mayores, más claras
+ *     y suben más deprisa; las del fondo son casi un velo. Eso da relieve sin
+ *     necesidad de más partículas — con la mitad se ve mejor que antes;
+ *   · no suben rectas: se balancean. Un seno muy lento y desfasado por mota,
+ *     con más recorrido en las de delante, que es como se mueve algo ligero
+ *     dentro de una corriente de aire;
+ *   · el titileo es lento y suave, nada de parpadeo;
+ *   · y todo entra fundiendo desde negro durante el primer segundo y medio, en
+ *     vez de aparecer de golpe con la página.
+ *
+ * Se queda quieto si el sistema pide menos movimiento, y también cuando no
+ * está a la vista: no tiene sentido gastar cuadros en algo que nadie mira.
  */
 export default function Particulas({ cantidad = 26, color }: { cantidad?: number; color?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -20,7 +33,7 @@ export default function Particulas({ cantidad = 26, color }: { cantidad?: number
     const ctx = lienzo.getContext("2d");
     if (!ctx) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Sobre fondo oscuro el dorado tostado desaparece: hay que subirlo de luz,
     // igual que se hace con el token de color.
@@ -33,17 +46,24 @@ export default function Particulas({ cantidad = 26, color }: { cantidad?: number
     let cuadro = 0;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const motas = Array.from({ length: cantidad }, () => ({
-      x: Math.random(),
-      y: Math.random(),
-      r: 0.7 + Math.random() * 1.5,
-      // Deriva muy lenta y hacia arriba: tiene que leerse como suspensión, no
-      // como lluvia al revés.
-      vx: (Math.random() - 0.5) * 0.00022,
-      vy: -(0.00012 + Math.random() * 0.00028),
-      fase: Math.random() * Math.PI * 2,
-      brillo: oscuro ? 0.4 + Math.random() * 0.5 : 0.34 + Math.random() * 0.46,
-    }));
+    const motas = Array.from({ length: cantidad }, () => {
+      // 0 = al fondo, 1 = delante del todo. Manda en el tamaño, en la luz y en
+      // la velocidad, que es lo que da la sensación de profundidad.
+      const z = Math.pow(Math.random(), 1.6);
+      return {
+        x: Math.random(),
+        y: Math.random(),
+        z,
+        r: 0.5 + z * 1.5,
+        // Sube, muy despacio, y las de delante algo más.
+        vy: -(0.006 + z * 0.014),
+        // El vaivén: amplitud y ritmo propios para que no ondeen a la vez.
+        vaiven: (0.004 + z * 0.014) * (Math.random() < 0.5 ? -1 : 1),
+        ritmo: 0.12 + Math.random() * 0.22,
+        fase: Math.random() * Math.PI * 2,
+        brillo: (oscuro ? 0.22 : 0.18) + z * (oscuro ? 0.5 : 0.42),
+      };
+    });
 
     const medir = () => {
       const c = lienzo.getBoundingClientRect();
@@ -61,36 +81,48 @@ export default function Particulas({ cantidad = 26, color }: { cantidad?: number
     const enPantalla = new IntersectionObserver((e) => (visible = e[0].isIntersecting), { threshold: 0 });
     enPantalla.observe(lienzo);
 
-    let t = 0;
-    const pintar = () => {
-      cuadro = requestAnimationFrame(pintar);
-      if (!visible || ancho === 0) return;
-      t += 1;
-      ctx.clearRect(0, 0, ancho, alto);
-      for (const m of motas) {
-        m.x += m.vx;
-        m.y += m.vy;
-        // Al salir por arriba vuelve a entrar por abajo, en otra columna.
-        if (m.y < -0.05) {
-          m.y = 1.05;
-          m.x = Math.random();
-        }
-        if (m.x < -0.05) m.x = 1.05;
-        if (m.x > 1.05) m.x = -0.05;
+    /** Una mota, con su halo. Sin halo se ven como puntos duros de alfiler. */
+    const mota = (x: number, y: number, radio: number, alfa: number) => {
+      const halo = ctx.createRadialGradient(x, y, 0, x, y, radio);
+      halo.addColorStop(0, `rgba(${tinta},${alfa.toFixed(3)})`);
+      halo.addColorStop(0.4, `rgba(${tinta},${(alfa * 0.4).toFixed(3)})`);
+      halo.addColorStop(1, `rgba(${tinta},0)`);
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(x, y, radio, 0, Math.PI * 2);
+      ctx.fill();
+    };
 
-        // El titileo es un seno lento y desfasado por partícula, para que no
-        // parpadeen todas a la vez.
-        const alfa = m.brillo * (0.55 + 0.45 * Math.sin(t * 0.012 + m.fase));
-        ctx.beginPath();
-        ctx.arc(m.x * ancho, m.y * alto, m.r * 2.4, 0, Math.PI * 2);
-        // Un halo suave alrededor de cada mota: sin él se ven como puntos
-        // duros, y esto tiene que leerse como polvo suspendido.
-        const halo = ctx.createRadialGradient(m.x * ancho, m.y * alto, 0, m.x * ancho, m.y * alto, m.r * 2.4);
-        halo.addColorStop(0, `rgba(${tinta},${alfa.toFixed(3)})`);
-        halo.addColorStop(0.45, `rgba(${tinta},${(alfa * 0.35).toFixed(3)})`);
-        halo.addColorStop(1, `rgba(${tinta},0)`);
-        ctx.fillStyle = halo;
-        ctx.fill();
+    // En segundos, y medido de reloj: así se mueve igual en una pantalla de 60
+    // que en una de 120, y no da un salto al volver de otra pestaña.
+    let t = 0;
+    let previo = performance.now();
+    const ENTRADA = 1.4;
+
+    const pintar = (ahora: number) => {
+      cuadro = requestAnimationFrame(pintar);
+      const dt = Math.min((ahora - previo) / 1000, 0.05);
+      previo = ahora;
+      if (!visible || ancho === 0) return;
+      if (!quieto) t += dt;
+
+      // Se apaga entero y vuelve a encenderse: el fundido de entrada.
+      const entrada = quieto ? 1 : Math.min(t / ENTRADA, 1);
+      ctx.clearRect(0, 0, ancho, alto);
+
+      for (const m of motas) {
+        if (!quieto) {
+          m.y += m.vy * dt;
+          // Al salir por arriba vuelve a entrar por abajo, en otra columna.
+          if (m.y < -0.06) {
+            m.y = 1.06;
+            m.x = Math.random();
+          }
+        }
+        const x = (m.x + Math.sin(t * m.ritmo + m.fase) * m.vaiven) * ancho;
+        const y = m.y * alto;
+        const titileo = 0.78 + 0.22 * Math.sin(t * m.ritmo * 1.7 + m.fase);
+        mota(x, y, m.r * 3.2, m.brillo * titileo * entrada);
       }
     };
     cuadro = requestAnimationFrame(pintar);

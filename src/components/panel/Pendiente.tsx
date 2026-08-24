@@ -23,7 +23,7 @@ export default function Pendiente({ titulo, pie }: { titulo: string; pie: string
       )}
     >
       <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
-        <Particulas cantidad={28} />
+        <Particulas cantidad={22} />
       </div>
       <div style={css("position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:var(--s3);")}>
         <span

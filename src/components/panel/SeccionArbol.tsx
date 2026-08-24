@@ -33,7 +33,7 @@ export default function SeccionArbol() {
           <span style={css("font-size:var(--t-read);font-weight:600;letter-spacing:-.022em;color:var(--text);")}>Árbol de la Vida</span>
         </div>
         <div style={css("position:relative;")}>
-          <Particulas cantidad={26} />
+          <Particulas cantidad={20} />
           <ArbolVida r={r} estilo="position:relative;width:100%;height:auto;display:block;" />
         </div>
 

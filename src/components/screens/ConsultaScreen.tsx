@@ -25,7 +25,7 @@ export default function ConsultaScreen() {
   const listo = !err;
 
   const campo = (label: string, key: "nombre" | "ap1" | "ap2" | "dia" | "mes" | "anio", numeric?: boolean) => (
-    <label style={css("display:flex;flex-direction:column;gap:var(--s2);min-width:0;")}>
+    <label style={css("display:flex;flex-direction:column;gap:5px;min-width:0;")}>
       <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>{label}</span>
       <input
         size={4}
@@ -33,7 +33,7 @@ export default function ConsultaScreen() {
         onChange={(e) => set(key, numeric ? e.target.value.replace(/\D/g, "").slice(0, key === "anio" ? 4 : 2) : e.target.value)}
         inputMode={numeric ? "numeric" : undefined}
         style={css(
-          "width:100%;min-width:0;background:color-mix(in srgb, var(--text) 6%, transparent);border:1px solid transparent;border-radius:var(--r-sm);padding:14px 16px;color:var(--text);font-family:var(--font-ui);font-size:var(--t-read);"
+          "width:100%;min-width:0;background:color-mix(in srgb, var(--text) 6%, transparent);border:1px solid transparent;border-radius:var(--r-sm);padding:11px 14px;color:var(--text);font-family:var(--font-ui);font-size:var(--t-read);"
         )}
       />
     </label>
@@ -50,7 +50,7 @@ export default function ConsultaScreen() {
       {/* El polvo cubre la pantalla entera, no una tarjeta: es la puerta de
        * entrada al estudio y se lee mejor como atmósfera que como adorno. */}
       <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
-        <Particulas cantidad={64} />
+        <Particulas cantidad={42} />
       </div>
 
       {/* margin:auto en vez de justify-content:center: si el contenido pasa
@@ -61,12 +61,13 @@ export default function ConsultaScreen() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          data-entrada-hero=""
           style={css("text-align:center;max-width:660px;margin:0 auto var(--s6);")}
         >
           {/* La marca en una sola línea: sin cabecera arriba hace falta, pero
            * apilada se comía la mitad de la pantalla y dejaba el formulario
            * por debajo del borde. */}
-          <div style={css("display:inline-flex;align-items:center;gap:11px;margin-bottom:var(--s5);")}>
+          <div data-entrada-marca="" style={css("display:inline-flex;align-items:center;gap:11px;margin-bottom:var(--s5);")}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.jpeg"
@@ -87,25 +88,24 @@ export default function ConsultaScreen() {
           </p>
         </motion.div>
 
-        <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--gap-lg);align-items:start;")}>
+        <div data-entrada="" style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--gap-lg);align-items:start;")}>
           <motion.section
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={css(
-              "background:linear-gradient(160deg,color-mix(in srgb, var(--surface-solid) 88%, transparent),color-mix(in srgb, var(--surface-solid) 58%, transparent));box-shadow:var(--shadow-lg);border:1px solid var(--border-accent);border-radius:var(--r-lg);padding:clamp(24px,3vw,36px);position:relative;"
+              "background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--gold);border-radius:var(--r);padding:var(--pad-card);position:relative;"
             )}
           >
-            <div style={css("position:absolute;top:-1px;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);")} />
-            <div style={css(ROTULO + "margin-bottom:var(--s6);")}>Datos de nacimiento</div>
+            <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Datos de nacimiento</div>
 
-            <div style={css("display:flex;flex-direction:column;gap:var(--s5);")}>
+            <div style={css("display:flex;flex-direction:column;gap:var(--s3);")}>
               {campo("Nombre", "nombre")}
-              <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4);")}>
+              <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3);")}>
                 {campo("Primer apellido", "ap1")}
                 {campo("Segundo apellido", "ap2")}
               </div>
-              <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4);")}>
+              <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3);")}>
                 {campo("Día", "dia", true)}
                 {campo("Mes", "mes", true)}
                 {campo("Año", "anio", true)}
@@ -114,9 +114,9 @@ export default function ConsultaScreen() {
               {/* El estudio se dirige a la persona en segunda persona —
                * «bienvenida», «fuiste nombrada» — así que necesita saber cómo
                * tratarla. No entra en ningún cálculo. */}
-              <div style={css("display:flex;flex-direction:column;gap:var(--s2);")}>
-                <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Cómo se dirige el estudio a la persona</span>
-                <div style={css("display:flex;gap:2px;background:color-mix(in srgb, var(--text) 6%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
+              <div style={css("display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;")}>
+                <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Se dirige a</span>
+                <div style={css("margin-left:auto;display:flex;gap:2px;background:color-mix(in srgb, var(--text) 6%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
                   {([
                     ["f", "Ella"],
                     ["m", "Él"],
@@ -127,7 +127,7 @@ export default function ConsultaScreen() {
                       type="button"
                       onClick={() => set("genero", k)}
                       style={css(
-                        "flex:none;padding:8px 18px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:590;white-space:nowrap;transition:all .2s;background:" +
+                        "flex:none;padding:6px 15px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:590;white-space:nowrap;transition:all .2s;background:" +
                           (f.genero === k ? "var(--surface-solid)" : "transparent") +
                           ";box-shadow:" +
                           (f.genero === k ? "0 2px 6px rgba(0,0,0,.09)" : "none") +
@@ -148,12 +148,12 @@ export default function ConsultaScreen() {
               disabled={!listo}
               whileTap={listo ? { scale: 0.98 } : undefined}
               style={css(
-                "width:100%;margin-top:var(--s7);padding:16px 0;border-radius:980px;border:none;cursor:" +
+                "width:100%;margin-top:var(--s5);padding:13px 0;border-radius:980px;border:none;cursor:" +
                   (listo ? "pointer" : "not-allowed") +
                   ";font-family:var(--font-ui);font-weight:600;font-size:var(--t-read);letter-spacing:-.01em;background:" +
                   (listo ? "linear-gradient(180deg,#C9A84C,#8A6A1B)" : "color-mix(in srgb, var(--text) 9%, transparent)") +
                   ";box-shadow:" +
-                  (listo ? "0 1px 2px rgba(0,0,0,.14),0 10px 26px rgba(154,123,46,.32)" : "none") +
+                  (listo ? "0 1px 2px rgba(0,0,0,.12),0 6px 16px rgba(154,123,46,.24)" : "none") +
                   ";color:" +
                   (listo ? "#fff" : "var(--text-4)") +
                   ";"
@@ -161,20 +161,23 @@ export default function ConsultaScreen() {
             >
               Generar el estudio
             </motion.button>
-            <p style={css("margin:var(--s4) 0 0;font-size:var(--t-body);color:var(--text-4);line-height:1.5;text-align:center;")}>
+            <p style={css("margin:var(--s3) 0 0;font-size:var(--t-mini);color:var(--text-4);line-height:1.45;text-align:center;")}>
               {err || "Se usa el nombre inscrito en el Registro Civil, sin diminutivos."}
             </p>
           </motion.section>
 
-          <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
-            <div style={css(TARJETA)}>
+          <div data-entrada-lado="" data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);min-height:0;")}>
+            <div style={css(TARJETA + "min-height:0;display:flex;flex-direction:column;")}>
               <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Valor del nombre</div>
               {n.palabras.length === 0 ? (
                 <p style={css("font-size:var(--t-body);line-height:1.55;color:var(--text-4);margin:0;")}>
                   Cada letra tiene su valor. En cuanto escribas el nombre verás aquí el desglose letra a letra.
                 </p>
               ) : (
-                <div style={css("display:flex;flex-wrap:wrap;gap:var(--s4);")}>
+                <div
+                  data-letras=""
+                  style={css("display:flex;flex-wrap:wrap;gap:var(--s4);min-height:0;overflow-y:auto;scrollbar-width:none;")}
+                >
                   {n.palabras.map((w, wi) => (
                     <div key={wi} style={css("display:flex;flex-direction:column;gap:var(--s2);")}>
                       <div style={css("display:flex;flex-wrap:wrap;gap:4px;")}>

@@ -127,7 +127,7 @@ export default function ParejaScreen() {
             )}
           >
             <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
-              <Particulas cantidad={40} />
+              <Particulas cantidad={28} />
             </div>
             <div style={css("text-align:right;position:relative;z-index:1;")}>
               <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:var(--text);line-height:1.25;")}>{titulo(r.nombre.texto)}</div>
