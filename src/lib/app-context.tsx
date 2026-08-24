@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { calcula, comparaPareja, ficha as fichaDe, type Resultado, type Comparativa, type Ficha, type Genero } from "./engine";
+import { analizaNombre, calcula, calculaEmpresa, comparaPareja, ficha as fichaDe, type Resultado, type ResultadoEmpresa, type Comparativa, type Ficha, type Genero } from "./engine";
 import { cargaHistorial, guardaHistorial, cargaEdits, guardaEdits, cargaActual, guardaActual, type HistItem, type Edits } from "./storage";
 
 export type View = "inicio" | "panel" | "estudio" | "pareja";
@@ -25,8 +25,7 @@ export type Seccion = "resumen" | "arbol" | "numeros" | "estructura" | "alma" | 
  *  otras dos existen ya en la navegación y avisan de que están por hacer. */
 export type Disciplina = "kabala" | "fengshui" | "numerologia";
 /** Un estudio se hace de una persona o de una empresa. La empresa no tiene
- *  apellidos ni género: su nombre completo es el nombre comercial, y la fecha
- *  es la de constitución. Todo lo demás se lee igual. */
+ *  apellidos, ni género, ni fecha: se lee entera de su nombre. */
 export type Tipo = "persona" | "empresa";
 
 export type FormState = { tipo: Tipo; nombre: string; ap1: string; ap2: string; dia: string; mes: string; anio: string; genero: Genero };
@@ -43,13 +42,13 @@ export const MARCA = "Escuela de Sabiduría 33";
 function entradaDe(f: FormState, anioUniversal: number) {
   return {
     nombre: f.nombre,
-    apellido1: f.tipo === "empresa" ? "" : f.ap1,
-    apellido2: f.tipo === "empresa" ? "" : f.ap2,
+    apellido1: f.ap1,
+    apellido2: f.ap2,
     dia: +f.dia,
     mes: +f.mes,
     anio: +f.anio,
     anioUniversal,
-    genero: f.tipo === "empresa" ? "n" : f.genero,
+    genero: f.genero,
     tipo: f.tipo,
   };
 }
@@ -73,7 +72,10 @@ export function valida(f: FormState): string | null {
   const d = +f.dia,
     m = +f.mes,
     a = +f.anio;
-  if (!f.nombre.trim()) return f.tipo === "empresa" ? "Falta el nombre de la empresa." : "Falta el nombre.";
+  // El estudio de empresa se hace sólo con el nombre: no hay fecha que pedir
+  // ni, por tanto, que comprobar.
+  if (f.tipo === "empresa") return f.nombre.trim() ? null : "Falta el nombre de la empresa.";
+  if (!f.nombre.trim()) return "Falta el nombre.";
   if (!(d >= 1 && d <= 31)) return "El día debe estar entre 1 y 31.";
   if (!(m >= 1 && m <= 12)) return "El mes debe estar entre 1 y 12.";
   if (!(a >= 1900 && a <= 2100)) return "El año debe tener cuatro cifras.";
@@ -92,6 +94,9 @@ type Ctx = {
   f: FormState;
   set: (k: keyof FormState, v: string) => void;
   r: Resultado | null;
+  /** El estudio de empresa, que se lee sólo del nombre. Nunca hay `r` y `re`
+   *  a la vez: uno de los dos es siempre nulo. */
+  re: ResultadoEmpresa | null;
   id: string | null;
   /** Ya se ha mirado si había un estudio abierto guardado. */
   rehidratado: boolean;
@@ -132,9 +137,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [lateral, setLateral] = useState(true);
   const [f, setF] = useState<FormState>(FORM_VACIO);
   const [r, setR] = useState<Resultado | null>(null);
+  // El estudio de empresa es otro cálculo, no un `Resultado` a medias: se
+  // guarda en su propio sitio y sólo uno de los dos está lleno a la vez.
+  const [re, setRe] = useState<ResultadoEmpresa | null>(null);
   const [id, setId] = useState<string | null>(null);
-  const [hist, setHist] = useState<HistItem[]>(() => (typeof window === "undefined" ? [] : cargaHistorial()));
-  const [edits, setEdits] = useState<Edits>(() => (typeof window === "undefined" ? {} : cargaEdits()));
+  // El historial y los retoques viven en el disco de este equipo, y el
+  // servidor no puede verlos: si se sembraran aquí, la primera pintada del
+  // navegador no coincidiría con el HTML que llega y React tiraría el árbol
+  // entero para rehacerlo. Se cargan al montar, junto con el estudio abierto.
+  const [hist, setHist] = useState<HistItem[]>([]);
+  const [edits, setEdits] = useState<Edits>({});
   const [detalle, setDetalle] = useState<Detalle>(null);
   const [p, setPState] = useState<FormState>(FORM_VACIO);
   const [pr, setPr] = useState<Resultado | null>(null);
@@ -150,43 +162,56 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const set = useCallback(<K extends keyof FormState>(k: K, v: FormState[K]) => setF((s) => ({ ...s, [k]: v })), []);
   const setP = useCallback(<K extends keyof FormState>(k: K, v: FormState[K]) => setPState((s) => ({ ...s, [k]: v })), []);
 
+  /** Persona o empresa son dos cálculos distintos; sólo uno queda cargado. */
+  const aplica = useCallback(
+    (form: FormState) => {
+      if (form.tipo === "empresa") {
+        setRe(calculaEmpresa({ nombre: form.nombre, anioUniversal }));
+        setR(null);
+      } else {
+        setR(calcula(entradaDe(form, anioUniversal)));
+        setRe(null);
+      }
+    },
+    [anioUniversal]
+  );
+
   const calcular = useCallback(() => {
     if (valida(f)) return;
-    const resultado = calcula(entradaDe(f, anioUniversal));
-    // Los apellidos siguen escritos en el formulario aunque se cambie a
-    // empresa, y no cuentan: si entrasen aquí, el historial guardaría un
-    // nombre que no es el que se ha estudiado.
+    // Los apellidos y la fecha siguen escritos en el formulario aunque se
+    // cambie a empresa, y ahí no cuentan: si entrasen, el historial guardaría
+    // datos que no son los que se han estudiado.
     const empresa = f.tipo === "empresa";
     const partes = empresa ? [f.nombre] : [f.nombre, f.ap1, f.ap2];
-    const hid = [f.tipo, ...partes, f.dia, f.mes, f.anio].join("|").toUpperCase();
+    const hid = [f.tipo, ...partes, empresa ? "" : `${f.dia}|${f.mes}|${f.anio}`].join("|").toUpperCase();
     const item: HistItem = {
       id: hid,
       nombre: partes.filter(Boolean).join(" "),
-      fecha: `${f.dia}/${f.mes}/${f.anio}`,
-      corazon: resultado.corazon.valor,
-      f: { ...f },
+      fecha: empresa ? "" : `${f.dia}/${f.mes}/${f.anio}`,
+      corazon: empresa ? analizaNombre(f.nombre).total : calcula(entradaDe(f, anioUniversal)).corazon.valor,
+      f: empresa ? { tipo: "empresa", nombre: f.nombre, ap1: "", ap2: "", dia: "", mes: "", anio: "", genero: "n" } : { ...f },
     };
     setHist((s) => {
       const next = [item].concat(s.filter((h) => h.id !== hid)).slice(0, 40);
       guardaHistorial(next);
       return next;
     });
-    setR(resultado);
+    aplica(f);
     setId(hid);
     setView("panel");
     setSeccion("resumen");
-  }, [f, anioUniversal, setView]);
+  }, [f, anioUniversal, aplica, setView]);
 
   const abrir = useCallback(
     (h: HistItem) => {
       const form = formDe(h);
       setF(form);
-      setR(calcula(entradaDe(form, anioUniversal)));
+      aplica(form);
       setId(h.id);
       setView("panel");
       setSeccion("resumen");
     },
-    [anioUniversal, setView]
+    [aplica, setView]
   );
 
   // Al cargar la página se recupera el estudio que estaba abierto. Se
@@ -200,12 +225,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   //
   /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
   useEffect(() => {
+    const guardados = cargaHistorial();
+    setHist(guardados);
+    setEdits(cargaEdits());
     const guardado = cargaActual();
-    const h = guardado ? cargaHistorial().find((x) => x.id === guardado) : undefined;
+    const h = guardado ? guardados.find((x) => x.id === guardado) : undefined;
     if (h) {
       const form = formDe(h);
       setF(form);
-      setR(calcula(entradaDe(form, anioUniversal)));
+      if (form.tipo === "empresa") setRe(calculaEmpresa({ nombre: form.nombre, anioUniversal }));
+      else setR(calcula(entradaDe(form, anioUniversal)));
       setId(h.id);
     }
     setRehidratado(true);
@@ -275,6 +304,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       f,
       set,
       r,
+      re,
       id,
       rehidratado,
       hist,
@@ -298,7 +328,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       marca: MARCA,
       anioUniversal,
     }),
-    [view, setView, seccion, disciplina, lateral, f, set, r, id, rehidratado, hist, calcular, abrir, borrar, edits, txt, guardaEdit, restablecer, detalle, verNumero, verArcano, verTexto, cerrarDetalle, p, setP, pr, comp, comparar, anioUniversal]
+    [view, setView, seccion, disciplina, lateral, f, set, r, re, id, rehidratado, hist, calcular, abrir, borrar, edits, txt, guardaEdit, restablecer, detalle, verNumero, verArcano, verTexto, cerrarDetalle, p, setP, pr, comp, comparar, anioUniversal]
   );
 
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;

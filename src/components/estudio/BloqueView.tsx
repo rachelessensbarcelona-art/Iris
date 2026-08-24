@@ -12,7 +12,9 @@ export default function BloqueView({
   guardaEdit,
 }: {
   b: Bloque;
-  r: Resultado;
+  /** El estudio de empresa no trae ninguno de los bloques con dibujo —salen
+   *  todos de la fecha— así que va sin `r`. */
+  r?: Resultado | null;
   txt: (id: string, def: string) => string;
   guardaEdit: (id: string, texto: string) => void;
 }) {
@@ -92,15 +94,15 @@ export default function BloqueView({
         </div>
       );
     case "arbol":
-      return <div data-nocorte=""><DocArbol r={r} /></div>;
+      return r ? <div data-nocorte=""><DocArbol r={r} /></div> : null;
     case "estructura":
-      return <div data-nocorte=""><DocEstructura r={r} /></div>;
+      return r ? <div data-nocorte=""><DocEstructura r={r} /></div> : null;
     case "alma":
-      return <div data-nocorte=""><DocAlma r={r} /></div>;
+      return r ? <div data-nocorte=""><DocAlma r={r} /></div> : null;
     case "cuentas":
-      return <div data-nocorte=""><DocCuentas r={r} /></div>;
+      return r ? <div data-nocorte=""><DocCuentas r={r} /></div> : null;
     case "ciclos":
-      return <div data-nocorte=""><DocCiclos r={r} /></div>;
+      return r ? <div data-nocorte=""><DocCiclos r={r} /></div> : null;
     case "cifras":
       return (
         <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 26px;")}>

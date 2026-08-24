@@ -69,6 +69,18 @@ export function fechaLarga(dia: number, mes: number, anio: number): string {
  *
  * Esto tapa el síntoma: los textos hay que completarlos en el diccionario.
  */
+/** Cierra con punto lo que no lo trae. Los nombres y lemas de los apuntes
+ *  vienen unos con punto final y otros sin él; sin normalizarlo, al pegarlos a
+ *  otra frase salen «El Carro. la dirección» o «La profesión.. No son». */
+export function punto(t: string | undefined | null): string {
+  const s = (t || "").trim();
+  return !s || /[.!?…]$/.test(s) ? s : s + ".";
+}
+/** Y al revés, para lo que va dentro de una enumeración. */
+export function sinPunto(t: string | undefined | null): string {
+  return (t || "").trim().replace(/\.+$/, "");
+}
+
 export function cierraFrase(t: string | undefined | null): string {
   const s = (t || "").trim();
   if (!s || /[.!?…»"')\]]$/.test(s)) return s;

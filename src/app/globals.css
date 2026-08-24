@@ -31,6 +31,10 @@
   --gold: #9a7b2e;
   --gold-deep: #6f5619;
   --gold-soft: rgba(201, 168, 76, 0.14);
+  /* La tinta que va encima de un relleno de --gold-deep. En claro el oro es
+     oscuro y pide texto blanco; en oscuro el oro se aclara y el blanco encima
+     deja de leerse, así que la tinta se invierte con el tema. */
+  --sobre-oro: #ffffff;
 
   --red: #c0392b;
   --red-soft: rgba(192, 57, 43, 0.07);
@@ -114,6 +118,7 @@
   --gold: #d8b860;
   --gold-deep: #eed79a;
   --gold-soft: rgba(216, 184, 96, 0.14);
+  --sobre-oro: #241f2e;
 
   --red: #e8705f;
   --red-soft: rgba(232, 112, 95, 0.1);

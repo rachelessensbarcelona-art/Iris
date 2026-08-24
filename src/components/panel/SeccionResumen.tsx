@@ -17,13 +17,11 @@ const ROTULO = "font-size:var(--t-mini);font-weight:590;color:var(--text-3);";
  * salen esos números.
  */
 export default function SeccionResumen() {
-  const { r, f, setSeccion, setView, verNumero, verArcano } = useApp();
+  const { r, setSeccion, setView, verNumero, verArcano } = useApp();
   if (!r) return null;
 
   const c = r.ciclos;
-  // A una persona se la llama por el nombre de pila; a una empresa, por su
-  // nombre entero — «Construcciones» a secas no es nadie.
-  const nombreCorto = f.tipo === "empresa" ? titulo(r.nombre.texto) : titulo(r.nombre.texto).split(" ")[0];
+  const nombreCorto = titulo(r.nombre.texto).split(" ")[0];
 
   const caminos = [
     { k: "origen" as const, etapa: "Origen", d: r.caminos.origen, rango: `0 – ${r.caminos.edadCambio} años` },
@@ -31,11 +29,15 @@ export default function SeccionResumen() {
     { k: "destino" as const, etapa: "Destino", d: r.caminos.destino, rango: `desde los ${r.turbulencias ? r.caminos.edadCambio + 10 : r.caminos.edadCambio} años` },
   ];
 
-  // Los cuatro números que resumen la lectura. El primero va destacado, como
-  // la cifra principal de un cuadro de mandos.
+  // Los números que resumen la lectura. El primero va destacado, como la cifra
+  // principal de un cuadro de mandos. La edad de cambio estaba sólo en la tira
+  // de la cabecera —que no sale en el resumen— y es de lo primero que se mira:
+  // marca cuándo se pasa del camino de origen al de destino.
   const cifras = [
     { label: "Número de esencia", valor: r.esencia.valor, pie: "Lo que has venido a ser", n: r.esencia.valor, destacada: true },
     { label: "Número de ego", valor: r.ego.valor, pie: "Cómo te ven los demás", n: r.ego.valor },
+    { label: "Edad de cambio", valor: r.caminos.edadCambio, pie: "Cuándo entras en tu destino", ir: "arbol" as const },
+    { label: "Lema de vida", valor: r.cuentas.lemaDeVida, pie: "La vibración de tu propósito", ir: "cuentas" as const },
     { label: "Estructura energética", valor: r.estructura.tipo, pie: `${r.aprendizajes.length} aprendizajes abiertos`, ir: "estructura" as const },
     { label: "Imagen del alma", valor: r.imagenAlma.numero, pie: `${r.bloqueos.length} bloqueos en los planos`, ir: "alma" as const },
   ];
@@ -92,7 +94,14 @@ export default function SeccionResumen() {
             </div>
 
             <div style={css("margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--border);")}>
-              <div style={css(ROTULO + "margin-bottom:var(--s3);")}>Tus tres caminos</div>
+              <div style={css("display:flex;align-items:baseline;gap:var(--s3);margin-bottom:var(--s3);")}>
+                <span style={css(ROTULO)}>Tus tres caminos</span>
+                {/* Los tres rangos se miden desde aquí: sin este número las
+                 * tres cartas no dicen cuándo empieza cada una. */}
+                <span style={css("margin-left:auto;font-size:var(--t-mini);color:var(--text-4);")}>
+                  edad de cambio · <span style={css("font-weight:600;color:var(--gold);")}>{r.caminos.edadCambio}</span>
+                </span>
+              </div>
               <div data-cascada="" style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s2);")}>
                 {caminos.map((x) => (
                   <button
@@ -177,13 +186,13 @@ export default function SeccionResumen() {
                 style={css(
                   "text-align:left;padding:17px 18px;cursor:pointer;border-radius:var(--r);" +
                     (x.destacada
-                      ? "border:1px solid var(--gold-deep);color:#fff;background:var(--gold-deep);"
+                      ? "border:1px solid var(--gold-deep);color:var(--sobre-oro);background:var(--gold-deep);"
                       : TARJETA)
                 )}
               >
-                <div style={css("font-size:var(--t-mini);font-weight:590;color:" + (x.destacada ? "rgba(255,255,255,.85)" : "var(--text-3)") + ";")}>{x.label}</div>
-                <div style={css("font-size:var(--t-hero);font-weight:700;letter-spacing:-.028em;line-height:1.1;margin-top:6px;color:" + (x.destacada ? "#fff" : "var(--text)") + ";")}>{x.valor}</div>
-                <div style={css("font-size:var(--t-mini);margin-top:3px;line-height:1.3;color:" + (x.destacada ? "color-mix(in srgb, var(--surface-solid) 80%, transparent)" : "var(--text-4)") + ";")}>{x.pie}</div>
+                <div style={css("font-size:var(--t-mini);font-weight:590;color:" + (x.destacada ? "color-mix(in srgb, var(--sobre-oro) 82%, transparent)" : "var(--text-3)") + ";")}>{x.label}</div>
+                <div style={css("font-size:var(--t-hero);font-weight:700;letter-spacing:-.028em;line-height:1.1;margin-top:6px;color:" + (x.destacada ? "var(--sobre-oro)" : "var(--text)") + ";")}>{x.valor}</div>
+                <div style={css("font-size:var(--t-mini);margin-top:3px;line-height:1.3;color:" + (x.destacada ? "color-mix(in srgb, var(--sobre-oro) 72%, transparent)" : "var(--text-4)") + ";")}>{x.pie}</div>
               </button>
             ))}
           </div>

@@ -547,6 +547,53 @@ export type Resultado = {
   ciclos: CiclosVitales;
 };
 
+/**
+ * El estudio de una empresa.
+ *
+ * Una empresa no tiene fecha de nacimiento, así que se lee sólo del nombre.
+ * Eso deja fuera todo lo que en la ficha sale de la fecha —la estructura
+ * energética, la imagen del alma, las cuentas abiertas, las vibraciones, la
+ * afinidad y los ciclos vitales, y con ellos el número de corazón y los
+ * caminos de transformación y destino, que se apoyan en la edad de cambio—.
+ *
+ * Queda en pie lo que el manual saca de las letras: el valor del nombre y su
+ * lectura, la esencia y el ego, el camino de origen —que se calcula desde el
+ * valor del nombre, no desde el corazón— y los días de fuerza. Por eso el
+ * estudio de empresa es corto: no es un estudio recortado, es todo lo que un
+ * nombre puede decir por sí solo.
+ *
+ * Va aparte de `calcula` a propósito. Devolver un `Resultado` con la mitad de
+ * los campos en blanco habría dejado ceros y cuentas sin sentido a un descuido
+ * de distancia de aparecer impresos en el documento de un cliente.
+ */
+export type ResultadoEmpresa = {
+  entrada: { nombre: string; anioUniversal: number };
+  nombre: NombreAnalizado;
+  valorNombre: number;
+  /** El número del nombre entero, con su ficha y su lectura. */
+  valor: { valor: number; ficha: Ficha | null; lectura: { positivo: string; negativo: string } };
+  esencia: { valor: number; ficha: Ficha | null; lectura: { positivo: string; negativo: string } };
+  ego: { valor: number; ficha: Ficha | null; lectura: { positivo: string; negativo: string } };
+  diasFuerza: { primeraSuma: number; base: number; dias: number[] };
+  origen: { calculo: ArcanoCalc; arcano: number; carta?: ArcanoData };
+};
+
+export function calculaEmpresa(entrada: { nombre: string; anioUniversal: number }): ResultadoEmpresa {
+  const nombre = analizaNombre(entrada.nombre);
+  const valorNombre = nombre.total;
+  const origen = arcanoDesde(valorNombre);
+  return {
+    entrada,
+    nombre,
+    valorNombre,
+    valor: { valor: valorNombre, ficha: ficha(valorNombre), lectura: lectura(valorNombre) },
+    esencia: { valor: nombre.esencia, ficha: ficha(nombre.esencia), lectura: lectura(nombre.esencia) },
+    ego: { valor: nombre.ego, ficha: ficha(nombre.ego), lectura: lectura(nombre.ego) },
+    diasFuerza: diasDeFuerza(valorNombre),
+    origen: { calculo: origen, arcano: origen.arcano, carta: (KDATA.arcanos || {})[origen.arcano] },
+  };
+}
+
 export function calcula(entrada: Entrada): Resultado {
   const f: Fecha = { dia: Number(entrada.dia), mes: Number(entrada.mes), anio: Number(entrada.anio) };
   const nombre = analizaNombre([entrada.nombre, entrada.apellido1, entrada.apellido2].filter(Boolean).join(" "));

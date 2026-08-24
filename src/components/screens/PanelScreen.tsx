@@ -9,6 +9,7 @@ import SeccionEstructura from "../panel/SeccionEstructura";
 import SeccionAlma from "../panel/SeccionAlma";
 import SeccionCuentas from "../panel/SeccionCuentas";
 import SeccionCiclos from "../panel/SeccionCiclos";
+import SeccionEmpresa from "../panel/SeccionEmpresa";
 import Pendiente from "../panel/Pendiente";
 import { DISCIPLINAS } from "../Sidebar";
 
@@ -26,17 +27,20 @@ const SECCIONES: Array<{ k: Seccion; label: string; pie: string }> = [
 ];
 
 export default function PanelScreen() {
-  const { r, seccion, disciplina } = useApp();
-  if (!r) return null;
+  const { r, re, seccion, disciplina } = useApp();
+  // Un estudio de empresa se lee sólo del nombre: no tiene fecha, ni
+  // estructura, ni ciclos, así que tampoco tiene las siete secciones.
+  const empresa = !!re;
+  if (!r && !re) return null;
 
-  const resumen = [
+  const resumen = r ? [
     { label: "Corazón", valor: r.corazon.valor },
     { label: "Esencia", valor: r.esencia.valor },
     { label: "Ego", valor: r.ego.valor },
     { label: "Edad de cambio", valor: r.caminos.edadCambio },
     { label: "Estructura", valor: r.estructura.tipo },
     { label: "Imagen del alma", valor: r.imagenAlma.numero },
-  ];
+  ] : [];
 
   return (
     <main style={css("max-width:var(--ancho);margin:0 auto;padding:var(--s6) var(--gutter) var(--s8);")}>
@@ -72,10 +76,10 @@ export default function PanelScreen() {
               "font-family:var(--font-ui);font-weight:700;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.026em;color:var(--text);margin:var(--s3) 0 0;line-height:1.1;overflow-wrap:anywhere;text-wrap:balance;"
             )}
           >
-            {titulo(r.nombre.texto)}
+            {titulo((r ?? re!).nombre.texto)}
           </h1>
           <div style={css("font-size:var(--t-body);color:var(--text-3);margin-top:6px;")} data-cifras="">
-            {r.fecha.dia} / {r.fecha.mes} / {r.fecha.anio}
+            {r ? `${r.fecha.dia} / ${r.fecha.mes} / ${r.fecha.anio}` : "Estudio de empresa · sólo el nombre"}
           </div>
         </div>
 
@@ -85,7 +89,7 @@ export default function PanelScreen() {
           data-tira-cifras=""
           style={css(
             "display:" +
-              (disciplina !== "kabala" || seccion === "resumen" ? "none" : "flex") +
+              (disciplina !== "kabala" || seccion === "resumen" || empresa ? "none" : "flex") +
               ";position:relative;z-index:1;flex-wrap:wrap;margin-left:auto;"
           )}
         >
@@ -108,7 +112,7 @@ export default function PanelScreen() {
       {(() => {
         // El resumen ya se abre saludando a Iris por su nombre; no hace falta
         // ponerle encima un segundo título que diga lo mismo.
-        const s = disciplina !== "kabala" || seccion === "resumen" ? null : SECCIONES.find((x) => x.k === seccion);
+        const s = disciplina !== "kabala" || seccion === "resumen" || empresa ? null : SECCIONES.find((x) => x.k === seccion);
         return s ? (
           <div key={"h" + seccion} style={css("margin-bottom:var(--s5);animation:es33-alza .45s cubic-bezier(.22,1,.36,1) both;")}>
             <h2 style={css("font-size:var(--t-head);margin:0;")}>{s.label}</h2>
@@ -133,7 +137,8 @@ export default function PanelScreen() {
             pie="La lectura numerológica, aparte de la kabalística: la vibración de cada cifra por sí misma. Todavía no está desarrollada."
           />
         )}
-        {disciplina === "kabala" && (
+        {disciplina === "kabala" && empresa && <SeccionEmpresa />}
+        {disciplina === "kabala" && !empresa && (
           <>
             {seccion === "resumen" && <SeccionResumen />}
             {seccion === "arbol" && <SeccionArbol />}

@@ -48,13 +48,16 @@ export const DISCIPLINAS: Array<{ k: Disciplina; label: string; Ico: Ico }> = [
  * `alCambiar` lo usa el cajón para cerrarse en cuanto se elige algo.
  */
 export function NavDisciplinas({ alCambiar, compacta }: { alCambiar?: () => void; compacta?: boolean }) {
-  const { r, seccion, setSeccion, disciplina, setDisciplina } = useApp();
+  const { r, re, seccion, setSeccion, disciplina, setDisciplina } = useApp();
   const quieto = useReducedMotion();
   // Qué disciplinas están desplegadas. Se abre la que se está mirando, y
   // pulsando su nombre se cierra: en cuanto haya partes en las tres, la
   // columna entera abierta no cabría de una vez.
   const [abiertas, setAbiertas] = useState<Disciplina[]>(["kabala"]);
-  if (!r) return null;
+  if (!r && !re) return null;
+  // El estudio de empresa cabe entero en una pantalla: no hay siete partes
+  // que listar porque seis de ellas salen de la fecha, y no hay fecha.
+  const partesKabala = re ? KABALA.slice(0, 1) : KABALA;
 
   const alterna = (d: Disciplina) => {
     setDisciplina(d);
@@ -111,7 +114,7 @@ export function NavDisciplinas({ alCambiar, compacta }: { alCambiar?: () => void
         const dentro = disciplina === d.k;
         // Sólo Kábala tiene partes por ahora; las otras dos no llevan flecha
         // porque no hay nada que desplegar todavía.
-        const partes = d.k === "kabala" ? KABALA : [];
+        const partes = d.k === "kabala" ? partesKabala : [];
         const abierta = partes.length > 0 && (compacta || abiertas.includes(d.k));
         return (
           <div key={d.k} style={css("display:flex;flex-direction:column;gap:2px;")}>

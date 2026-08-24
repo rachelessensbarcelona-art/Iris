@@ -18,7 +18,7 @@ const TABS: Array<{ k: View; label: string }> = [
 ];
 
 export default function Shell() {
-  const { view, setView, r, rehidratado } = useApp();
+  const { view, setView, r, re, rehidratado } = useApp();
   const [menu, setMenu] = useState(false);
 
   // Ahora que cada pantalla tiene su dirección, se puede llegar a /panel con
@@ -27,8 +27,8 @@ export default function Shell() {
   // se empieza. Se espera a que se haya intentado recuperarlo: antes de eso
   // no hay estudio todavía y se saldría siempre.
   useEffect(() => {
-    if (rehidratado && view !== "inicio" && !r) setView("inicio");
-  }, [view, r, rehidratado, setView]);
+    if (rehidratado && view !== "inicio" && !r && !re) setView("inicio");
+  }, [view, r, re, rehidratado, setView]);
 
   return (
     <div
@@ -87,7 +87,7 @@ export default function Shell() {
         <nav data-nav="" style={css("display:flex;gap:2px;margin-left:auto;background:color-mix(in srgb, var(--text) 8%, transparent);border-radius:980px;padding:3px;")}>
           {TABS.map((t) => {
             const on = view === t.k;
-            const bloqueado = t.k !== "inicio" && !r;
+            const bloqueado = t.k !== "inicio" && !r && !re;
             return (
               <button
                 key={t.k}

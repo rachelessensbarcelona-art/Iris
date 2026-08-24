@@ -99,7 +99,7 @@ export default function ConsultaScreen() {
           <p style={css("font-size:var(--t-read);line-height:1.5;color:var(--text-3);margin:0 auto;max-width:56ch;")}>
             <span style={css("color:var(--gold);font-weight:590;")}>{saludo()}, Iris.</span>{" "}
             {empresa
-              ? "Dime el nombre comercial completo y la fecha de constitución, y te dejo el estudio listo para imprimir."
+              ? "Dime el nombre comercial completo y te dejo el estudio listo para imprimir. De una empresa se lee el nombre, nada más."
               : "Dime el nombre de la partida de nacimiento y la fecha exacta, y te dejo el estudio listo para imprimir."}
           </p>
         </motion.div>
@@ -149,18 +149,23 @@ export default function ConsultaScreen() {
                   {campo("Segundo apellido", "ap2")}
                 </div>
               )}
-              {/* Una empresa no nace: se constituye. Es la misma fecha para el
-               * cálculo, pero llamarla «de nacimiento» confunde al rellenarla. */}
-              <div style={css("display:flex;flex-direction:column;gap:5px;")}>
-                <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>
-                  {empresa ? "Fecha de constitución" : "Fecha de nacimiento"}
-                </span>
-                <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3);")}>
-                  {campo("Día", "dia", true)}
-                  {campo("Mes", "mes", true)}
-                  {campo("Año", "anio", true)}
+              {/* La empresa se lee entera de su nombre: no se le pide fecha
+               * porque no entra en ningún cálculo. */}
+              {!empresa && (
+                <div style={css("display:flex;flex-direction:column;gap:5px;")}>
+                  <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Fecha de nacimiento</span>
+                  <div style={css("display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3);")}>
+                    {campo("Día", "dia", true)}
+                    {campo("Mes", "mes", true)}
+                    {campo("Año", "anio", true)}
+                  </div>
                 </div>
-              </div>
+              )}
+              {empresa && (
+                <p style={css("margin:0;font-size:var(--t-body);line-height:1.5;color:var(--text-4);border-left:2px solid var(--border-accent);padding-left:var(--s3);")}>
+                  El estudio de empresa se lee entero del nombre: su valor, la esencia, el ego, el camino de origen y los días de fuerza. No se pide fecha porque no interviene.
+                </p>
+              )}
 
               {/* El estudio se dirige a la persona en segunda persona —
                * «bienvenida», «fuiste nombrada» — así que necesita saber cómo
@@ -208,7 +213,7 @@ botonPrincipal(listo) + "width:100%;margin-top:var(--s5);"
             <p style={css("margin:var(--s3) 0 0;font-size:var(--t-mini);color:var(--text-4);line-height:1.45;text-align:center;")}>
               {err ||
                 (empresa
-                  ? "Se usa la razón social tal y como está registrada, con la fecha de constitución."
+                  ? "Se usa la razón social tal y como está registrada."
                   : "Se usa el nombre inscrito en el Registro Civil, sin diminutivos.")}
             </p>
           </motion.section>
@@ -292,7 +297,7 @@ botonPrincipal(listo) + "width:100%;margin-top:var(--s5);"
                       <button onClick={() => abrir(h)} style={css("flex:1;min-width:0;text-align:left;background:none;border:none;padding:0;cursor:pointer;color:var(--text);")}>
                         <div style={css("font-size:var(--t-read);line-height:1.25;color:var(--text);overflow-wrap:anywhere;")}>{h.nombre}</div>
                         <div style={css("font-size:var(--t-mini);color:var(--text-4);margin-top:2px;")}>
-                          {h.fecha} · corazón {h.corazon}
+                          {h.f.tipo === "empresa" ? `Empresa · valor del nombre ${h.corazon}` : `${h.fecha} · corazón ${h.corazon}`}
                         </div>
                       </button>
                       <button

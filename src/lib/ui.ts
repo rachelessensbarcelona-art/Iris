@@ -92,7 +92,7 @@ export const botonPrincipal = (activo = true) =>
   ";background:" +
   (activo ? "var(--gold-deep)" : "color-mix(in srgb, var(--text) 9%, transparent)") +
   ";color:" +
-  (activo ? "#fff" : "var(--text-4)") +
+  (activo ? "var(--sobre-oro)" : "var(--text-4)") +
   ";" +
   (activo ? "" : "cursor:not-allowed;");
 

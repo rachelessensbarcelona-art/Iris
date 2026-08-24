@@ -6,9 +6,22 @@ import { imprimir, AYUDA_IMPRIMIR } from "@/lib/imprimir";
 import { useApp, valida } from "@/lib/app-context";
 import { KDATA } from "@/lib/kdata";
 import Particulas from "../Particulas";
+import Pendiente from "../panel/Pendiente";
 
 export default function ParejaScreen() {
-  const { r, p, setP, comparar, pr, comp } = useApp();
+  const { r, re, p, setP, comparar, pr, comp } = useApp();
+  // La comparativa cruza estructuras, planos y cuentas, y todo eso sale de la
+  // fecha de nacimiento. Una empresa no la tiene, así que no hay nada que
+  // cruzar: mejor decirlo que dejar la pantalla en blanco.
+  if (!r && re)
+    return (
+      <main style={css("max-width:var(--ancho);margin:0 auto;padding:var(--s6) var(--gutter) var(--s8);")}>
+        <Pendiente
+          titulo="La comparativa es de personas"
+          pie="Se cruzan los portales, los planos de consciencia y las cuentas abiertas de los dos, y todo eso sale de la fecha de nacimiento. Un estudio de empresa se lee sólo del nombre, así que no hay nada que comparar."
+        />
+      </main>
+    );
   if (!r) return null;
 
   const errP = valida(p);
@@ -108,7 +121,7 @@ botonPrincipal(listo) + "margin-top:20px;"
             <button
               onClick={() => imprimir()}
               style={css(
-                "margin-left:auto;background:var(--gold-deep);border:1px solid var(--gold-deep);color:#fff;border-radius:999px;padding:10px 22px;font-weight:590;font-size:var(--t-body);cursor:pointer;"
+                "margin-left:auto;background:var(--gold-deep);border:1px solid var(--gold-deep);color:var(--sobre-oro);border-radius:999px;padding:10px 22px;font-weight:590;font-size:var(--t-body);cursor:pointer;"
               )}
             >
               Exportar PDF

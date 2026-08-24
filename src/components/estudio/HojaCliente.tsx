@@ -2,7 +2,7 @@
 import { css } from "@/lib/css";
 import type { Resultado } from "@/lib/engine";
 import { paraCliente } from "@/lib/estudio";
-import { fechaLarga, frase, recorta, titulo } from "@/lib/format";
+import { fechaLarga, frase, recorta, sinPunto, titulo } from "@/lib/format";
 import { COL } from "@/lib/tree";
 import styles from "./Estudio.module.css";
 
@@ -31,6 +31,19 @@ export default function HojaCliente({ r, marca }: { r: Resultado; marca: string 
   const c = r.ciclos;
   const cicloActual = c.ciclos.find((x) => c.edad >= x.desde && (x.hasta === null || c.edad <= x.hasta)) || c.ciclos[c.ciclos.length - 1];
 
+  const importante = [
+    { l: "Hacia dónde", t: `Tu destino: ${titulo(r.caminos.destino.carta?.nombre)}.` },
+    {
+      l: "Qué trabajar",
+      t:
+        r.aprendizajes.length === 0
+          ? "Nada abierto: sostener lo que ya viene resuelto."
+          : `${recorta(r.aprendizajes.map((a) => sinPunto(frase(a.tarea?.nombre)) || "portal " + a.portal).join(", "), 62)} — de uno en uno.`,
+    },
+    { l: "Qué cerrar", t: `El kármico ${r.cuentas.karmico}, con el lema de vida ${r.cuentas.lemaDeVida}.` },
+    { l: "Dónde estás", t: `Año personal ${c.anioPersonal} de nueve, ciclo ${cicloActual.nombre}.` },
+  ];
+
   const cifras = [
     { l: "Número de corazón", v: r.corazon.valor, p: "Cómo vibras" },
     { l: "Esencia", v: r.esencia.valor, p: "Lo que has venido a ser" },
@@ -41,7 +54,7 @@ export default function HojaCliente({ r, marca }: { r: Resultado; marca: string 
   ];
 
   return (
-    <section className={`${styles.page} ${styles.interior} ${styles.abreSeccion}`} style={css("display:flex;flex-direction:column;gap:13px;")}>
+    <section className={`${styles.page} ${styles.interior} ${styles.abreSeccion}`} style={css("display:flex;flex-direction:column;gap:11px;")}>
       <header style={css("display:flex;align-items:flex-end;gap:14px;border-bottom:1px solid rgba(154,127,50,.3);padding-bottom:11px;")}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.jpeg" alt="" style={css("width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none;")} />
@@ -78,7 +91,7 @@ export default function HojaCliente({ r, marca }: { r: Resultado; marca: string 
                 </span>
                 <span style={css("margin-left:auto;font-size:9px;color:#8A8296;")}>{x.rango}</span>
               </div>
-              <p style={css(CUERPO)}>{recorta(paraCliente(frase(x.d.carta?.lema) + ". " + (x.d.carta?.texto || "").replace(/^[“"][^”"]*[”"]\.?\s*/, "")), 210)}</p>
+              <p style={css(CUERPO)}>{recorta(paraCliente(frase(x.d.carta?.lema) + ". " + (x.d.carta?.texto || "").replace(/^[“"][^”"]*[”"]\.?\s*/, "")), 135)}</p>
             </div>
           ))}
         </div>
@@ -94,7 +107,7 @@ export default function HojaCliente({ r, marca }: { r: Resultado; marca: string 
                 <span style={css("flex:none;display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:#E5B63C;color:#241F2E;font-size:9.5px;font-weight:700;")}>{a.portal}</span>
                 <span style={css("min-width:0;")}>
                   <span style={css("display:block;font-size:11px;font-weight:600;color:#241F2E;line-height:1.25;")}>{frase(a.tarea?.nombre)}</span>
-                  <span style={css("display:block;font-size:10px;color:#5A5468;line-height:1.4;margin-top:1px;")}>{recorta(paraCliente(a.tarea?.sanador || a.tarea?.texto || ""), 120)}</span>
+                  <span style={css("display:block;font-size:10px;color:#5A5468;line-height:1.4;margin-top:1px;")}>{recorta(paraCliente(a.tarea?.sanador || a.tarea?.texto || ""), 100)}</span>
                 </span>
               </div>
             ))}
@@ -103,9 +116,6 @@ export default function HojaCliente({ r, marca }: { r: Resultado; marca: string 
 
         <div>
           <div style={css(ROTULO + "margin-bottom:6px;")}>Lo que traes resuelto</div>
-          <p style={css(CUERPO + "margin:0 0 7px;")}>
-            Estos portales vienen aprendidos de antes y sostienen el trabajo de los demás.
-          </p>
           <div style={css("display:flex;flex-wrap:wrap;gap:5px;")}>
             {r.estructura.maestrias.map((m) => (
               <span key={m} style={css("display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(76,154,90,.4);background:rgba(76,154,90,.07);border-radius:980px;padding:3px 9px;font-size:10px;color:#3D7A48;")}>
@@ -144,6 +154,20 @@ export default function HojaCliente({ r, marca }: { r: Resultado; marca: string 
             ))}
           </div>
           <p style={css(CUERPO)}>Del más fuerte al menos fuerte. Aprovéchalos para firmas y decisiones importantes.</p>
+        </div>
+      </div>
+
+      {/* Lo que hay que retener, al pie. La hoja se lee entera una vez y
+       * después se relee a saltos: esto es lo que se busca al releerla. */}
+      <div style={css("border-top:1px solid rgba(154,127,50,.3);padding-top:8px;")}>
+        <div style={css(ROTULO + "margin-bottom:4px;")}>Lo importante que has de tener en cuenta</div>
+        <div style={css("display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;")}>
+          {importante.map((x) => (
+            <div key={x.l} style={css("display:flex;gap:6px;align-items:baseline;")}>
+              <span style={css("flex:none;font-size:10px;font-weight:600;color:#241F2E;min-width:72px;")}>{x.l}</span>
+              <span style={css("font-size:10px;line-height:1.4;color:#3A3546;")}>{x.t}</span>
+            </div>
+          ))}
         </div>
       </div>
 

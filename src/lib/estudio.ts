@@ -3,12 +3,12 @@
 // recortaba los textos para encajarlos en 14 páginas fijas—, aquí no se trunca
 // nada: el motor de paginación de impresión del navegador reparte el
 // contenido íntegro en tantas páginas como haga falta.
-import type { Resultado } from "./engine";
+import type { Resultado, ResultadoEmpresa } from "./engine";
 import { ficha } from "./engine";
 import { refItems, type RefItem } from "./chips";
 import { CAMINO_EVOLUTIVO, KDATA } from "./kdata";
 import { COL } from "./tree";
-import { cierraFrase, titulo } from "./format";
+import { cierraFrase, frase, punto, sinPunto, titulo } from "./format";
 
 export type Bloque =
   | { tipo: "h"; texto: string }
@@ -112,46 +112,31 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
    */
   const g = r.entrada.genero || "f";
   const ao = (fem: string, masc: string, neutro?: string) => (g === "m" ? masc : g === "n" ? (neutro ?? fem) : fem);
-  /**
-   * Una empresa se estudia con los mismos números —salen del nombre y de la
-   * fecha igual que en una persona— pero no se le puede hablar de haber
-   * nacido. Sólo cambia el marco: la bienvenida y las frases nuestras que
-   * dicen «naciste». Los textos de los manuales describen el número, no a
-   * quien lo lleva, y se quedan tal cual están escritos.
-   */
-  const esEmpresa = r.entrada.tipo === "empresa";
-  const pn = (persona: string, empresa: string) => (esEmpresa ? empresa : persona);
   const push = (o: Partial<Capitulo> & Pick<Capitulo, "seccion" | "titulo" | "bloques">) =>
     cap.push({ id: "c" + cap.length, kicker: "", ...o });
 
   push({
     seccion: "Bienvenida",
     kicker: "Tu mapa de luz",
-    titulo: pn(ao("Bienvenida a tu estudio", "Bienvenido a tu estudio", "Te damos la bienvenida a tu estudio"), "Te damos la bienvenida a este estudio"),
+    titulo: ao("Bienvenida a tu estudio", "Bienvenido a tu estudio", "Te damos la bienvenida a tu estudio"),
     bloques: [
       bLead(
         "p2.lead",
-        pn(
-          "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día y la hora en que naciste, junto con el nombre con el que " +
-            ao("fuiste nombrada", "fuiste nombrado", "te nombraron") +
-            ", constituyen una contraseña única de acceso a tu potencial supremo.",
-          "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día en que esta empresa quedó constituida, junto con el nombre con el que se la nombró, constituyen una contraseña única de acceso a su potencial supremo."
-        )
+        "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día y la hora en que naciste, junto con el nombre con el que " +
+          ao("fuiste nombrada", "fuiste nombrado", "te nombraron") +
+          ", constituyen una contraseña única de acceso a tu potencial supremo."
+
       ),
       bP(
         "p2.a",
-        pn(
-          "Todo lo que leerás en las siguientes páginas habla de ti: de lo que ya has conquistado, de lo que aún está por despertar y de los aprendizajes que han venido a impulsarte. Léelo con apertura, amor y la certeza de que posees la fuerza para transformar cada aspecto de tu vida.",
-          "Todo lo que leerás en las siguientes páginas habla de esta empresa: de lo que ya ha conquistado, de lo que aún está por despertar y de los aprendizajes que han venido a impulsarla. Léelo con apertura y con la certeza de que tiene la fuerza para transformar cada aspecto de su actividad."
-        )
+        "Todo lo que leerás en las siguientes páginas habla de ti: de lo que ya has conquistado, de lo que aún está por despertar y de los aprendizajes que han venido a impulsarte. Léelo con apertura, amor y la certeza de que posees la fuerza para transformar cada aspecto de tu vida."
+
       ),
-      bH(pn("Un viaje de retorno a tu esencia", "Un viaje de retorno a su esencia")),
+      bH("Un viaje de retorno a tu esencia"),
       bP(
         "p2.b",
-        pn(
-          "Este estudio es una hoja de ruta para comprender la arquitectura de tu ser. A través de la Kábala desciframos los códigos de tu nacimiento para ofrecerte claridad, sentido y dirección: tus dones, las virtudes y herramientas con las que viniste a habitar el mundo; tus desafíos de evolución, esos bloqueos o patrones repetitivos transformados en tu mayor fuente de sabiduría; y tu propósito, la dirección hacia donde orientar tu energía para vivir en plenitud.",
-          "Este estudio es una hoja de ruta para comprender la arquitectura de esta empresa. A través de la Kábala desciframos los códigos de su nombre y de su constitución para ofrecer claridad, sentido y dirección: sus dones, las virtudes y herramientas con las que vino a ocupar su sitio; sus desafíos de evolución, esos bloqueos o patrones repetitivos transformados en su mayor fuente de sabiduría; y su propósito, la dirección hacia donde orientar su energía para desplegarse en plenitud."
-        )
+        "Este estudio es una hoja de ruta para comprender la arquitectura de tu ser. A través de la Kábala desciframos los códigos de tu nacimiento para ofrecerte claridad, sentido y dirección: tus dones, las virtudes y herramientas con las que viniste a habitar el mundo; tus desafíos de evolución, esos bloqueos o patrones repetitivos transformados en tu mayor fuente de sabiduría; y tu propósito, la dirección hacia donde orientar tu energía para vivir en plenitud."
+
       ),
       bP(
         "p2.c",
@@ -188,7 +173,7 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
       c: r.caminos.origen,
       kicker: "Sesión 1 · Tus caminos",
       titulo: "Tu camino de origen",
-      intro: `Te habla de esa cualidad que traes de serie: el camino de origen es lo que vienes a recordar y a compartir con otros en esta existencia. En tu caso, desde ${pn("tu nacimiento", "la constitución")} hasta los ${r.caminos.edadCambio} años, que es ${pn("tu", "su")} edad de cambio.`,
+      intro: `Te habla de esa cualidad que traes de serie: el camino de origen es lo que vienes a recordar y a compartir con otros en esta existencia. En tu caso, desde tu nacimiento hasta los ${r.caminos.edadCambio} años, que es tu edad de cambio.`,
     },
     {
       k: "transformacion" as const,
@@ -387,9 +372,7 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
     bloques: [
       bLead(
         "p14b.lead",
-        "Son la visión más amplia de la carta: qué has venido a hacer en esta encarnación. Van en pareja, y cada uno mira una mitad — el primero sale del día y el mes de " +
-          pn("nacimiento", "constitución") +
-          "; el segundo, del mes y el año."
+        "Son la visión más amplia de la carta: qué has venido a hacer en esta encarnación. Van en pareja, y cada uno mira una mitad — el primero sale del día y el mes de nacimiento; el segundo, del mes y el año."
       ),
       ...bLectura("p14b.a", r.afinidad.diaMes, `día ${r.fecha.dia} + mes ${r.fecha.mes}`),
       ...bLectura("p14b.b", r.afinidad.mesAnio, `mes ${r.fecha.mes} + año ${String(r.fecha.anio).slice(2)}`),
@@ -439,7 +422,7 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
     kicker: "Ciclos vitales",
     titulo: `Tu año personal: ${r.ciclos.anioPersonal}`,
     bloques: [
-      bDato("p17.anio", `Año ${r.ciclos.anioUniversal}`, r.ciclos.anioPersonal, textoAnio || `Se calcula sumando el día y el mes de ${pn("nacimiento", "constitución")} al año en curso.`),
+      bDato("p17.anio", `Año ${r.ciclos.anioUniversal}`, r.ciclos.anioPersonal, textoAnio || "Se calcula sumando tu día y tu mes de nacimiento al año en curso."),
     ],
   });
 
@@ -471,6 +454,213 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
         ],
       },
       bCita("Que este mapa te acompañe. La luz que buscas ya habita en ti."),
+    ],
+  });
+
+  // Y un último capítulo con lo que hay que retener. El estudio son treinta
+  // páginas: quien lo recibe se queda con la sensación general y pierde lo
+  // concreto. Aquí van, en seis puntos, las cosas que de verdad ha de tener
+  // presentes — todas salen de lo que ya se ha explicado, no hay nada nuevo.
+  push({
+    seccion: "Cierre",
+    kicker: "Antes de cerrar",
+    titulo: "Lo importante que has de tener en cuenta",
+    bloques: [
+      bLead(
+        "p19.lead",
+        "Si de todo el estudio sólo te quedas con una página, que sea esta. Son los seis puntos que conviene tener presentes en el día a día."
+      ),
+      bDato(
+        "p19.destino",
+        "Hacia dónde",
+        r.caminos.destino.arcano,
+        `Tu camino de destino es ${sinPunto(titulo(r.caminos.destino.carta?.nombre || ""))}. ${punto(frase(r.caminos.destino.carta?.lema))} Es la dirección de fondo: cuando una decisión te aleje de ahí, lo notarás como desgaste.`
+      ),
+      bDato(
+        "p19.aprendizajes",
+        "Qué trabajar",
+        r.aprendizajes.length,
+        r.aprendizajes.length === 0
+          ? "No traes portales con aprendizaje: tu estructura viene resuelta y el trabajo es sostenerla."
+          : `Tienes ${r.aprendizajes.length} ${r.aprendizajes.length === 1 ? "aprendizaje abierto" : "aprendizajes abiertos"}: ${r.aprendizajes
+              .map((a) => sinPunto(titulo(a.tarea?.nombre || `portal ${a.portal}`)))
+              .join(", ")}. No son defectos: son las tareas que has venido a hacer, y se trabajan de una en una.`
+      ),
+      bDato(
+        "p19.bloqueos",
+        "Qué desatascar",
+        r.bloqueos.length,
+        r.bloqueos.length === 0
+          ? "No hay planos de consciencia bloqueados: la imagen del alma viene limpia."
+          : `Los planos bloqueados son ${r.bloqueos.map((b) => sinPunto(titulo(b.plano?.nombre || `casilla ${b.casilla}`))).join(", ")}. Son los sitios donde la energía se te queda parada; reconocerlos ya es media parte.`
+      ),
+      bDato(
+        "p19.karmico",
+        "Qué cerrar",
+        r.cuentas.karmico,
+        `El número kármico ${r.cuentas.karmico} es la cuenta que traes de atrás. Tu lema de vida, el ${r.cuentas.lemaDeVida}, es la vibración con la que se salda.`
+      ),
+      bDato(
+        "p19.anio",
+        "Dónde estás",
+        r.ciclos.anioPersonal,
+        `En ${r.ciclos.anioUniversal} estás en el año personal ${r.ciclos.anioPersonal} de una rueda de nueve, dentro del ciclo de ${r.ciclos.proposito} que marca tu propósito. Lo que toca este año no es lo que tocará el que viene.`
+      ),
+      bDato(
+        "p19.dias",
+        "Cuándo mover",
+        r.diasFuerza.dias[0] ?? "—",
+        `Tus días de fuerza son el ${r.diasFuerza.dias.join(", el ")}, de más a menos. Guárdalos para firmar, empezar y decidir; lo que arranques esos días viene con el viento a favor.`
+      ),
+      bCita("Nada de esto es un destino cerrado. Es el mapa; el camino lo andas tú."),
+    ],
+  });
+
+  return cap;
+}
+
+/**
+ * El estudio de una empresa: mucho más corto, porque se lee sólo del nombre.
+ *
+ * Reutiliza los mismos bloques que el estudio de una persona, así que se
+ * imprime, se pagina y se reescribe igual. Lo que no está es lo que no se
+ * puede calcular sin una fecha, que es casi todo el estudio largo.
+ */
+export function construyeCapitulosEmpresa(re: ResultadoEmpresa): Capitulo[] {
+  const cap: Capitulo[] = [];
+  const push = (o: Partial<Capitulo> & Pick<Capitulo, "seccion" | "titulo" | "bloques">) =>
+    cap.push({ id: "e" + cap.length, kicker: "", ...o });
+  const nombre = titulo(re.nombre.texto);
+
+  push({
+    seccion: "Bienvenida",
+    kicker: "El nombre de la empresa",
+    titulo: "Qué dice este nombre",
+    bloques: [
+      bLead(
+        "e1.lead",
+        `La Kábala lee el nombre como una contraseña: cada letra tiene un valor y la suma de todas dice cómo vibra lo que ese nombre designa. ${nombre} suma ${re.valorNombre}.`
+      ),
+      bP(
+        "e1.a",
+        "Este estudio se hace sólo con el nombre. De una persona se leen además la estructura energética, los planos de consciencia, las cuentas abiertas y los ciclos vitales, pero todo eso sale de la fecha de nacimiento; una empresa no la tiene, y lo que no se puede calcular no se inventa. Lo que sigue es, íntegro, lo que el nombre dice por sí solo.",
+      ),
+      {
+        tipo: "cifras",
+        filas: [
+          { label: "Valor del nombre", valor: re.valorNombre, pie: "Cómo vibra la empresa entera" },
+          { label: "Esencia", valor: re.esencia.valor, pie: "Lo que ha venido a ser, en las vocales" },
+          { label: "Ego", valor: re.ego.valor, pie: "Cómo la ven, en las consonantes" },
+          { label: "Camino de origen", valor: re.origen.arcano, pie: titulo(re.origen.carta?.nombre || "") },
+        ],
+      },
+      bH("Cómo se cuenta"),
+      bP(
+        "e1.b",
+        `Se suma el valor de cada letra: ${re.nombre.palabras.map((w) => `${w.palabra} vale ${w.total}`).join("; ")}${
+          re.nombre.palabras.length > 1 ? `, y en total ${re.valorNombre}` : ""
+        }. Las vocales aparte dan la esencia, ${re.esencia.valor}; las consonantes, el ego, ${re.ego.valor}.`
+      ),
+    ],
+  });
+
+  const numero = (
+    id: string,
+    seccion: string,
+    kicker: string,
+    tit: string,
+    o: { valor: number; ficha: ReturnType<typeof ficha>; lectura: { positivo: string; negativo: string } },
+    entrada: string
+  ) => {
+    const refs = bRefsFicha(o.ficha);
+    push({
+      seccion,
+      kicker,
+      titulo: tit,
+      bloques: [
+        bDato(id + ".dato", kicker, o.valor, entrada),
+        ...bLectura(id, o.valor),
+        bPolos(id + ".polos", o.lectura.negativo, o.lectura.positivo),
+        ...(refs ? [refs] : []),
+      ],
+    });
+  };
+
+  numero(
+    "e2",
+    "Los números del nombre",
+    "Valor del nombre",
+    `El ${re.valorNombre}: cómo vibra`,
+    re.valor,
+    "Es el número de la empresa entera, la suma de todas sus letras. Marca el tono de fondo de lo que hace y de cómo se la percibe."
+  );
+  numero(
+    "e3",
+    "Los números del nombre · Esencia",
+    "Esencia",
+    `El ${re.esencia.valor}: lo que ha venido a ser`,
+    re.esencia,
+    "Sale sólo de las vocales. Es el impulso interno del proyecto: aquello a lo que tiende cuando nadie la mira."
+  );
+  numero(
+    "e4",
+    "Los números del nombre · Ego",
+    "Ego",
+    `El ${re.ego.valor}: cómo la ven`,
+    re.ego,
+    "Sale sólo de las consonantes. Es la cara que la empresa pone hacia fuera: lo que perciben clientes y proveedores antes de tratarla."
+  );
+
+  const carta = re.origen.carta;
+  push({
+    seccion: "El camino de origen",
+    kicker: `Arcano ${re.origen.arcano}`,
+    titulo: titulo(carta?.nombre || `Arcano ${re.origen.arcano}`),
+    bloques: [
+      bDato(
+        "e5.dato",
+        "Origen",
+        re.origen.arcano,
+        `Se saca del valor del nombre: ${re.valorNombre} menos la suma de sus cifras (${re.origen.calculo.sumaCifras}) da ${re.origen.calculo.resta}, que entre nueve son ${re.origen.calculo.division}, más uno, ${re.origen.calculo.mas1}. Reducido a los veintiún arcanos, el ${re.origen.arcano}.`
+      ),
+      ...(carta?.lema ? [bLead("e5.lema", carta.lema)] : []),
+      ...(carta?.texto ? [bP("e5.texto", carta.texto)] : []),
+      bP(
+        "e5.nota",
+        "En una persona este es el primero de tres caminos —origen, transformación y destino—, pero los otros dos se apoyan en la edad de cambio, que sale de la fecha de nacimiento. En una empresa sólo hay este, y por eso pesa: es todo el arco de la carta.",
+      ),
+    ],
+  });
+
+  push({
+    seccion: "Cierre",
+    kicker: "Antes de cerrar",
+    titulo: "Lo importante que hay que tener en cuenta",
+    bloques: [
+      bLead(
+        "e6.lead",
+        "Si de todo el estudio sólo se retiene una página, que sea esta. Son los cuatro puntos que conviene tener presentes."
+      ),
+      bDato("e6.valor", "Cómo vibra", re.valorNombre, `El nombre suma ${re.valorNombre}. Es el tono de fondo: lo que la empresa transmite antes de decir nada.`),
+      bDato(
+        "e6.dentrofuera",
+        "Dentro y fuera",
+        `${re.esencia.valor} / ${re.ego.valor}`,
+        `La esencia es ${re.esencia.valor} y el ego ${re.ego.valor}. Cuando los dos se parecen, la empresa se muestra como es; cuando se separan mucho, hay distancia entre lo que quiere ser y lo que aparenta, y esa distancia se paga en confianza.`
+      ),
+      bDato(
+        "e6.origen",
+        "Hacia dónde",
+        re.origen.arcano,
+        `El camino de origen es ${sinPunto(titulo(carta?.nombre || ""))}. ${punto(frase(carta?.lema))} Es la dirección de fondo del proyecto.`
+      ),
+      bDato(
+        "e6.dias",
+        "Cuándo mover",
+        re.diasFuerza.dias[0] ?? "—",
+        `Los días de fuerza son el ${re.diasFuerza.dias.join(", el ")}, de más a menos. Guárdalos para firmar contratos, abrir y presentar.`
+      ),
+      bCita("El nombre es la contraseña: lo que se nombra bien, se sostiene."),
     ],
   });
 

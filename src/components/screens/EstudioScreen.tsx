@@ -3,47 +3,57 @@ import { useMemo, useState } from "react";
 import { css } from "@/lib/css";
 import { BOTON_NORMAL, botonPrincipal } from "@/lib/ui";
 import { useApp } from "@/lib/app-context";
-import { construyeCapitulos } from "@/lib/estudio";
+import { construyeCapitulos, construyeCapitulosEmpresa } from "@/lib/estudio";
 import { imprimir, AYUDA_IMPRIMIR } from "@/lib/imprimir";
 import { fechaLarga, titulo } from "@/lib/format";
 import BloqueView from "../estudio/BloqueView";
 import HojaCliente from "../estudio/HojaCliente";
+import HojaClienteEmpresa from "../estudio/HojaClienteEmpresa";
 import styles from "../estudio/Estudio.module.css";
 
 export default function EstudioScreen() {
-  const { r, f, marca, txt, guardaEdit, restablecer } = useApp();
-  const capitulos = useMemo(() => (r ? construyeCapitulos(r) : []), [r]);
+  const { r, re, marca, txt, guardaEdit, restablecer } = useApp();
+  const capitulos = useMemo(() => (r ? construyeCapitulos(r) : re ? construyeCapitulosEmpresa(re) : []), [r, re]);
   // Dos documentos distintos con el mismo botón de imprimir: el estudio
   // entero, que es la herramienta de Iris, y la hoja que se lleva el cliente.
   const [modo, setModo] = useState<"estudio" | "hoja">("estudio");
-  if (!r) return null;
+  if (!r && !re) return null;
 
   const hoja = modo === "hoja";
+  const empresa = !!re;
+  const nombreTexto = (r ?? re!).nombre.texto;
 
   return (
     <div className={styles.wrap}>
       <div data-chrome="1" className={styles.toolbar}>
-        <div style={css("display:flex;gap:2px;background:color-mix(in srgb, var(--text) 9%, transparent);border-radius:980px;padding:3px;flex:none;")}>
+        {/* Los dos documentos, uno al lado del otro y los dos legibles.
+         * Estaban en un control segmentado gris sobre gris: el que no estaba
+         * elegido apenas se veía, y la hoja del cliente —que es la mitad de
+         * lo que se imprime aquí— pasaba desapercibida. Ahora el que no está
+         * activo es un botón con borde, no un texto apagado. */}
+        <div style={css("display:flex;gap:var(--s2);flex:none;flex-wrap:wrap;")}>
           {([
-            ["estudio", `Estudio · ${capitulos.length} capítulos`],
-            ["hoja", "Hoja para el cliente"],
-          ] as const).map(([k, label]) => (
-            <button
-              key={k}
-              onClick={() => setModo(k)}
-              style={css(
-                "padding:7px 15px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:590;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
-                  (modo === k ? "var(--surface-solid)" : "transparent") +
-                  ";box-shadow:" +
-                  (modo === k ? "0 3px 8px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.06)" : "none") +
-                  ";color:" +
-                  (modo === k ? "var(--text)" : "var(--text-3)") +
-                  ";"
-              )}
-            >
-              {label}
-            </button>
-          ))}
+            ["estudio", "Estudio completo", `${capitulos.length} capítulos`],
+            ["hoja", "Hoja para el cliente", "1 página"],
+          ] as const).map(([k, label, pie]) => {
+            const on = modo === k;
+            return (
+              <button
+                key={k}
+                onClick={() => setModo(k)}
+                aria-pressed={on}
+                style={css(
+                  "display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 16px;border-radius:var(--r-sm);cursor:pointer;text-align:left;white-space:nowrap;transition:all .2s;" +
+                    (on
+                      ? "border:1px solid var(--gold-deep);background:var(--gold-deep);color:var(--sobre-oro);"
+                      : "border:1px solid var(--border-strong);background:var(--surface);color:var(--text-2);")
+                )}
+              >
+                <span style={css("font-size:var(--t-body);font-weight:600;letter-spacing:-.01em;")}>{label}</span>
+                <span style={css("font-size:var(--t-mini);color:" + (on ? "color-mix(in srgb, var(--sobre-oro) 72%, transparent)" : "var(--text-4)") + ";")}>{pie}</span>
+              </button>
+            );
+          })}
         </div>
         <span className={styles.hint} style={css("font-size:var(--t-body);color:var(--text-4);")}>
           {hoja ? "Una página, sin fórmulas ni claves: lo que se lleva la persona." : "Haz clic en cualquier párrafo para reescribirlo con tus palabras."}
@@ -70,17 +80,19 @@ export default function EstudioScreen() {
       </div>
 
       <div className={styles.desk}>
-        {hoja && <HojaCliente r={r} marca={marca} />}
+        {hoja && (r ? <HojaCliente r={r} marca={marca} /> : <HojaClienteEmpresa re={re!} marca={marca} />)}
         {!hoja && <section className={`${styles.page} ${styles.portada}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.jpeg" alt="" style={css("width:210px;height:210px;border-radius:50%;object-fit:cover;margin-bottom:34px;")} />
           <div style={css("font-weight:590;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</div>
           <div style={css("width:78px;height:1px;background:var(--gold);margin:26px 0;")} />
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:#6B6478;")}>
-            {f.tipo === "empresa" ? "Estudio de Kábala empresarial" : "Estudio de Kábala personal"}
+            {empresa ? "Estudio de Kábala empresarial" : "Estudio de Kábala personal"}
           </div>
-          <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:var(--t-hero);line-height:1.22;letter-spacing:-.022em;color:#241F2E;margin:30px 0 0;max-width:560px;")}>{titulo(r.nombre.texto)}</h1>
-          <div style={css("font-family:var(--font-ui);font-size:var(--t-title);font-style:italic;color:#7A7288;margin-top:var(--s4);")}>{fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio)}</div>
+          <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:var(--t-hero);line-height:1.22;letter-spacing:-.022em;color:#241F2E;margin:30px 0 0;max-width:560px;")}>{titulo(nombreTexto)}</h1>
+          <div style={css("font-family:var(--font-ui);font-size:var(--t-title);font-style:italic;color:#7A7288;margin-top:var(--s4);")}>
+            {r ? fechaLarga(r.fecha.dia, r.fecha.mes, r.fecha.anio) : "Leído del nombre"}
+          </div>
         </section>}
 
         {!hoja && capitulos.map((cap, i) => {
@@ -111,7 +123,7 @@ export default function EstudioScreen() {
               ))}
             </div>
             <footer className={styles.footer}>
-              <span>{r.nombre.texto}</span>
+              <span>{nombreTexto}</span>
               <span style={css("margin-left:auto;")}>{marca}</span>
             </footer>
           </section>
