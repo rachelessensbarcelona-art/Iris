@@ -178,10 +178,15 @@
     size: letter;
     margin: 0;
   }
+  /* El color del papel se pinta en la hoja, no en el capítulo. Cuando iba en
+   * .page y un capítulo se pasaba a la hoja siguiente, el crema terminaba
+   * donde terminaba el elemento y el resto del folio salía blanco: la hoja
+   * aparecía cortada por una raya de otro color a media altura. */
   .page {
     width: auto;
     box-shadow: none;
     border-radius: 0;
+    background: transparent;
   }
   .page + .page {
     break-before: page;
@@ -204,6 +209,18 @@
   /* Un título no debe quedarse solo al pie de una hoja. */
   .cuerpo h2 {
     break-after: avoid;
+  }
+  /* Ni un dato, ni un diagrama, ni una cita se parten por la mitad entre dos
+   * hojas: o caben enteros o pasan a la siguiente. */
+  .cuerpo > * {
+    break-inside: avoid;
+  }
+  /* Los párrafos largos sí pueden partirse — si no, dejarían medio folio en
+   * blanco — pero nunca por una sola línea suelta. */
+  .cuerpo p {
+    break-inside: auto;
+    orphans: 3;
+    widows: 3;
   }
   .portada {
     aspect-ratio: auto;

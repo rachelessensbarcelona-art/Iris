@@ -480,15 +480,17 @@ button:not(:disabled):active {
   [data-chrome] {
     display: none !important;
   }
+  /* El papel del estudio es crema. Va aquí, en la hoja, para que salga
+   * uniforme aunque un capítulo se reparta entre dos folios. */
   html,
   body {
-    background: #fff !important;
+    background: #fbf8f1 !important;
   }
   /* El contenedor de la app pinta el fondo de la interfaz; en papel tiene que
    * desaparecer para no teñir la hoja. Y min-height:100vh se mide contra la
    * ventana, no contra el papel, así que puede colar hojas de más. */
   [data-app-root] {
-    background: #fff !important;
+    background: transparent !important;
     background-image: none !important;
     min-height: 0 !important;
   }
@@ -497,5 +499,16 @@ button:not(:disabled):active {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
+  }
+  /* El polvo va en un canvas: en papel sale como una mancha gris. */
+  canvas {
+    display: none !important;
+  }
+  /* Una tarjeta no se parte entre dos hojas si cabe entera en la siguiente.
+   * Vale para la comparativa de pareja y para el panel, que también se
+   * imprimen aunque no sean el documento maquetado. */
+  article,
+  section {
+    break-inside: avoid;
   }
 }

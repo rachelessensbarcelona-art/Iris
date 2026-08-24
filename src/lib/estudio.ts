@@ -8,6 +8,7 @@ import { ficha } from "./engine";
 import { refItems, type RefItem } from "./chips";
 import { CAMINO_EVOLUTIVO, KDATA } from "./kdata";
 import { COL } from "./tree";
+import { cierraFrase } from "./format";
 
 export type Bloque =
   | { tipo: "h"; texto: string }
@@ -21,7 +22,9 @@ export type Bloque =
   | { tipo: "alma" }
   | { tipo: "cuentas" }
   | { tipo: "ciclos" }
-  | { tipo: "cita"; texto: string };
+  | { tipo: "cita"; texto: string }
+  /** La tabla de cifras del cierre: el estudio entero en una mirada. */
+  | { tipo: "cifras"; filas: Array<{ label: string; valor: string | number; pie: string }> };
 
 export type Capitulo = { id: string; kicker: string; titulo: string; seccion: string; bloques: Bloque[] };
 
@@ -34,11 +37,13 @@ export type Capitulo = { id: string; kicker: string; titulo: string; seccion: st
  */
 const CLAVES = /(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+)(?:\s*[-–]\s*(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+))+\.?/g;
 export function paraCliente(t: string): string {
-  return t
-    .replace(CLAVES, "")
-    .replace(/\s{2,}/g, " ")
-    .replace(/\s+([,.;:])/g, "$1")
-    .trim();
+  return cierraFrase(
+    t
+      .replace(CLAVES, "")
+      .replace(/\s{2,}/g, " ")
+      .replace(/\s+([,.;:])/g, "$1")
+      .trim()
+  );
 }
 
 function bH(texto: string): Bloque {
@@ -66,17 +71,26 @@ function bCita(texto: string): Bloque {
 
 export function construyeCapitulos(r: Resultado): Capitulo[] {
   const cap: Capitulo[] = [];
+  /**
+   * El estudio habla de tú a la persona, y en castellano eso tiene género:
+   * «bienvenida», «fuiste nombrada». Se elige en la consulta y aquí sólo se
+   * decide la terminación. En neutro se busca una vuelta que no la necesite.
+   */
+  const g = r.entrada.genero || "f";
+  const ao = (fem: string, masc: string, neutro?: string) => (g === "m" ? masc : g === "n" ? (neutro ?? fem) : fem);
   const push = (o: Partial<Capitulo> & Pick<Capitulo, "seccion" | "titulo" | "bloques">) =>
     cap.push({ id: "c" + cap.length, kicker: "", ...o });
 
   push({
     seccion: "Bienvenida",
     kicker: "Tu mapa de luz",
-    titulo: "Bienvenida a tu estudio",
+    titulo: ao("Bienvenida a tu estudio", "Bienvenido a tu estudio", "Te damos la bienvenida a tu estudio"),
     bloques: [
       bLead(
         "p2.lead",
-        "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día y la hora en que naciste, junto con el nombre con el que fuiste nombrada, constituyen una contraseña única de acceso a tu potencial supremo."
+        "Acepta este estudio no como un diagnóstico rígido, sino como una guía viva. La Kábala nos enseña que el día y la hora en que naciste, junto con el nombre con el que " +
+          ao("fuiste nombrada", "fuiste nombrado", "te nombraron") +
+          ", constituyen una contraseña única de acceso a tu potencial supremo."
       ),
       bP(
         "p2.a",
@@ -260,6 +274,12 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
         "p13.lead",
         "Te da información de todos los procesos kármicos que te impiden crecer y avanzar. Es una mochila cargada de rutinas heredadas, patrones familiares y maneras de actuar de otras vidas que estás repitiendo en esta. Al conocerla vas a quitarle peso."
       ),
+      bDato(
+        "p13.numero",
+        "Imagen del alma",
+        r.imagenAlma.numero,
+        "Es la cifra que abre la tabla: de ella salen los números móviles de cada casilla, y con ellos los planos que traes bloqueados y las ayudas con las que cuentas."
+      ),
       { tipo: "alma" },
     ],
   });
@@ -338,6 +358,36 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
     titulo: `Tu año personal: ${r.ciclos.anioPersonal}`,
     bloques: [
       bDato("p17.anio", `Año ${r.ciclos.anioUniversal}`, r.ciclos.anioPersonal, textoAnio || "Se calcula sumando tu día y tu mes de nacimiento al año en curso."),
+    ],
+  });
+
+  // El documento acababa de golpe con el año personal. Cierra recogiendo las
+  // cifras que se han ido explicando — la imagen del alma entre ellas, que era
+  // la única que salía en el panel y no llegaba nunca al papel.
+  push({
+    seccion: "Cierre",
+    kicker: "Tu estudio en una mirada",
+    titulo: "Tus números, todos juntos",
+    bloques: [
+      bLead(
+        "p18.lead",
+        "Estas son las cifras sobre las que se ha construido todo lo que acabas de leer. Guárdalas: cada una abre una puerta distinta y ninguna se lee sola."
+      ),
+      {
+        tipo: "cifras",
+        filas: [
+          { label: "Corazón", valor: r.corazon.valor, pie: "El número pin del alma, cómo vibra" },
+          { label: "Esencia", valor: r.esencia.valor, pie: "Lo que has venido a ser" },
+          { label: "Ego", valor: r.ego.valor, pie: "Cómo te ven los demás" },
+          { label: "Edad de cambio", valor: r.caminos.edadCambio, pie: "Cuándo entras en tu camino de destino" },
+          { label: "Estructura", valor: r.estructura.tipo, pie: "La figura de tus diez portales" },
+          { label: "Imagen del alma", valor: r.imagenAlma.numero, pie: "Los diez planos de consciencia" },
+          { label: "Kármico", valor: r.cuentas.karmico, pie: "Lo que traes por cerrar" },
+          { label: "Lema de vida", valor: r.cuentas.lemaDeVida, pie: "La vibración que te permite llevarlo a cabo" },
+          { label: "Propósito", valor: r.ciclos.proposito, pie: "El hilo que recorre toda la vida" },
+          { label: "Año personal", valor: r.ciclos.anioPersonal, pie: `Dónde estás en ${r.ciclos.anioUniversal}` },
+        ],
+      },
       bCita("Que este mapa te acompañe. La luz que buscas ya habita en ti."),
     ],
   });

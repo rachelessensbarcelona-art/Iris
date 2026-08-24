@@ -5,6 +5,10 @@
 import { KDATA, type NumeroFicha, type ArcanoData } from "./kdata";
 
 export type Fecha = { dia: number; mes: number; anio: number };
+/** Cómo se dirige el documento a la persona. No entra en ningún cálculo: sólo
+ *  decide si el estudio dice «bienvenida» o «bienvenido». */
+export type Genero = "f" | "m" | "n";
+
 export type Entrada = {
   nombre: string;
   apellido1: string;
@@ -13,6 +17,7 @@ export type Entrada = {
   mes: number;
   anio: number;
   anioUniversal: number;
+  genero?: Genero;
 };
 
 function digits(str: string | number): number[] {

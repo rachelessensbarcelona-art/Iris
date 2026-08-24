@@ -1,12 +1,12 @@
 "use client";
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { calcula, comparaPareja, ficha as fichaDe, type Resultado, type Comparativa, type Ficha } from "./engine";
+import { calcula, comparaPareja, ficha as fichaDe, type Resultado, type Comparativa, type Ficha, type Genero } from "./engine";
 import { cargaHistorial, guardaHistorial, cargaEdits, guardaEdits, type HistItem, type Edits } from "./storage";
 
 export type View = "inicio" | "panel" | "estudio" | "pareja";
 export type Seccion = "resumen" | "arbol" | "numeros" | "estructura" | "alma" | "cuentas" | "ciclos";
-export type FormState = { nombre: string; ap1: string; ap2: string; dia: string; mes: string; anio: string };
-const FORM_VACIO: FormState = { nombre: "", ap1: "", ap2: "", dia: "", mes: "", anio: "" };
+export type FormState = { nombre: string; ap1: string; ap2: string; dia: string; mes: string; anio: string; genero: Genero };
+const FORM_VACIO: FormState = { nombre: "", ap1: "", ap2: "", dia: "", mes: "", anio: "", genero: "f" };
 
 export type Detalle =
   | { tipo: "numero"; f: Ficha }
@@ -25,6 +25,7 @@ function entradaDe(f: FormState, anioUniversal: number) {
     mes: +f.mes,
     anio: +f.anio,
     anioUniversal,
+    genero: f.genero,
   };
 }
 
@@ -87,8 +88,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const anioUniversal = new Date().getFullYear();
 
-  const set = useCallback((k: keyof FormState, v: string) => setF((s) => ({ ...s, [k]: v })), []);
-  const setP = useCallback((k: keyof FormState, v: string) => setPState((s) => ({ ...s, [k]: v })), []);
+  const set = useCallback(<K extends keyof FormState>(k: K, v: FormState[K]) => setF((s) => ({ ...s, [k]: v })), []);
+  const setP = useCallback(<K extends keyof FormState>(k: K, v: FormState[K]) => setPState((s) => ({ ...s, [k]: v })), []);
 
   const calcular = useCallback(() => {
     if (valida(f)) return;

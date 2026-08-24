@@ -93,6 +93,23 @@ export default function BloqueView({
       return <DocCuentas r={r} />;
     case "ciclos":
       return <DocCiclos r={r} />;
+    case "cifras":
+      return (
+        <div style={css("display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 26px;")}>
+          {b.filas.map((f, fi) => (
+            <div
+              key={fi}
+              style={css(
+                "display:flex;align-items:baseline;gap:12px;padding:9px 0;" + (fi > 1 ? "border-top:1px solid rgba(201,168,76,.22);" : "")
+              )}
+            >
+              <span style={css("font-family:'Karla',sans-serif;font-size:var(--t-micro);letter-spacing:.18em;text-transform:uppercase;color:#9B93A8;min-width:96px;")}>{f.label}</span>
+              <span style={css("font-family:'Cinzel',serif;font-size:var(--t-title);line-height:1;color:#241F2E;")}>{f.valor}</span>
+              <span style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-body);line-height:1.35;color:#6B6478;margin-left:auto;text-align:right;")}>{f.pie}</span>
+            </div>
+          ))}
+        </div>
+      );
     case "cita":
       return (
         <p

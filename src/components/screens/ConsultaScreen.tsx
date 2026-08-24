@@ -86,6 +86,37 @@ export default function ConsultaScreen() {
                 {campo("Mes", "mes", true)}
                 {campo("Año", "anio", true)}
               </div>
+
+              {/* El estudio se dirige a la persona en segunda persona —
+               * «bienvenida», «fuiste nombrada» — así que necesita saber cómo
+               * tratarla. No entra en ningún cálculo. */}
+              <div style={css("display:flex;flex-direction:column;gap:var(--s2);")}>
+                <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Cómo se dirige el estudio a la persona</span>
+                <div style={css("display:flex;gap:2px;background:color-mix(in srgb, var(--text) 6%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;")}>
+                  {([
+                    ["f", "Ella"],
+                    ["m", "Él"],
+                    ["n", "Neutro"],
+                  ] as const).map(([k, label]) => (
+                    <button
+                      key={k}
+                      type="button"
+                      onClick={() => set("genero", k)}
+                      style={css(
+                        "flex:none;padding:8px 18px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:590;white-space:nowrap;transition:all .2s;background:" +
+                          (f.genero === k ? "var(--surface-solid)" : "transparent") +
+                          ";box-shadow:" +
+                          (f.genero === k ? "0 2px 6px rgba(0,0,0,.09)" : "none") +
+                          ";color:" +
+                          (f.genero === k ? "var(--text)" : "var(--text-3)") +
+                          ";"
+                      )}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <motion.button

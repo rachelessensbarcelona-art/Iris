@@ -55,3 +55,23 @@ const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "
 export function fechaLarga(dia: number, mes: number, anio: number): string {
   return `${dia} de ${MESES[mes - 1]} de ${anio}`;
 }
+
+/**
+ * Cierra un texto que viene cortado a media frase.
+ *
+ * Treinta y tres de los textos del diccionario se quedaron a medias al
+ * extraerlos de los manuales — «…se puede comparar con un» y ahí acaba. En el
+ * panel se nota poco, pero en el documento que se entrega al cliente una frase
+ * que muere a media palabra queda fatal. Aquí se retrocede hasta el último
+ * punto, y sólo si lo que queda sigue siendo el grueso del texto; si el corte
+ * viene de tan atrás que apenas quedaría nada, se deja como está con puntos
+ * suspensivos, que al menos se lee como algo pendiente y no como un error.
+ *
+ * Esto tapa el síntoma: los textos hay que completarlos en el diccionario.
+ */
+export function cierraFrase(t: string | undefined | null): string {
+  const s = (t || "").trim();
+  if (!s || /[.!?…»"')\]]$/.test(s)) return s;
+  const i = Math.max(s.lastIndexOf("."), s.lastIndexOf("!"), s.lastIndexOf("?"));
+  return i > 0 && i > s.length * 0.6 ? s.slice(0, i + 1) : s + "…";
+}

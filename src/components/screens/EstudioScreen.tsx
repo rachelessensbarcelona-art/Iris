@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { construyeCapitulos } from "@/lib/estudio";
+import { imprimir, AYUDA_IMPRIMIR } from "@/lib/imprimir";
 import { fechaLarga, titulo } from "@/lib/format";
 import BloqueView from "../estudio/BloqueView";
 import HojaCliente from "../estudio/HojaCliente";
@@ -16,7 +17,6 @@ export default function EstudioScreen() {
   const [modo, setModo] = useState<"estudio" | "hoja">("estudio");
   if (!r) return null;
 
-  const imprimir = () => window.print();
   const hoja = modo === "hoja";
 
   return (
@@ -57,12 +57,15 @@ export default function EstudioScreen() {
             </button>
           )}
           <button
-            onClick={imprimir}
+            onClick={() => imprimir()}
             style={css("background:linear-gradient(180deg,#B9942F,#93711F);border:1px solid var(--gold);color:#fff;border-radius:999px;padding:10px 22px;font-family:var(--font-ui);font-weight:600;font-size:var(--t-body);cursor:pointer;")}
           >
             {hoja ? "Exportar la hoja" : "Exportar PDF"}
           </button>
         </div>
+        {/* En el iPad el diálogo no siempre se abre solo; la ruta manual
+         * funciona siempre y conviene tenerla a la vista. */}
+        <span style={css("flex-basis:100%;font-size:var(--t-mini);color:var(--text-4);")}>{AYUDA_IMPRIMIR}</span>
       </div>
 
       <div className={styles.desk}>

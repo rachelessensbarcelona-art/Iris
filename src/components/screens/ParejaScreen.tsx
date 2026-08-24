@@ -1,6 +1,7 @@
 "use client";
 import { css } from "@/lib/css";
 import { titulo } from "@/lib/format";
+import { imprimir, AYUDA_IMPRIMIR } from "@/lib/imprimir";
 import { useApp, valida } from "@/lib/app-context";
 import { KDATA } from "@/lib/kdata";
 import Particulas from "../Particulas";
@@ -69,9 +70,14 @@ export default function ParejaScreen() {
       <div style={css("text-align:center;margin-bottom:30px;")}>
         <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:var(--s3);")}>Comparativa</div>
         <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(21px,3.4vw,30px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.2;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)} &amp; su pareja</h1>
+        <p style={css("font-size:var(--t-read);line-height:1.6;color:var(--text-3);margin:var(--s4) auto 0;max-width:62ch;text-wrap:pretty;")}>
+          La comparativa no juzga si una pareja funciona: enseña qué traen los dos en común y qué les toca aprender juntos. Se
+          miran cuatro cosas — el camino que forman entre los dos, si comparten estructura y portales, qué planos de consciencia
+          tienen bloqueados a la vez, y si arrastran las mismas cuentas abiertas.
+        </p>
       </div>
 
-      <section style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);margin-bottom:var(--s5);")}>
+      <section data-chrome="1" style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);margin-bottom:var(--s5);")}>
         <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s5);")}>Datos de la segunda persona</div>
         <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:var(--s3);align-items:end;")}>
           {campo("Nombre", "nombre")}
@@ -102,9 +108,22 @@ export default function ParejaScreen() {
 
       {comp && pr && (
         <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+          {/* La comparativa también se entrega: se imprime como el estudio, y
+           * al imprimir desaparecen el formulario y la navegación. */}
+          <div data-chrome="1" style={css("display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;")}>
+            <span style={css("font-size:var(--t-mini);color:var(--text-4);")}>{AYUDA_IMPRIMIR}</span>
+            <button
+              onClick={() => imprimir()}
+              style={css(
+                "margin-left:auto;background:var(--gold-deep);border:1px solid var(--gold-deep);color:#fff;border-radius:999px;padding:10px 22px;font-weight:600;font-size:var(--t-body);cursor:pointer;"
+              )}
+            >
+              Exportar PDF
+            </button>
+          </div>
           <div
             style={css(
-              "position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--gap);align-items:center;justify-items:center;text-align:center;border:1px solid var(--border-accent);background:linear-gradient(155deg,var(--gold-soft),color-mix(in srgb, var(--surface-solid) 70%, transparent));box-shadow:var(--shadow);border-radius:var(--r);padding:var(--pad-card);"
+              "position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--gap);align-items:center;justify-items:center;text-align:center;background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--gold);border-radius:var(--r);padding:var(--pad-card);"
             )}
           >
             <div style={css("position:absolute;inset:0;z-index:0;pointer-events:none;")}>
@@ -120,6 +139,9 @@ export default function ParejaScreen() {
               <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Camino conjunto</div>
               <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-hero);color:var(--gold);line-height:1.1;")}>{comp.caminoConjunto}</div>
               <div style={css("font-family:var(--font-ui);font-style:normal;font-size:var(--t-body);color:var(--text-3);")}>{titulo(comp.cartaConjunta?.nombre)}</div>
+              <div style={css("font-size:var(--t-mini);color:var(--text-4);margin-top:6px;")}>
+                corazón {r.corazon.valor} + {pr.corazon.valor}, reducido a arcano
+              </div>
             </div>
             <div style={css("position:relative;z-index:1;")}>
               <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:var(--text);line-height:1.25;")}>{titulo(pr.nombre.texto)}</div>
