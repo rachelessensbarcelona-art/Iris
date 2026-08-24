@@ -41,7 +41,8 @@ export default function Shell() {
           />
           <div style={css("display:flex;flex-direction:column;gap:2px;")}>
             <div style={css("font-family:var(--font-display);font-weight:500;font-size:clamp(15px,1.7vw,19px);letter-spacing:-.008em;color:var(--text);line-height:1.15;")}>Escuela de Sabiduría 33</div>
-            <div style={css("font-size:var(--t-mini);color:var(--text-4);letter-spacing:-.01em;")}>Estudio de Kábala</div>
+            {/* La escuela son tres disciplinas: la marca ya no dice sólo Kábala. */}
+            <div style={css("font-size:var(--t-mini);color:var(--text-4);letter-spacing:-.01em;")}>Kábala · Feng Shui · Numerología</div>
           </div>
         </div>
         {view !== "inicio" && (

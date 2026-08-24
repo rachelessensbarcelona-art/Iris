@@ -5,6 +5,10 @@ import { cargaHistorial, guardaHistorial, cargaEdits, guardaEdits, type HistItem
 
 export type View = "inicio" | "panel" | "estudio" | "pareja";
 export type Seccion = "resumen" | "arbol" | "numeros" | "estructura" | "alma" | "cuentas" | "ciclos";
+
+/** Las tres disciplinas de la escuela. Kábala es la que está construida; las
+ *  otras dos existen ya en la navegación y avisan de que están por hacer. */
+export type Disciplina = "kabala" | "fengshui" | "numerologia";
 export type FormState = { nombre: string; ap1: string; ap2: string; dia: string; mes: string; anio: string; genero: Genero };
 const FORM_VACIO: FormState = { nombre: "", ap1: "", ap2: "", dia: "", mes: "", anio: "", genero: "f" };
 
@@ -44,6 +48,8 @@ type Ctx = {
   view: View;
   setView: (v: View) => void;
   seccion: Seccion;
+  disciplina: Disciplina;
+  setDisciplina: (d: Disciplina) => void;
   setSeccion: (s: Seccion) => void;
   f: FormState;
   set: (k: keyof FormState, v: string) => void;
@@ -76,6 +82,7 @@ const AppCtx = createContext<Ctx | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [view, setView] = useState<View>("inicio");
   const [seccion, setSeccion] = useState<Seccion>("resumen");
+  const [disciplina, setDisciplina] = useState<Disciplina>("kabala");
   const [f, setF] = useState<FormState>(FORM_VACIO);
   const [r, setR] = useState<Resultado | null>(null);
   const [id, setId] = useState<string | null>(null);
@@ -176,6 +183,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       view,
       setView,
       seccion,
+      disciplina,
+      setDisciplina,
       setSeccion,
       f,
       set,
@@ -202,7 +211,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       marca: MARCA,
       anioUniversal,
     }),
-    [view, seccion, f, set, r, id, hist, calcular, abrir, borrar, edits, txt, guardaEdit, restablecer, detalle, verNumero, verArcano, verTexto, cerrarDetalle, p, setP, pr, comp, comparar, anioUniversal]
+    [view, seccion, disciplina, f, set, r, id, hist, calcular, abrir, borrar, edits, txt, guardaEdit, restablecer, detalle, verNumero, verArcano, verTexto, cerrarDetalle, p, setP, pr, comp, comparar, anioUniversal]
   );
 
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;

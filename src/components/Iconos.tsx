@@ -72,3 +72,19 @@ export const IcoCiclos = (p: P) => (
     <path d="M12 7v5.2l3.2 2" />
   </Caja>
 );
+
+/* El bagua: el octógono del feng shui con sus ocho sectores. */
+export const IcoFengShui = (p: P) => (
+  <Caja {...p}>
+    <path d="M12 2.6 19.4 6v8L12 21.4 4.6 14V6z" />
+    <path d="M12 2.6v18.8M4.6 6l14.8 8M19.4 6 4.6 14" />
+  </Caja>
+);
+
+/* La numerología, por lo que se ve en cuanto se abre: cifras. */
+export const IcoNumerologia = (p: P) => (
+  <Caja {...p}>
+    <path d="M7.4 9.2 9.6 7.6v8.8M14 8.4a2.4 2.4 0 1 1 3.4 3.3L13.8 16.4h4" />
+    <rect x="3" y="3" width="18" height="18" rx="4.5" />
+  </Caja>
+);

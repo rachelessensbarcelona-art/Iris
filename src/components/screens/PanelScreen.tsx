@@ -9,6 +9,8 @@ import SeccionEstructura from "../panel/SeccionEstructura";
 import SeccionAlma from "../panel/SeccionAlma";
 import SeccionCuentas from "../panel/SeccionCuentas";
 import SeccionCiclos from "../panel/SeccionCiclos";
+import Pendiente from "../panel/Pendiente";
+import { DISCIPLINAS } from "../Sidebar";
 
 /* El nombre largo y, debajo, qué se está mirando. En la lateral los nombres
  * van cortos para que la columna quede a plomo, así que el encabezado de la
@@ -24,7 +26,7 @@ const SECCIONES: Array<{ k: Seccion; label: string; pie: string }> = [
 ];
 
 export default function PanelScreen() {
-  const { r, seccion, setSeccion } = useApp();
+  const { r, seccion, setSeccion, disciplina, setDisciplina } = useApp();
   if (!r) return null;
 
   const resumen = [
@@ -40,7 +42,9 @@ export default function PanelScreen() {
     <main style={css("max-width:var(--ancho);margin:0 auto;padding:var(--s6) var(--gutter) var(--s8);")}>
       <div style={css("display:flex;align-items:flex-end;gap:var(--s5);flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:var(--s5);margin-bottom:var(--s5);")}>
         <div>
-          <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:6px;")}>Estudio de Kábala</div>
+          <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:6px;")}>
+            Estudio de {DISCIPLINAS.find((d) => d.k === disciplina)?.label}
+          </div>
           <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:clamp(22px,3.6vw,31px);letter-spacing:-.022em;color:var(--text);margin:0;line-height:1.15;overflow-wrap:anywhere;")}>{titulo(r.nombre.texto)}</h1>
           <div style={css("font-family:var(--font-ui);font-size:var(--t-read);color:var(--text-3);margin-top:5px;")}>
             {r.fecha.dia} / {r.fecha.mes} / {r.fecha.anio}
@@ -48,7 +52,7 @@ export default function PanelScreen() {
         </div>
         {/* En el resumen estas mismas cifras ya salen en las tarjetas, así que
          * la tira sólo aparece en las demás secciones. */}
-        <div style={css("display:" + (seccion === "resumen" ? "none" : "flex") + ";gap:clamp(14px,2.4vw,26px);flex-wrap:wrap;margin-left:auto;")}>
+        <div style={css("display:" + (disciplina !== "kabala" || seccion === "resumen" ? "none" : "flex") + ";gap:clamp(14px,2.4vw,26px);flex-wrap:wrap;margin-left:auto;")}>
           {resumen.map((k, i) => (
             <div key={i} style={css("display:flex;flex-direction:column;gap:3px;align-items:flex-end;")}>
               <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);")}>{k.label}</span>
@@ -71,7 +75,23 @@ export default function PanelScreen() {
           "display:flex;gap:2px;margin-bottom:var(--s6);background:color-mix(in srgb, var(--text) 10%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;"
         )}
       >
-        {SECCIONES.map((s) => {
+        {DISCIPLINAS.filter((d) => d.k !== "kabala" || disciplina !== "kabala").map((d) => (
+          <button
+            key={d.k}
+            onClick={() => setDisciplina(d.k)}
+            style={css(
+              "flex:none;padding:8px 16px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:600;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
+                (disciplina === d.k ? "var(--surface-solid)" : "transparent") +
+                ";color:" +
+                (disciplina === d.k ? "var(--text)" : "var(--text-3)") +
+                ";"
+            )}
+          >
+            {d.label}
+          </button>
+        ))}
+        {disciplina === "kabala" &&
+          SECCIONES.map((s) => {
           const on = seccion === s.k;
           return (
             <button
@@ -96,7 +116,7 @@ export default function PanelScreen() {
       {(() => {
         // El resumen ya se abre saludando a Iris por su nombre; no hace falta
         // ponerle encima un segundo título que diga lo mismo.
-        const s = seccion === "resumen" ? null : SECCIONES.find((x) => x.k === seccion);
+        const s = disciplina !== "kabala" || seccion === "resumen" ? null : SECCIONES.find((x) => x.k === seccion);
         return s ? (
           <div key={"h" + seccion} style={css("margin-bottom:var(--s5);animation:es33-alza .45s cubic-bezier(.22,1,.36,1) both;")}>
             <h2 style={css("font-size:var(--t-head);margin:0;")}>{s.label}</h2>
@@ -108,14 +128,30 @@ export default function PanelScreen() {
       {/* La key hace que React tire el árbol anterior al cambiar de sección,
        * así la animación de entrada se reproduce en cada salto y no sólo la
        * primera vez. */}
-      <div key={seccion} style={css("animation:es33-alza .5s cubic-bezier(.22,1,.36,1) both;")}>
-        {seccion === "resumen" && <SeccionResumen />}
-        {seccion === "arbol" && <SeccionArbol />}
-        {seccion === "numeros" && <SeccionNumeros />}
-        {seccion === "estructura" && <SeccionEstructura />}
-        {seccion === "alma" && <SeccionAlma />}
-        {seccion === "cuentas" && <SeccionCuentas />}
-        {seccion === "ciclos" && <SeccionCiclos />}
+      <div key={disciplina + seccion} style={css("animation:es33-alza .5s cubic-bezier(.22,1,.36,1) both;")}>
+        {disciplina === "fengshui" && (
+          <Pendiente
+            titulo="Feng Shui"
+            pie="El estudio del espacio: cómo la casa y la orientación acompañan lo que dice la carta. Todavía no está desarrollado."
+          />
+        )}
+        {disciplina === "numerologia" && (
+          <Pendiente
+            titulo="Numerología"
+            pie="La lectura numerológica, aparte de la kabalística: la vibración de cada cifra por sí misma. Todavía no está desarrollada."
+          />
+        )}
+        {disciplina === "kabala" && (
+          <>
+            {seccion === "resumen" && <SeccionResumen />}
+            {seccion === "arbol" && <SeccionArbol />}
+            {seccion === "numeros" && <SeccionNumeros />}
+            {seccion === "estructura" && <SeccionEstructura />}
+            {seccion === "alma" && <SeccionAlma />}
+            {seccion === "cuentas" && <SeccionCuentas />}
+            {seccion === "ciclos" && <SeccionCiclos />}
+          </>
+        )}
       </div>
     </main>
   );
