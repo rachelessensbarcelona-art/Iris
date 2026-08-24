@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { css } from "@/lib/css";
 import { useApp, type View } from "@/lib/app-context";
 import ConsultaScreen from "./screens/ConsultaScreen";
@@ -7,6 +8,7 @@ import EstudioScreen from "./screens/EstudioScreen";
 import ParejaScreen from "./screens/ParejaScreen";
 import DetalleModal from "./DetalleModal";
 import Sidebar from "./Sidebar";
+import Menu, { BotonMenu } from "./Menu";
 import Tema from "./Tema";
 
 const TABS: Array<{ k: View; label: string }> = [
@@ -17,6 +19,7 @@ const TABS: Array<{ k: View; label: string }> = [
 
 export default function Shell() {
   const { view, setView, r } = useApp();
+  const [menu, setMenu] = useState(false);
 
   return (
     <div
@@ -43,7 +46,8 @@ export default function Shell() {
           "position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:clamp(12px,2vw,22px);flex-wrap:wrap;padding:12px clamp(14px,3vw,28px);background:color-mix(in srgb, var(--bg) 78%, transparent);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--border);"
         )}
       >
-        <div style={css("display:flex;align-items:center;gap:13px;")}>
+        <BotonMenu onClick={() => setMenu(true)} />
+        <div data-marca="" style={css("display:flex;align-items:center;gap:13px;min-width:0;")}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo.jpeg"
@@ -114,6 +118,7 @@ export default function Shell() {
         </div>
       </div>
 
+      <Menu abierto={menu} cerrar={() => setMenu(false)} />
       <DetalleModal />
     </div>
   );

@@ -39,13 +39,14 @@ export const DISCIPLINAS: Array<{ k: Disciplina; label: string; Ico: Ico }> = [
 ];
 
 /**
- * Barra lateral del panel. Un grupo por disciplina: dentro de Kábala cuelgan
- * las siete partes del estudio, y Feng Shui y Numerología están puestas ya en
- * su sitio aunque todavía no tengan contenido — así se ve de entrada que la
- * escuela son tres cosas y no una. En pantalla estrecha desaparece y manda la
- * tira de pestañas de arriba.
+ * La navegación del estudio: un grupo por disciplina y, dentro de Kábala, sus
+ * siete partes. Es la misma lista en los dos sitios donde aparece — la columna
+ * de la izquierda en pantalla ancha y el cajón del menú en móvil y tableta —
+ * para que no haya dos navegaciones que mantener y que puedan discrepar.
+ *
+ * `alCambiar` lo usa el cajón para cerrarse en cuanto se elige algo.
  */
-export default function Sidebar() {
+export function NavDisciplinas({ alCambiar }: { alCambiar?: () => void }) {
   const { r, seccion, setSeccion, disciplina, setDisciplina } = useApp();
   const quieto = useReducedMotion();
   // Qué disciplinas están desplegadas. Se abre la que se está mirando, y
@@ -102,6 +103,72 @@ export default function Sidebar() {
   );
 
   return (
+    <nav style={css("display:flex;flex-direction:column;gap:var(--s5);")}>
+      {DISCIPLINAS.map((d) => {
+        const dentro = disciplina === d.k;
+        // Sólo Kábala tiene partes por ahora; las otras dos no llevan flecha
+        // porque no hay nada que desplegar todavía.
+        const partes = d.k === "kabala" ? KABALA : [];
+        const abierta = partes.length > 0 && abiertas.includes(d.k);
+        return (
+          <div key={d.k} style={css("display:flex;flex-direction:column;gap:2px;")}>
+            {/* La disciplina abierta no se resalta si es Kábala: ya se ve
+             * cuál está por la sección marcada de dentro. */}
+            {fila(
+              dentro && !partes.length,
+              d.Ico,
+              d.label,
+              () => {
+                if (partes.length) alterna(d.k);
+                else {
+                  setDisciplina(d.k);
+                  alCambiar?.();
+                }
+              },
+              true,
+              partes.length ? abierta : undefined
+            )}
+            <AnimatePresence initial={false}>
+              {abierta && (
+                <motion.div
+                  key="partes"
+                  initial={quieto ? false : { height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={quieto ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                  transition={{ height: { duration: 0.34, ease: [0.22, 1, 0.36, 1] }, opacity: { duration: 0.22 } }}
+                  style={css("overflow:hidden;")}
+                >
+                  <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);padding:var(--s2) 10px 2px;")}>El estudio</div>
+                  {partes.map(({ k, label, Ico }, i) => (
+                    <motion.div
+                      key={k}
+                      initial={quieto ? false : { opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 + i * 0.035, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      {fila(seccion === k && dentro, Ico, label, () => {
+                        // Pulsar una parte de Kábala devuelve a Kábala, aunque
+                        // se estuviera mirando otra disciplina.
+                        setDisciplina("kabala");
+                        setSeccion(k);
+                        alCambiar?.();
+                      })}
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </nav>
+  );
+}
+
+/** La columna de la izquierda en pantalla ancha. Por debajo de 980 px
+ *  desaparece y manda el menú del botón de la cabecera. */
+export default function Sidebar() {
+  return (
     <aside
       data-sidebar=""
       data-chrome="1"
@@ -109,58 +176,7 @@ export default function Sidebar() {
         "position:sticky;top:63px;align-self:start;flex:none;width:238px;height:calc(100vh - 63px);overflow-y:auto;padding:22px 14px 28px;background:var(--bg);border-right:1px solid var(--border);"
       )}
     >
-      <nav style={css("display:flex;flex-direction:column;gap:var(--s5);")}>
-        {DISCIPLINAS.map((d) => {
-          const dentro = disciplina === d.k;
-          // Sólo Kábala tiene partes por ahora; las otras dos no llevan flecha
-          // porque no hay nada que desplegar todavía.
-          const partes = d.k === "kabala" ? KABALA : [];
-          const abierta = partes.length > 0 && abiertas.includes(d.k);
-          return (
-            <div key={d.k} style={css("display:flex;flex-direction:column;gap:2px;")}>
-              {/* La disciplina abierta no se resalta si es Kábala: ya se ve
-               * cuál está por la sección marcada de dentro. */}
-              {fila(
-                dentro && !partes.length,
-                d.Ico,
-                d.label,
-                () => (partes.length ? alterna(d.k) : setDisciplina(d.k)),
-                true,
-                partes.length ? abierta : undefined
-              )}
-              <AnimatePresence initial={false}>
-                {abierta && (
-                  <motion.div
-                    key="partes"
-                    initial={quieto ? false : { height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={quieto ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                    transition={{ height: { duration: 0.34, ease: [0.22, 1, 0.36, 1] }, opacity: { duration: 0.22 } }}
-                    style={css("overflow:hidden;")}
-                  >
-                    <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);padding:var(--s2) 10px 2px;")}>El estudio</div>
-                    {partes.map(({ k, label, Ico }, i) => (
-                      <motion.div
-                        key={k}
-                        initial={quieto ? false : { opacity: 0, x: -6 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.05 + i * 0.035, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      >
-                        {fila(seccion === k && dentro, Ico, label, () => {
-                          // Pulsar una parte de Kábala devuelve a Kábala, aunque
-                          // se estuviera mirando otra disciplina.
-                          setDisciplina("kabala");
-                          setSeccion(k);
-                        })}
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          );
-        })}
-      </nav>
+      <NavDisciplinas />
     </aside>
   );
 }

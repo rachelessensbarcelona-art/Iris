@@ -26,7 +26,7 @@ const SECCIONES: Array<{ k: Seccion; label: string; pie: string }> = [
 ];
 
 export default function PanelScreen() {
-  const { r, seccion, setSeccion, disciplina, setDisciplina } = useApp();
+  const { r, seccion, disciplina } = useApp();
   if (!r) return null;
 
   const resumen = [
@@ -62,56 +62,6 @@ export default function PanelScreen() {
         </div>
       </div>
 
-      {/* Duplica la barra lateral, así que sólo aparece cuando ésta se esconde
-       * por falta de ancho. */}
-      {/* La tira se desliza dentro de su propia pastilla. Sin el overflow las
-       * pestañas que no caben empujaban el ancho de la página entera y
-       * aparecía una barra horizontal en toda la pantalla. */}
-      <nav
-        data-nav=""
-        data-tabs-panel=""
-        data-tira=""
-        style={css(
-          "display:flex;gap:2px;margin-bottom:var(--s6);background:color-mix(in srgb, var(--text) 10%, transparent);border-radius:980px;padding:3px;width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;"
-        )}
-      >
-        {DISCIPLINAS.filter((d) => d.k !== "kabala" || disciplina !== "kabala").map((d) => (
-          <button
-            key={d.k}
-            onClick={() => setDisciplina(d.k)}
-            style={css(
-              "flex:none;padding:8px 16px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:600;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
-                (disciplina === d.k ? "var(--surface-solid)" : "transparent") +
-                ";color:" +
-                (disciplina === d.k ? "var(--text)" : "var(--text-3)") +
-                ";"
-            )}
-          >
-            {d.label}
-          </button>
-        ))}
-        {disciplina === "kabala" &&
-          SECCIONES.map((s) => {
-          const on = seccion === s.k;
-          return (
-            <button
-              key={s.k}
-              onClick={() => setSeccion(s.k)}
-              style={css(
-                "flex:none;padding:8px 16px;border-radius:980px;border:none;cursor:pointer;font-size:var(--t-body);font-weight:590;letter-spacing:-.01em;white-space:nowrap;transition:all .2s;background:" +
-                  (on ? "var(--surface-solid)" : "transparent") +
-                  ";box-shadow:" +
-                  (on ? "0 3px 8px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.06)" : "none") +
-                  ";color:" +
-                  (on ? "var(--text)" : "var(--text-3)") +
-                  ";"
-              )}
-            >
-              {s.label}
-            </button>
-          );
-        })}
-      </nav>
 
       {(() => {
         // El resumen ya se abre saludando a Iris por su nombre; no hace falta
