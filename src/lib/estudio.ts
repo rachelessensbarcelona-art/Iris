@@ -8,7 +8,7 @@ import { ficha } from "./engine";
 import { refItems, type RefItem } from "./chips";
 import { CAMINO_EVOLUTIVO, KDATA } from "./kdata";
 import { COL } from "./tree";
-import { cierraFrase } from "./format";
+import { cierraFrase, titulo } from "./format";
 
 export type Bloque =
   | { tipo: "h"; texto: string }
@@ -36,6 +36,15 @@ export type Capitulo = { id: string; kicker: string; titulo: string; seccion: st
  * entra en el documento — en el panel siguen, que es su mesa de trabajo.
  */
 const CLAVES = /(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+)(?:\s*[-–]\s*(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+))+\.?/g;
+/** Sólo quita las claves de escuela; deja el texto como está. */
+export function sinClaves(t: string): string {
+  return t
+    .replace(CLAVES, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([,.;:])/g, "$1")
+    .trim();
+}
+
 export function paraCliente(t: string): string {
   return cierraFrase(
     t
@@ -47,7 +56,9 @@ export function paraCliente(t: string): string {
 }
 
 function bH(texto: string): Bloque {
-  return { tipo: "h", texto: paraCliente(texto) };
+  // Un rótulo no es una frase: se le quitan las claves de escuela, pero no se
+  // le cierra con puntos suspensivos como a los párrafos.
+  return { tipo: "h", texto: sinClaves(texto) };
 }
 function bP(editId: string, textoDef: string): Bloque {
   return { tipo: "p", editId, textoDef: paraCliente(textoDef) };
@@ -67,6 +78,29 @@ function bRefsFicha(F: ReturnType<typeof ficha>): Bloque | null {
 }
 function bCita(texto: string): Bloque {
   return { tipo: "cita", texto };
+}
+
+/**
+ * La lectura de un número, para el documento. Si el número está en los
+ * apuntes se pone tal cual; si no está —pasa con casi todos los de tres y
+ * cuatro cifras— el manual lo lee por sus partes, y eso es lo que se escribe,
+ * diciendo de dónde sale cada una. Sin esto, el kármico y los de afinidad
+ * salían como una cifra suelta y una frase de qué es, sin decir qué dicen.
+ */
+function bLectura(idBase: string, n: number, aclara?: string): Bloque[] {
+  const F = ficha(n);
+  if (!F) return [];
+  if (F.texto) {
+    return [bH(`${n} · ${titulo(F.titulo)}${aclara ? " — " + aclara : ""}`), bP(`${idBase}.${n}`, F.texto)];
+  }
+  if (F.partes.length) {
+    const dice = F.partes.map((x) => x.n).join(" y ");
+    return [
+      bH(`${n}${aclara ? " · " + aclara : ""} — no figura en los apuntes: se lee por sus partes, ${dice}`),
+      ...F.partes.flatMap((x): Bloque[] => [bH(`${x.n} · ${titulo(x.titulo)}`), bP(`${idBase}.${x.n}`, x.texto)]),
+    ];
+  }
+  return [];
 }
 
 export function construyeCapitulos(r: Resultado): Capitulo[] {
@@ -308,9 +342,37 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
         "Las cuentas abiertas son la base del sentimiento de culpa, donde tu alma siente que más ha fallado: situaciones no resueltas que continúas cargando. Cada potencial arcaico te ayuda a cerrar la cuenta abierta de su fila."
       ),
       { tipo: "cuentas" },
+      bDato(
+        "p14.karmico",
+        "Kármico",
+        r.cuentas.karmico,
+        "Dónde falló tu alma en sus relaciones en vidas pasadas y qué se repite en esta."
+      ),
+      ...bLectura("p14.k", r.cuentas.karmico),
       bRefsFicha(r.cuentasFichas.karmico),
-      bH("Tu lema de vida: " + r.cuentas.lemaDeVida),
+      bDato(
+        "p14.lema",
+        "Lema de vida",
+        r.cuentas.lemaDeVida,
+        "El propósito de tu alma: la vibración que te permite llevar a cabo tu plan."
+      ),
+      ...bLectura("p14.l", r.cuentas.lemaDeVida),
       bRefsFicha(r.cuentasFichas.lema),
+    ].filter(Boolean) as Bloque[],
+  });
+
+  // Los números de afinidad no aparecían en el documento por ninguna parte.
+  push({
+    seccion: "Cierre",
+    kicker: "Cuentas abiertas y karma",
+    titulo: `Tus números de afinidad: ${r.afinidad.diaMes} y ${r.afinidad.mesAnio}`,
+    bloques: [
+      bLead(
+        "p14b.lead",
+        "Son la visión más amplia de la carta: qué has venido a hacer en esta encarnación. Van en pareja, y cada uno mira una mitad — el primero sale del día y el mes de nacimiento; el segundo, del mes y el año."
+      ),
+      ...bLectura("p14b.a", r.afinidad.diaMes, `día ${r.fecha.dia} + mes ${r.fecha.mes}`),
+      ...bLectura("p14b.b", r.afinidad.mesAnio, `mes ${r.fecha.mes} + año ${String(r.fecha.anio).slice(2)}`),
     ].filter(Boolean) as Bloque[],
   });
 
