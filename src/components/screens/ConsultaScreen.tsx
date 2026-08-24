@@ -41,6 +41,17 @@ export default function ConsultaScreen() {
 
   // Sin cabecera arriba, la entrada se centra en la ventana: queda el
   // formulario y nada más, que es lo único que hay que hacer aquí.
+  // Las fichas de letras se achican cuando el nombre es largo. Con un nombre
+  // compuesto y dos apellidos salen cincuenta letras: a tamaño fijo no cabían
+  // y las de los apellidos quedaban fuera sin que se notara.
+  const totalLetras = n.palabras.reduce((s, w) => s + w.letras.length, 0);
+  const fichas =
+    totalLetras > 42
+      ? { ancho: 21, pad: "4px 3px", letra: "var(--t-body)" }
+      : totalLetras > 26
+        ? { ancho: 24, pad: "5px 4px", letra: "var(--t-body)" }
+        : { ancho: 28, pad: "6px 5px", letra: "var(--t-read)" };
+
   return (
     <main
       style={css(
@@ -166,8 +177,8 @@ export default function ConsultaScreen() {
             </p>
           </motion.section>
 
-          <div data-entrada-lado="" data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);min-height:0;")}>
-            <div style={css(TARJETA + "min-height:0;display:flex;flex-direction:column;")}>
+          <div data-entrada-lado="" data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
+            <div style={css(TARJETA)}>
               <div style={css(ROTULO + "margin-bottom:var(--s4);")}>Valor del nombre</div>
               {n.palabras.length === 0 ? (
                 <p style={css("font-size:var(--t-body);line-height:1.55;color:var(--text-4);margin:0;")}>
@@ -188,7 +199,11 @@ export default function ConsultaScreen() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.28, delay: li * 0.015 }}
                             style={css(
-                              "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:28px;padding:6px 5px;border-radius:var(--r-xs);border:1px solid " +
+                              "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:" +
+                                fichas.ancho +
+                                "px;padding:" +
+                                fichas.pad +
+                                ";border-radius:var(--r-xs);border:1px solid " +
                                 (esVocal(l.g) ? "var(--border-accent)" : "var(--border)") +
                                 ";background:" +
                                 (esVocal(l.g) ? "var(--gold-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
@@ -197,7 +212,7 @@ export default function ConsultaScreen() {
                                 ";"
                             )}
                           >
-                            <span style={css("font-size:var(--t-read);line-height:1;")}>{l.g}</span>
+                            <span style={css("font-size:" + fichas.letra + ";line-height:1;")}>{l.g}</span>
                             <span style={css("font-size:var(--t-micro);font-weight:590;opacity:.7;")}>{l.v}</span>
                           </motion.div>
                         ))}
