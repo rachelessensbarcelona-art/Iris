@@ -25,7 +25,7 @@ export default function SeccionNumeros() {
         return (
           <article key={i} style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
             <div style={css("display:flex;align-items:baseline;gap:var(--gap);flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);")}>{d.label}</span>
+              <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>{d.label}</span>
               <Cifra id={d.id} valor={d.o.valor} tam={42} />
               <span style={css("font-family:var(--font-ui);font-style:normal;font-size:var(--t-read);color:var(--text-3);")}>{d.desc}</span>
             </div>
@@ -64,7 +64,7 @@ export default function SeccionNumeros() {
       />
 
       <article style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s3);")}>Tus días de fuerza</div>
+        <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:var(--s3);")}>Tus días de fuerza</div>
         <div style={css("display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap;")}>
           {r.diasFuerza.dias.map((n, i) => (
             <span

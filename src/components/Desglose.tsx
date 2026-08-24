@@ -16,7 +16,7 @@ export type Paso = {
 export default function Desglose({ titulo, pasos, nota }: { titulo: string; pasos: Paso[]; nota?: string }) {
   return (
     <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-      <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s4);")}>{titulo}</div>
+      <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:var(--s4);")}>{titulo}</div>
       <div style={css("display:flex;flex-direction:column;gap:1px;")}>
         {pasos.map((p, i) => (
           // Tres columnas fijas en vez de flex con salto: con flex-wrap una

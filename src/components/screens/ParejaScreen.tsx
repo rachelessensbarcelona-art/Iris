@@ -1,5 +1,6 @@
 "use client";
 import { css } from "@/lib/css";
+import { botonPrincipal } from "@/lib/ui";
 import { titulo } from "@/lib/format";
 import { imprimir, AYUDA_IMPRIMIR } from "@/lib/imprimir";
 import { useApp, valida } from "@/lib/app-context";
@@ -78,7 +79,7 @@ export default function ParejaScreen() {
       </div>
 
       <section data-chrome="1" style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);margin-bottom:var(--s5);")}>
-        <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s5);")}>Datos de la segunda persona</div>
+        <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:var(--s5);")}>Datos de la segunda persona</div>
         <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:var(--s3);align-items:end;")}>
           {campo("Nombre", "nombre")}
           {campo("Primer apellido", "ap1")}
@@ -91,15 +92,7 @@ export default function ParejaScreen() {
           onClick={comparar}
           disabled={!listo}
           style={css(
-            "margin-top:20px;padding:13px 34px;border-radius:980px;border:none;cursor:" +
-              (listo ? "pointer" : "not-allowed") +
-              ";font-family:var(--font-ui);font-weight:600;font-size:var(--t-read);letter-spacing:-.01em;background:" +
-              (listo ? "linear-gradient(180deg,#B9942F,#8A6A1B)" : "color-mix(in srgb, var(--text) 10%, transparent)") +
-              ";box-shadow:" +
-              (listo ? "0 1px 2px rgba(0,0,0,.10),0 8px 20px rgba(154,123,46,.26)" : "none") +
-              ";color:" +
-              (listo ? "#fff" : "var(--text-4)") +
-              ";"
+botonPrincipal(listo) + "margin-top:20px;"
           )}
         >
           Comparar
@@ -115,7 +108,7 @@ export default function ParejaScreen() {
             <button
               onClick={() => imprimir()}
               style={css(
-                "margin-left:auto;background:var(--gold-deep);border:1px solid var(--gold-deep);color:#fff;border-radius:999px;padding:10px 22px;font-weight:600;font-size:var(--t-body);cursor:pointer;"
+                "margin-left:auto;background:var(--gold-deep);border:1px solid var(--gold-deep);color:#fff;border-radius:999px;padding:10px 22px;font-weight:590;font-size:var(--t-body);cursor:pointer;"
               )}
             >
               Exportar PDF
@@ -152,10 +145,10 @@ export default function ParejaScreen() {
           </div>
           {comparativa.map((sec, si) => (
             <article key={si} style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-              <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s3);")}>{sec.titulo}</div>
+              <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:var(--s3);")}>{sec.titulo}</div>
               {sec.items.map((it, ii) => (
                 <div key={ii} style={css("display:flex;gap:var(--s3);padding:8px 0;border-top:1px solid var(--border);")}>
-                  <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-body);color:var(--gold);min-width:96px;")}>{it.clave}</span>
+                  <span style={css("font-family:var(--font-ui);font-weight:590;font-size:var(--t-body);color:var(--gold);min-width:96px;")}>{it.clave}</span>
                   <p style={css("font-family:var(--font-ui);font-size:var(--t-read);line-height:1.55;color:var(--text-2);margin:0;text-wrap:pretty;flex:1;")}>{it.texto}</p>
                 </div>
               ))}

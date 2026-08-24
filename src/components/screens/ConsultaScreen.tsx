@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { css } from "@/lib/css";
+import { botonPrincipal } from "@/lib/ui";
 import { useApp, valida } from "@/lib/app-context";
 import { analizaNombre, esVocal } from "@/lib/engine";
 import Particulas from "../Particulas";
@@ -159,15 +160,7 @@ export default function ConsultaScreen() {
               disabled={!listo}
               whileTap={listo ? { scale: 0.98 } : undefined}
               style={css(
-                "width:100%;margin-top:var(--s5);padding:13px 0;border-radius:980px;border:none;cursor:" +
-                  (listo ? "pointer" : "not-allowed") +
-                  ";font-family:var(--font-ui);font-weight:600;font-size:var(--t-read);letter-spacing:-.01em;background:" +
-                  (listo ? "linear-gradient(180deg,#C9A84C,#8A6A1B)" : "color-mix(in srgb, var(--text) 9%, transparent)") +
-                  ";box-shadow:" +
-                  (listo ? "0 1px 2px rgba(0,0,0,.12),0 6px 16px rgba(154,123,46,.24)" : "none") +
-                  ";color:" +
-                  (listo ? "#fff" : "var(--text-4)") +
-                  ";"
+botonPrincipal(listo) + "width:100%;margin-top:var(--s5);"
               )}
             >
               Generar el estudio

@@ -18,14 +18,23 @@ export default function BloqueView({
 }) {
   const onBlur = (id: string) => (e: React.FocusEvent<HTMLParagraphElement>) => guardaEdit(id, (e.target.textContent || "").trim());
 
+  // Todo párrafo del documento se puede reescribir, pero no había forma de
+  // saberlo: parecía texto impreso. Ahora se marcan como editables — al pasar
+  // el ratón se tiñen y sale el cursor de texto, y al entrar se enmarcan.
+  const editable = {
+    contentEditable: true,
+    suppressContentEditableWarning: true,
+    "data-editable": "",
+    title: "Pulsa para reescribirlo con tus palabras",
+  } as const;
+
   switch (b.tipo) {
     case "h":
       return <div style={css("font-family:'Cinzel',serif;font-size:var(--t-mini);letter-spacing:.2em;text-transform:uppercase;color:#9A7F32;border-top:1px solid rgba(201,168,76,.3);padding-top:9px;")}>{b.texto}</div>;
     case "lead":
       return (
         <p
-          contentEditable
-          suppressContentEditableWarning
+          {...editable}
           onBlur={onBlur(b.editId)}
           style={css("font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-title);line-height:1.5;color:#5E5670;margin:0;text-wrap:pretty;")}
         >
@@ -35,8 +44,7 @@ export default function BloqueView({
     case "p":
       return (
         <p
-          contentEditable
-          suppressContentEditableWarning
+          {...editable}
           onBlur={onBlur(b.editId)}
           style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-read);line-height:1.56;color:#37323F;margin:0;text-align:justify;text-wrap:pretty;white-space:pre-line;")}
         >
@@ -50,7 +58,7 @@ export default function BloqueView({
             <div style={css("font-family:'Karla',sans-serif;font-size:var(--t-micro);letter-spacing:.22em;text-transform:uppercase;color:#9B93A8;")}>{b.label}</div>
             <div style={css("font-family:'Cinzel',serif;font-size:var(--t-hero);line-height:1.1;color:#241F2E;")}>{b.valor}</div>
           </div>
-          <p contentEditable suppressContentEditableWarning onBlur={onBlur(b.editId)} style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-read);line-height:1.55;color:#37323F;margin:0;flex:1;text-wrap:pretty;")}>
+          <p {...editable} onBlur={onBlur(b.editId)} style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-read);line-height:1.55;color:#37323F;margin:0;flex:1;text-wrap:pretty;")}>
             {txt(b.editId, b.textoDef)}
           </p>
         </div>
@@ -60,13 +68,13 @@ export default function BloqueView({
         <div className={styles.duo}>
           <div style={css("border-left:2px solid #C0574C;padding-left:12px;")}>
             <div style={css("font-family:'Karla',sans-serif;font-size:var(--t-micro);letter-spacing:.2em;text-transform:uppercase;color:#B0564C;margin-bottom:3px;")}>En negativo</div>
-            <p contentEditable suppressContentEditableWarning onBlur={onBlur(b.editIdNeg)} style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-body);line-height:1.5;color:#413B4B;margin:0;")}>
+            <p {...editable} onBlur={onBlur(b.editIdNeg)} style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-body);line-height:1.5;color:#413B4B;margin:0;")}>
               {txt(b.editIdNeg, b.negDef)}
             </p>
           </div>
           <div style={css("border-left:2px solid #4C8A5A;padding-left:12px;")}>
             <div style={css("font-family:'Karla',sans-serif;font-size:var(--t-micro);letter-spacing:.2em;text-transform:uppercase;color:#40794F;margin-bottom:3px;")}>En positivo</div>
-            <p contentEditable suppressContentEditableWarning onBlur={onBlur(b.editIdPos)} style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-body);line-height:1.5;color:#413B4B;margin:0;")}>
+            <p {...editable} onBlur={onBlur(b.editIdPos)} style={css("font-family:'Cormorant Garamond',serif;font-size:var(--t-body);line-height:1.5;color:#413B4B;margin:0;")}>
               {txt(b.editIdPos, b.posDef)}
             </p>
           </div>

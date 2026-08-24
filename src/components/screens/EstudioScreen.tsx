@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { css } from "@/lib/css";
+import { BOTON_NORMAL, botonPrincipal } from "@/lib/ui";
 import { useApp } from "@/lib/app-context";
 import { construyeCapitulos } from "@/lib/estudio";
 import { imprimir, AYUDA_IMPRIMIR } from "@/lib/imprimir";
@@ -51,14 +52,14 @@ export default function EstudioScreen() {
           {!hoja && (
             <button
               onClick={restablecer}
-              style={css("background:none;border:1px solid var(--border-accent);color:var(--text-3);border-radius:980px;padding:9px 16px;font-size:var(--t-body);font-weight:590;cursor:pointer;")}
+              style={css(BOTON_NORMAL)}
             >
               Restablecer textos
             </button>
           )}
           <button
             onClick={() => imprimir()}
-            style={css("background:linear-gradient(180deg,#B9942F,#93711F);border:1px solid var(--gold);color:#fff;border-radius:999px;padding:10px 22px;font-family:var(--font-ui);font-weight:600;font-size:var(--t-body);cursor:pointer;")}
+            style={css(botonPrincipal())}
           >
             {hoja ? "Exportar la hoja" : "Exportar PDF"}
           </button>
@@ -73,7 +74,7 @@ export default function EstudioScreen() {
         {!hoja && <section className={`${styles.page} ${styles.portada}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.jpeg" alt="" style={css("width:210px;height:210px;border-radius:50%;object-fit:cover;margin-bottom:34px;")} />
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</div>
+          <div style={css("font-weight:590;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</div>
           <div style={css("width:78px;height:1px;background:var(--gold);margin:26px 0;")} />
           <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:#6B6478;")}>Estudio de Kábala personal</div>
           <h1 style={css("font-family:var(--font-ui);font-weight:700;font-size:var(--t-hero);line-height:1.22;letter-spacing:-.022em;color:#241F2E;margin:30px 0 0;max-width:560px;")}>{titulo(r.nombre.texto)}</h1>
@@ -93,7 +94,7 @@ export default function EstudioScreen() {
             <header className={styles.header}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.jpeg" alt="" style={css("width:26px;height:26px;border-radius:50%;object-fit:cover;")} />
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</span>
+              <span style={css("font-weight:590;font-size:var(--t-mini);color:#9A7F32;")}>{marca}</span>
               <span style={css("margin-left:auto;font-family:var(--font-ui);font-size:var(--t-mini);font-weight:590;color:#9B93A8;")}>{cap.seccion}</span>
             </header>
             <div className={styles.cuerpo}>

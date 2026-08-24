@@ -5,7 +5,7 @@ import { arbolGeometria } from "@/lib/arbol";
 import { COL } from "@/lib/tree";
 import { frase, recorta, titulo } from "@/lib/format";
 import Particulas from "../Particulas";
-import { tarjetaCon, PAD_SM } from "@/lib/ui";
+import { tarjetaCon, PAD_SM, BOTON_PLANO } from "@/lib/ui";
 import Lienzo from "../Lienzo";
 import ArbolVida from "../ArbolVida";
 
@@ -73,7 +73,7 @@ export default function SeccionArbol() {
             <p style={css("font-size:var(--t-read);line-height:1.62;color:var(--text-2);margin:var(--s3) 0 0;text-wrap:pretty;")}>{c.extracto}</p>
             <button
               onClick={() => verArcano(c.c.arcano)}
-              style={css("margin-top:var(--s3);background:color-mix(in srgb, var(--surface-solid) 70%, transparent);border:1px solid var(--border-accent);color:var(--gold);border-radius:980px;padding:8px 16px;font-size:var(--t-body);font-weight:590;cursor:pointer;")}
+              style={css(BOTON_PLANO + "margin-top:var(--s3);")}
             >
               Texto completo
             </button>
@@ -82,7 +82,7 @@ export default function SeccionArbol() {
 
         {r.turbulencias && (
           <article style={css(tarjetaCon("var(--red)") + PAD_SM)}>
-            <div style={css("font-weight:600;font-size:var(--t-body);color:var(--red);margin-bottom:var(--s3);")}>
+            <div style={css("font-weight:590;font-size:var(--t-body);color:var(--red);margin-bottom:var(--s3);")}>
               Años de turbulencias · {r.turbulencias.desde} – {r.turbulencias.hasta} años
             </div>
             {r.turbulencias.lista.map((t, i) => (

@@ -49,6 +49,8 @@ type Ctx = {
   setView: (v: View) => void;
   seccion: Seccion;
   disciplina: Disciplina;
+  lateral: boolean;
+  setLateral: (v: boolean) => void;
   setDisciplina: (d: Disciplina) => void;
   setSeccion: (s: Seccion) => void;
   f: FormState;
@@ -83,6 +85,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [view, setView] = useState<View>("inicio");
   const [seccion, setSeccion] = useState<Seccion>("resumen");
   const [disciplina, setDisciplina] = useState<Disciplina>("kabala");
+  // La columna de la izquierda se pliega para leer el estudio a todo lo ancho.
+  const [lateral, setLateral] = useState(true);
   const [f, setF] = useState<FormState>(FORM_VACIO);
   const [r, setR] = useState<Resultado | null>(null);
   const [id, setId] = useState<string | null>(null);
@@ -185,6 +189,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       seccion,
       disciplina,
       setDisciplina,
+      lateral,
+      setLateral,
       setSeccion,
       f,
       set,
@@ -211,7 +217,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       marca: MARCA,
       anioUniversal,
     }),
-    [view, seccion, disciplina, f, set, r, id, hist, calcular, abrir, borrar, edits, txt, guardaEdit, restablecer, detalle, verNumero, verArcano, verTexto, cerrarDetalle, p, setP, pr, comp, comparar, anioUniversal]
+    [view, seccion, disciplina, lateral, f, set, r, id, hist, calcular, abrir, borrar, edits, txt, guardaEdit, restablecer, detalle, verNumero, verArcano, verTexto, cerrarDetalle, p, setP, pr, comp, comparar, anioUniversal]
   );
 
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;

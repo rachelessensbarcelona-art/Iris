@@ -64,3 +64,40 @@ export const ENLACE =
 
 /** Punto de color que marca a qué pertenece una fila. */
 export const punto = (color: string) => "width:7px;height:7px;border-radius:50%;flex:none;background:" + color + ";";
+
+
+/* ------------------------------------------------------------------ botones */
+
+/**
+ * Los botones se escribían uno a uno y salían de todo: unos con borde dorado y
+ * fondo translúcido, otros con degradado y sombra de color, otros sin más que
+ * el texto. Aquí hay tres, y no hacen falta más.
+ *
+ *   · `botonPrincipal` — la acción de la pantalla, una por pantalla;
+ *   · `botonNormal` — todo lo demás que se pulsa y no es un chip;
+ *   · `botonPlano` — el que va dentro de una tarjeta y no debe competir.
+ *
+ * Todos con la misma altura, el mismo radio y la misma letra, para que se
+ * reconozcan como botones sin tener que leerlos.
+ */
+const BOTON =
+  "display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:980px;" +
+  "font-family:var(--font-ui);font-size:var(--t-body);font-weight:590;letter-spacing:-.01em;" +
+  "white-space:nowrap;cursor:pointer;transition:background .18s,border-color .18s,color .18s;";
+
+export const botonPrincipal = (activo = true) =>
+  BOTON +
+  "padding:12px 24px;border:1px solid " +
+  (activo ? "var(--gold-deep)" : "transparent") +
+  ";background:" +
+  (activo ? "var(--gold-deep)" : "color-mix(in srgb, var(--text) 9%, transparent)") +
+  ";color:" +
+  (activo ? "#fff" : "var(--text-4)") +
+  ";" +
+  (activo ? "" : "cursor:not-allowed;");
+
+export const BOTON_NORMAL =
+  BOTON + "padding:9px 18px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-2);";
+
+export const BOTON_PLANO =
+  BOTON + "padding:8px 15px;border:none;background:color-mix(in srgb, var(--text) 5%, transparent);color:var(--text-2);";

@@ -61,7 +61,7 @@ export default function SeccionCiclos() {
     <div style={css("display:flex;flex-direction:column;gap:var(--gap-lg);")}>
       <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("display:flex;align-items:baseline;gap:var(--gap);flex-wrap:wrap;margin-bottom:20px;")}>
-          <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);")}>Ciclos vitales</span>
+          <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Ciclos vitales</span>
           <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>propósito de vida {r.ciclos.proposito}</span>
           <span style={css("margin-left:auto;font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>
             año {r.ciclos.anioUniversal} · <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-title);color:var(--gold);")}>{r.ciclos.anioPersonal}</span>
@@ -83,7 +83,7 @@ export default function SeccionCiclos() {
 
       <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
         <div style={css("display:flex;align-items:baseline;gap:var(--s4);flex-wrap:wrap;margin-bottom:var(--s3);")}>
-          <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);")}>Tu año personal {r.ciclos.anioUniversal}</span>
+          <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Tu año personal {r.ciclos.anioUniversal}</span>
           <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-hero);color:var(--gold);line-height:1;")}>{r.ciclos.anioPersonal}</span>
         </div>
         {/* Era un muro de veinte renglones a todo lo ancho. Se corta a una
@@ -137,7 +137,7 @@ export default function SeccionCiclos() {
 
       <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap-lg);")}>
         <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:14px;")}>Realizaciones</div>
+          <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:14px;")}>Realizaciones</div>
           {realizaciones.map((r2, i) => (
             <div key={i} style={css("display:flex;gap:var(--s4);padding:11px 0;" + (i ? "border-top:1px solid var(--border);" : ""))}>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-head);color:var(--gold);min-width:32px;")}>{r2.valor}</span>
@@ -151,7 +151,7 @@ export default function SeccionCiclos() {
           ))}
         </div>
         <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:14px;")}>Desafíos</div>
+          <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:14px;")}>Desafíos</div>
           {desafios.map((d, i) => (
             <div key={i} style={css("display:flex;gap:var(--s4);padding:11px 0;" + (i ? "border-top:1px solid var(--border);" : ""))}>
               <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-head);color:var(--red);min-width:32px;")}>{d.valor}</span>

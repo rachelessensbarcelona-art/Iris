@@ -126,7 +126,7 @@ export default function SeccionEstructura() {
       <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
         <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
           <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s3);")}>
-            <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--text-3);")}>Estructura energética</span>
+            <span style={css("font-weight:590;font-size:var(--t-mini);color:var(--text-3);")}>Estructura energética</span>
             <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-head);color:var(--gold);line-height:1;")}>tipo {est.tipo}</span>
           </div>
           <CuerpoPortales r={r} />
@@ -134,7 +134,7 @@ export default function SeccionEstructura() {
           {/* Qué es cada número del dibujo. Sobre la figura conviven cuatro
            * cosas distintas y sin esto no hay forma de saber cuál es cuál. */}
           <div style={css("margin-top:var(--s4);padding-top:var(--s4);border-top:1px solid var(--border);")}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s3);")}>Qué significa cada número del dibujo</div>
+            <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:var(--s3);")}>Qué significa cada número del dibujo</div>
             <div style={css("display:flex;flex-direction:column;gap:var(--s3);")}>
               {LEYENDA.map((l, i) => (
                 <div key={i} style={css("display:grid;grid-template-columns:38px 1fr;gap:var(--s3);align-items:start;")}>
@@ -219,7 +219,7 @@ export default function SeccionEstructura() {
         </div>
 
         <div style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--text-3);margin-bottom:var(--s2);")}>Ejes y planos en tensión</div>
+          <div style={css("font-weight:590;font-size:var(--t-mini);color:var(--text-3);margin-bottom:var(--s2);")}>Ejes y planos en tensión</div>
           <p style={css("font-family:var(--font-ui);font-size:var(--t-body);line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>{TENSIONES.intro.ejes}</p>
           <div style={css("display:flex;flex-direction:column;gap:7px;")}>
             {tensiones.map((t, idx) => (
@@ -258,7 +258,7 @@ export default function SeccionEstructura() {
 
       <div data-cascada="" style={css("display:flex;flex-direction:column;gap:var(--gap);")}>
         <article style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>
-          <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);margin-bottom:var(--s3);")}>Estructura número {est.tipo}</div>
+          <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);margin-bottom:var(--s3);")}>Estructura número {est.tipo}</div>
           <p style={css("font-family:var(--font-ui);font-size:var(--t-read);line-height:1.62;color:var(--text-2);margin:0;text-wrap:pretty;")}>{r.tipoEstructura?.texto || ""}</p>
           <div style={css("display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:var(--s4);margin-top:var(--s4);")}>
             <div style={css("border-left:2px solid var(--red);padding-left:12px;")}>
@@ -274,7 +274,7 @@ export default function SeccionEstructura() {
         {aprendizajes.map(({ a, ai, card, chips }) => (
           <article key={ai} style={css(card)}>
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--gold);")}>
+              <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>
                 Aprendizaje {a.portal}
                 {a.veces > 1 ? " · ×" + a.veces : ""}
               </span>
@@ -307,7 +307,7 @@ export default function SeccionEstructura() {
          * columna del cuerpo no se estire el triple que ésta. */}
         {enfermedades.length > 0 && (
           <div style={css(tarjetaCon("var(--red)") + PAD_SM)}>
-            <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--red);margin-bottom:var(--s2);")}>Enfermedades y debilidades</div>
+            <div style={css("font-weight:590;font-size:var(--t-mini);color:var(--red);margin-bottom:var(--s2);")}>Enfermedades y debilidades</div>
             <p style={css("font-family:var(--font-ui);font-size:var(--t-body);line-height:1.5;color:var(--text-4);margin:0 0 12px;")}>
               Si el aprendizaje del portal no se trabaja, la energía se somatiza en los órganos que rige ese chakra.
             </p>

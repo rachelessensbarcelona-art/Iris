@@ -436,6 +436,45 @@ button:not(:disabled):active {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Lo que se puede reescribir tiene que parecerlo.
+   Los párrafos del documento son editables desde el principio, pero se veían
+   como texto impreso: no había forma de saber que se podía pulsar encima. Sin
+   tocar, sólo un subrayado de puntos muy tenue; al pasar por encima se tiñen
+   y sale el cursor de texto; al entrar, se enmarcan.
+   --------------------------------------------------------------------------- */
+[data-editable] {
+  cursor: text;
+  border-radius: 6px;
+  margin-inline: -7px !important;
+  padding: 2px 7px;
+  /* Una línea de puntos al pie del bloque, no debajo de cada renglón:
+   * subrayando todas las líneas, un párrafo de cinco salía con cinco líneas
+   * de puntos y la página entera se llenaba de textura. */
+  border-bottom: 1px dotted rgba(154, 123, 46, 0.32);
+  transition: background .18s, box-shadow .18s, border-color .18s;
+}
+[data-editable]:hover {
+  background: rgba(201, 168, 76, 0.09);
+  border-bottom-color: rgba(154, 123, 46, 0.6);
+}
+[data-editable]:focus {
+  outline: none;
+  background: rgba(201, 168, 76, 0.07);
+  border-bottom-color: transparent;
+  box-shadow: 0 0 0 1.5px rgba(154, 123, 46, 0.45);
+}
+/* En papel no se imprime nada de esto: es una ayuda de pantalla. */
+@media print {
+  [data-editable] {
+    border-bottom: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    margin-inline: 0 !important;
+    padding: 0 !important;
+  }
+}
+
 /* La tira del carrusel se arrastra pero no enseña barra: la navegación va en
  * las flechas y en el propio gesto. */
 [data-tira]::-webkit-scrollbar {

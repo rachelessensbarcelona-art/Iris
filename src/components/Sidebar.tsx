@@ -12,6 +12,7 @@ import {
   IcoFengShui,
   IcoNumerologia,
   IcoNumeros,
+  IcoPlegar,
   IcoResumen,
 } from "./Iconos";
 
@@ -46,7 +47,7 @@ export const DISCIPLINAS: Array<{ k: Disciplina; label: string; Ico: Ico }> = [
  *
  * `alCambiar` lo usa el cajón para cerrarse en cuanto se elige algo.
  */
-export function NavDisciplinas({ alCambiar }: { alCambiar?: () => void }) {
+export function NavDisciplinas({ alCambiar, compacta }: { alCambiar?: () => void; compacta?: boolean }) {
   const { r, seccion, setSeccion, disciplina, setDisciplina } = useApp();
   const quieto = useReducedMotion();
   // Qué disciplinas están desplegadas. Se abre la que se está mirando, y
@@ -64,6 +65,8 @@ export function NavDisciplinas({ alCambiar }: { alCambiar?: () => void }) {
     <button
       key={label}
       onClick={onClick}
+      title={compacta ? label : undefined}
+      aria-label={compacta ? label : undefined}
       style={css(
         "display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:9px 10px;white-space:nowrap;border:none;border-radius:var(--r-sm);cursor:pointer;letter-spacing:-.01em;line-height:1.25;transition:background .18s,color .18s;" +
           (grande ? "font-size:var(--t-read);font-weight:600;" : "font-size:var(--t-body);font-weight:590;") +
@@ -85,9 +88,9 @@ export function NavDisciplinas({ alCambiar }: { alCambiar?: () => void }) {
       >
         <Ico size={grande ? 16 : 19} />
       </span>
-      {label}
+      {!compacta && label}
       {/* La flecha dice si el grupo está abierto y sirve para cerrarlo. */}
-      {abierta !== undefined && (
+      {!compacta && abierta !== undefined && (
         <motion.span
           aria-hidden="true"
           animate={{ rotate: abierta ? 0 : -90 }}
@@ -109,7 +112,7 @@ export function NavDisciplinas({ alCambiar }: { alCambiar?: () => void }) {
         // Sólo Kábala tiene partes por ahora; las otras dos no llevan flecha
         // porque no hay nada que desplegar todavía.
         const partes = d.k === "kabala" ? KABALA : [];
-        const abierta = partes.length > 0 && abiertas.includes(d.k);
+        const abierta = partes.length > 0 && (compacta || abiertas.includes(d.k));
         return (
           <div key={d.k} style={css("display:flex;flex-direction:column;gap:2px;")}>
             {/* La disciplina abierta no se resalta si es Kábala: ya se ve
@@ -138,7 +141,7 @@ export function NavDisciplinas({ alCambiar }: { alCambiar?: () => void }) {
                   transition={{ height: { duration: 0.34, ease: [0.22, 1, 0.36, 1] }, opacity: { duration: 0.22 } }}
                   style={css("overflow:hidden;")}
                 >
-                  <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);padding:var(--s2) 10px 2px;")}>El estudio</div>
+                  {!compacta && <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);padding:var(--s2) 10px 2px;")}>El estudio</div>}
                   {partes.map(({ k, label, Ico }, i) => (
                     <motion.div
                       key={k}
@@ -165,18 +168,41 @@ export function NavDisciplinas({ alCambiar }: { alCambiar?: () => void }) {
   );
 }
 
-/** La columna de la izquierda en pantalla ancha. Por debajo de 980 px
- *  desaparece y manda el menú del botón de la cabecera. */
+/**
+ * La columna de la izquierda en pantalla ancha. Por debajo de 980 px
+ * desaparece y manda el menú del botón de la cabecera.
+ *
+ * Se pliega a una tira de iconos para leer el estudio a todo lo ancho — que en
+ * las secciones de dos columnas se nota — y al pasar el ratón por encima
+ * enseña el nombre de lo que hay debajo de cada icono.
+ */
 export default function Sidebar() {
+  const { lateral, setLateral } = useApp();
+
   return (
     <aside
       data-sidebar=""
       data-chrome="1"
       style={css(
-        "position:sticky;top:63px;align-self:start;flex:none;width:238px;height:calc(100vh - 63px);overflow-y:auto;padding:22px 14px 28px;background:var(--bg);border-right:1px solid var(--border);"
+        "position:sticky;top:63px;align-self:start;flex:none;width:" +
+          (lateral ? "238px" : "62px") +
+          ";height:calc(100vh - 63px);overflow-y:auto;overflow-x:hidden;padding:14px 12px 28px;background:var(--bg);border-right:1px solid var(--border);transition:width .3s cubic-bezier(.22,1,.36,1);"
       )}
     >
-      <NavDisciplinas />
+      <button
+        onClick={() => setLateral(!lateral)}
+        title={lateral ? "Plegar la columna" : "Desplegar la columna"}
+        aria-label={lateral ? "Plegar la columna" : "Desplegar la columna"}
+        style={css(
+          "display:flex;align-items:center;gap:9px;width:100%;margin-bottom:var(--s4);padding:8px;border:none;border-radius:var(--r-sm);background:none;color:var(--text-4);cursor:pointer;font-size:var(--t-mini);font-weight:590;white-space:nowrap;"
+        )}
+      >
+        <span style={css("flex:none;display:grid;place-items:center;")}>
+          <IcoPlegar size={19} abierto={lateral} />
+        </span>
+        {lateral && "Plegar"}
+      </button>
+      <NavDisciplinas compacta={!lateral} />
     </aside>
   );
 }

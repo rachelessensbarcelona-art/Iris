@@ -61,7 +61,7 @@ export default function SeccionAlma() {
             )}
           >
             <div style={css("display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;")}>
-              <span style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-mini);color:var(--purple);")}>
+              <span style={css("font-weight:590;font-size:var(--t-mini);color:var(--purple);")}>
                 Bloqueo {b.casilla}
                 {b.veces > 1 ? " · ×" + b.veces : ""}
               </span>

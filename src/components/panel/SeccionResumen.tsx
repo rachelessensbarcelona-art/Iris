@@ -1,5 +1,6 @@
 "use client";
 import { css } from "@/lib/css";
+import { BOTON_NORMAL } from "@/lib/ui";
 import { useApp } from "@/lib/app-context";
 import { COL } from "@/lib/tree";
 import { frase, recorta, titulo } from "@/lib/format";
@@ -129,7 +130,7 @@ export default function SeccionResumen() {
             </div>
             <button
               onClick={() => setSeccion("ciclos")}
-              style={css("margin-top:var(--s4);padding:9px 16px;border:1px solid var(--border-strong);border-radius:980px;cursor:pointer;background:color-mix(in srgb, var(--surface-solid) 70%, transparent);color:var(--text-2);font-size:var(--t-body);font-weight:590;")}
+              style={css(BOTON_NORMAL + "margin-top:var(--s4);")}
             >
               Ver ciclos vitales
             </button>
