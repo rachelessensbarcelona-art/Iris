@@ -22,7 +22,10 @@ const esperado: Array<[string, unknown, unknown]> = [
   ["arcano transformación", r.caminos.transformacion.arcano, 11],
   ["arcano destino", r.caminos.destino.arcano, 5],
   ["días de fuerza · 1ª suma", r.diasFuerza.primeraSuma, 17],
-  ["días de fuerza · lista", JSON.stringify(r.diasFuerza.dias), JSON.stringify([8,17,26])],
+  // La hoja anota «17, 26, 8»: el conjunto es {8,17,26} y el principal —el
+  // que va primero, y el que se dice en la lectura— es el 17, la primera suma.
+  ["días de fuerza · conjunto", JSON.stringify([...r.diasFuerza.dias].sort((a, b) => a - b)), JSON.stringify([8,17,26])],
+  ["días de fuerza · principal", r.diasFuerza.dias[0], 17],
   ["estructura · suma", r.estructura.suma, 40],
   ["estructura · tipo", r.estructura.tipo, 4],
   ["dinámicos", JSON.stringify([1,2,3,4,5,6,7,8,9,10].map((p) => r.estructura.dinamicos[p])), JSON.stringify([4,5,6,7,8,9,0,1,2,3])],

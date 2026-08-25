@@ -145,8 +145,12 @@ botonPrincipal(listo) + "margin-top:20px;"
               <div style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-3);")}>Camino conjunto</div>
               <div style={css("font-family:var(--font-ui);font-weight:600;font-size:var(--t-hero);color:var(--gold);line-height:1.1;")}>{comp.caminoConjunto}</div>
               <div style={css("font-family:var(--font-ui);font-style:normal;font-size:var(--t-body);color:var(--text-3);")}>{titulo(comp.cartaConjunta?.nombre)}</div>
-              <div style={css("font-size:var(--t-mini);color:var(--text-4);margin-top:6px;")}>
-                corazón {r.corazon.valor} + {pr.corazon.valor}, reducido a arcano
+              {/* La cuenta entera, como está impresa en la ficha: se suman los
+                * dos corazones, se les resta la suma de sus cifras, se divide
+                * entre nueve y se suma 2 «porque son 2 personas = 2 almas». */}
+              <div style={css("font-size:var(--t-mini);color:var(--text-4);margin-top:6px;line-height:1.45;")}>
+                ({r.corazon.valor} + {pr.corazon.valor} − {comp.calcConjunto.sumaCifras}) ÷ 9 + 2 = {comp.calcConjunto.mas1}
+                {comp.calcConjunto.mas1 > 21 ? ` → ${comp.caminoConjunto}` : ""}
               </div>
             </div>
             <div style={css("position:relative;z-index:1;")}>

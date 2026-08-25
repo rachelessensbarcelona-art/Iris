@@ -112,11 +112,23 @@ export function analizaNombre(nombreCompleto: string): NombreAnalizado {
 }
 
 type ArcanoCalc = { total: number; sumaCifras: number; resta: number; division: number; mas1: number; arcano: number };
-export function arcanoDesde(total: number): ArcanoCalc {
+/**
+ * La cuenta de los caminos, tal y como está impresa en la ficha:
+ *
+ *     ( total − suma de sus cifras ) ÷ 9 + almas = arcano
+ *
+ * y si pasa de 21, se suman sus cifras. La guía lo hace así para el origen
+ * (241 − 7 = 234; 234 ÷ 9 = 26; 26 + 1 = 27 → 2+7 = 9, El Ermitaño) y para el
+ * destino (275 − 14 = 261; ÷ 9 = 29; + 1 = 30 → 3+0 = 3, La Emperatriz).
+ *
+ * `almas` es lo que se suma al final: 1 para una persona. En el camino
+ * conjunto de una pareja se suma 2, «porque son 2 personas = 2 almas».
+ */
+export function arcanoDesde(total: number, almas = 1): ArcanoCalc {
   const s = reduceOnce(total);
   const resta = total - s;
   const division = resta / 9;
-  const mas1 = division + 1;
+  const mas1 = division + almas;
   const arc = reduceTo(mas1, 21);
   return { total, sumaCifras: s, resta, division, mas1, arcano: arc };
 }
@@ -486,32 +498,40 @@ function turbulencias(f: Fecha, edadCambio: number): Turbulencias {
 }
 
 /**
- * Los días de fuerza, según la guía de la ficha (paso 6):
+ * Los días de fuerza. Las dos fuentes que hay dicen lo mismo:
  *
- *   «Se suma una a una las cifras del valor del nombre completo, en nuestro
- *    caso 241. 2+4+1 = 7. Su principal día de fuerza es el 7, y después todos
- *    los números del mes que sumen 7, es decir, el día 16 y el día 25.»
+ *   · Guía de la ficha, paso 6: «se suma una a una las cifras del valor del
+ *     nombre completo, en nuestro caso 241. 2+4+1 = 7. Su principal día de
+ *     fuerza es el 7, y después todos los números del mes que sumen 7, es
+ *     decir, el día 16 y el día 25.» → 7, 16, 25.
+ *   · Ficha resuelta a mano: 269 → 2+6+9 = 17, y anota 17, 26 y 8.
  *
- * Una sola pasada de suma, no una reducción hasta una cifra. La diferencia
- * sólo se nota cuando esa primera suma da 10 u 11 —los dos únicos valores de
- * dos cifras que algún día del mes puede sumar (19 y 28 suman 10; el 29 suma
- * 11)—, y ahí es donde estaba el error: al reducir de más, un nombre de 235
- * daba 10 → 1 y salían los días 1 y 10 en vez del 10, el 19 y el 28.
+ * De ahí salen las tres reglas:
  *
- * Se sigue reduciendo mientras la suma pase de 11, porque a partir de ahí no
- * hay ningún día del mes que la alcance y la lista se quedaría vacía. Por eso
- * el 269 de la ficha resuelta (2+6+9 = 17) baja a 8 y da los días 8, 17 y 26,
- * que es justo lo que hay escrito a mano en la hoja.
+ *   1. Se suman las cifras **una vez**. Ese número es el día principal —«su
+ *      principal día de fuerza es el 7»— y por eso va el primero de la lista,
+ *      no el más pequeño. En la hoja resuelta el principal es el 17, aunque
+ *      el 8 sea menor.
+ *   2. Los demás son los días del mes que suman ese número.
+ *   3. Sólo si ningún día puede sumarlo se reduce otra vez. Pasa a partir de
+ *      12, porque 11 es lo más que suma un día (29 → 2+9). Es lo que hace la
+ *      hoja con el 17: baja a 8 y de ahí saca el 8 y el 26 —y el propio 17,
+ *      que también suma 8—.
+ *
+ * Reducir siempre hasta una sola cifra, que es lo que se hacía antes, sólo
+ * coincide con las fuentes cuando la primera suma ya baja de 10. Con un
+ * nombre de 235 (2+3+5 = 10) daba 10 → 1 y salían los días 1 y 10, en vez
+ * del 10, el 19 y el 28.
  */
 function diasDeFuerza(totalNombre: number): { primeraSuma: number; base: number; dias: number[] } {
   const primeraSuma = reduceOnce(totalNombre);
   // 11 es la suma de cifras más alta que alcanza un día del mes (29 → 2+9).
   let base = primeraSuma;
   while (base > 11) base = reduceOnce(base);
-  // El propio número es el día principal; detrás van los demás que lo sumen.
-  const dias = [base];
-  for (let d = 1; d <= 31; d++) if (d !== base && sumDigits(d) === base) dias.push(d);
-  dias.sort((a, b) => a - b);
+  const resto: number[] = [];
+  for (let d = 1; d <= 31; d++) if (d !== primeraSuma && sumDigits(d) === base) resto.push(d);
+  // El principal delante; detrás, los demás de menor a mayor.
+  const dias = primeraSuma >= 1 && primeraSuma <= 31 ? [primeraSuma, ...resto] : resto;
   return { primeraSuma, base, dias };
 }
 
@@ -697,6 +717,9 @@ export function calcula(entrada: Entrada): Resultado {
 export type Coincidencia = { tipo: string; valor: number; texto: string };
 export type Comparativa = {
   caminoConjunto: number;
+  /** La cuenta entera, para poder enseñarla como en la ficha. */
+  calcConjunto: ArcanoCalc;
+  sumaCorazones: number;
   cartaConjunta?: ArcanoData;
   mismaEstructura: boolean;
   textoEstructura: string;
@@ -706,7 +729,14 @@ export type Comparativa = {
   afinidadIgual: boolean;
 };
 export function comparaPareja(a: Resultado, b: Resultado): Comparativa {
-  const conjunto = reduceTo(reduceOnce(a.corazon.valor + b.corazon.valor), 21);
+  // El camino conjunto lleva la misma cuenta que los caminos de una persona,
+  // pero sumando 2 al final en vez de 1 «porque son 2 personas = 2 almas»
+  // (guía de la ficha, 2ª sesión). Antes se reducían las cifras del total y ya
+  // está: con el ejemplo de la guía —268 + 273 = 541— daba 10 en vez del 7 que
+  // sale de (541 − 10) ÷ 9 + 2 = 61 → 6+1.
+  const sumaCorazones = a.corazon.valor + b.corazon.valor;
+  const calcConjunto = arcanoDesde(sumaCorazones, 2);
+  const conjunto = calcConjunto.arcano;
   const coincidencias: Coincidencia[] = [];
   const ca = a.cuentas,
     cb = b.cuentas;
@@ -732,6 +762,8 @@ export function comparaPareja(a: Resultado, b: Resultado): Comparativa {
     .map(Number);
   return {
     caminoConjunto: conjunto,
+    calcConjunto,
+    sumaCorazones,
     cartaConjunta: (KDATA.arcanos || {})[conjunto],
     mismaEstructura: a.estructura.tipo === b.estructura.tipo,
     textoEstructura: a.estructura.tipo === b.estructura.tipo ? P.estructuras.iguales : P.estructuras.distintas,
