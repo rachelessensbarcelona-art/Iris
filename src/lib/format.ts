@@ -69,6 +69,47 @@ export function fechaLarga(dia: number, mes: number, anio: number): string {
  *
  * Esto tapa el síntoma: los textos hay que completarlos en el diccionario.
  */
+/**
+ * Los apuntes traen intercaladas las claves de trabajo de la escuela —
+ * «2/33-3/22-6/11-M15-M51-C11-T11-L77-P313» y parecidas: divisores, maestría,
+ * corazón, tensión, liberación y potencial. A Iris le sirven; al cliente que
+ * recibe su lectura no le dicen nada y le ensucian la página. Se quitan de
+ * todo lo que entra en el documento — en el panel siguen, que es su mesa de
+ * trabajo.
+ */
+const CLAVES_ENCADENADAS = /(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+)(?:\s*[-–]\s*(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+))+\.?/g;
+/**
+ * Un divisor suelto que abre frase —«3/29 laberinto espiritual», «8/11 la
+ * fuerza en los 3 planos»— también es clave. Sólo se quita cuando encabeza,
+ * no cuando va dentro de la oración: en «Es 2/43 el número del pionero» el
+ * divisor hace de sujeto y quitarlo dejaría la frase coja.
+ *
+ * Y NO se tocan las letras con número sueltas —«L1», «C4», «D7»—: no son
+ * claves, son vértebras. Los apuntes dan los órganos y las disfunciones de
+ * cada portal, y una regla que barriera «[MCTLP] + número» convertía
+ * «Lumbares L1 y L2» en «Lumbares y». Las claves de verdad van encadenadas
+ * con guiones, y de eso ya se encarga la expresión de arriba.
+ */
+const DIVISOR_QUE_ENCABEZA = /(^|[.:;¡¿]\s+)\d+\/\d+\s+(\p{Ll})?/gu;
+
+/** Quita las claves de escuela y recoge la puntuación que dejan colgando. */
+export function sinClavesEscuela(t: string): string {
+  return (t || "")
+    .replace(CLAVES_ENCADENADAS, "")
+    // Al quitar el divisor, lo que venía detrás pasa a abrir frase: se le
+    // devuelve la mayúscula, o quedaría «Es un número sanador. laberinto».
+    .replace(DIVISOR_QUE_ENCABEZA, (_m, antes: string, letra?: string) =>
+      antes + (letra ? letra.toLocaleUpperCase("es") : "")
+    )
+    // Un «·» o un guion que se quedan sin nada detrás.
+    .replace(/[·–-]\s*(?=[,.;:)]|$)/g, "")
+    .replace(/\(\s*\)/g, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([,.;:])/g, "$1")
+    .replace(/^[\s·–-]+/, "")
+    .trim();
+}
+
 /** Cierra con punto lo que no lo trae. Los nombres y lemas de los apuntes
  *  vienen unos con punto final y otros sin él; sin normalizarlo, al pegarlos a
  *  otra frase salen «El Carro. la dirección» o «La profesión.. No son». */

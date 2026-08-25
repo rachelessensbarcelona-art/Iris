@@ -1,4 +1,4 @@
-import { chipStyle, recorta } from "./format";
+import { chipStyle, recorta, sinClavesEscuela } from "./format";
 import { ficha, type Ficha } from "./engine";
 
 export type Chip = { label: string; style: string; onClick: () => void };
@@ -23,7 +23,16 @@ export function chipsDeFicha(F: Ficha | null | undefined, verNumero: (n: number)
 
 export type RefItem = { label: string; color: string; texto: string; style: string };
 
-/** Bloques "lo que te tensa / lo que te libera" con el texto completo, para el Estudio. */
+/**
+ * Bloques "lo que te tensa / lo que te libera" con el texto completo, para el
+ * Estudio.
+ *
+ * Esto es sólo del documento —en el panel manda `chipsDeFicha`, que sí enseña
+ * las claves porque son la mesa de trabajo de Iris—, así que aquí se limpian
+ * en origen. Antes se limpiaban fuera, en `estudio.ts`, y tres sitios que se
+ * montaban el bloque a mano se saltaban el filtro: por ahí salían ochenta y
+ * tres claves impresas en el documento del cliente.
+ */
 export function refItems(F: Ficha | null | undefined): RefItem[] {
   if (!F) return [];
   const items: RefItem[] = [];
@@ -36,10 +45,12 @@ export function refItems(F: Ficha | null | undefined): RefItem[] {
           : "Se lee dividiéndolo de dos en dos."
       : "";
   const add = (G: Ficha, pre: string) => {
-    if (G.T) items.push({ label: pre + "Lo que te tensa · T" + G.T, color: "#B0564C", texto: lee(ficha(G.T)), style: "border-left:2px solid #C0574C;padding-left:12px;" });
-    if (G.L) items.push({ label: pre + "Lo que te libera · L" + G.L, color: "#40794F", texto: lee(ficha(G.L)), style: "border-left:2px solid #4C8A5A;padding-left:12px;" });
+    // El número va a secas: dice de dónde sale la lectura que viene debajo.
+    // La letra de la escuela —la T de tensión, la L de liberación— no.
+    if (G.T) items.push({ label: pre + "Lo que te tensa · " + G.T, color: "#B0564C", texto: lee(ficha(G.T)), style: "border-left:2px solid #C0574C;padding-left:12px;" });
+    if (G.L) items.push({ label: pre + "Lo que te libera · " + G.L, color: "#40794F", texto: lee(ficha(G.L)), style: "border-left:2px solid #4C8A5A;padding-left:12px;" });
   };
   if (F.enDiccionario) add(F, "");
   else (F.partes || []).forEach((p) => add(p, p.n + " · "));
-  return items;
+  return items.map((i) => ({ ...i, label: sinClavesEscuela(i.label), texto: sinClavesEscuela(i.texto) }));
 }

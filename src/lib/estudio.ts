@@ -8,7 +8,7 @@ import { ficha } from "./engine";
 import { refItems, type RefItem } from "./chips";
 import { CAMINO_EVOLUTIVO, KDATA } from "./kdata";
 import { COL } from "./tree";
-import { cierraFrase, frase, punto, sinPunto, titulo } from "./format";
+import { cierraFrase, frase, punto, sinClavesEscuela, sinPunto, titulo } from "./format";
 
 export type Bloque =
   | { tipo: "h"; texto: string }
@@ -28,31 +28,12 @@ export type Bloque =
 
 export type Capitulo = { id: string; kicker: string; titulo: string; seccion: string; bloques: Bloque[] };
 
-/**
- * Los apuntes traen intercaladas las claves de trabajo de la escuela —
- * "2/33-3/22-6/11-M15-M51-C11-T11-L77-P313" y parecidas: divisores, corazón,
- * tensión, liberación, potencial. A Iris le sirven; al cliente que recibe su
- * lectura no le dicen nada y le ensucian la página. Se quitan de todo lo que
- * entra en el documento — en el panel siguen, que es su mesa de trabajo.
- */
-const CLAVES = /(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+)(?:\s*[-–]\s*(?:\d+\/\d+|[A-ZÁÉÍÓÚ]\d+))+\.?/g;
-/** Sólo quita las claves de escuela; deja el texto como está. */
-export function sinClaves(t: string): string {
-  return t
-    .replace(CLAVES, "")
-    .replace(/\s{2,}/g, " ")
-    .replace(/\s+([,.;:])/g, "$1")
-    .trim();
-}
+/** Quita las claves de escuela. La regla vive en `format` porque también la
+ *  necesita `chips`, que es de donde salían las que se colaban. */
+export const sinClaves = sinClavesEscuela;
 
 export function paraCliente(t: string): string {
-  return cierraFrase(
-    t
-      .replace(CLAVES, "")
-      .replace(/\s{2,}/g, " ")
-      .replace(/\s+([,.;:])/g, "$1")
-      .trim()
-  );
+  return cierraFrase(sinClaves(t));
 }
 
 function bH(texto: string): Bloque {
@@ -77,7 +58,7 @@ function bRefsFicha(F: ReturnType<typeof ficha>): Bloque | null {
   return items.length ? { tipo: "refs", items } : null;
 }
 function bCita(texto: string): Bloque {
-  return { tipo: "cita", texto };
+  return { tipo: "cita", texto: sinClaves(texto) };
 }
 
 /**
