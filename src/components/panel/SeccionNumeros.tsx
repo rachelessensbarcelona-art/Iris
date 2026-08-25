@@ -2,7 +2,7 @@
 import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
-import { chipStyle } from "@/lib/format";
+import { chipStyle, cuentaDiasFuerza } from "@/lib/format";
 import Desglose from "../Desglose";
 import Cifra from "../Cifra";
 
@@ -58,9 +58,9 @@ export default function SeccionNumeros() {
           { etiqueta: "Número de corazón", operacion: `${r.valorNombre} + ${r.caminos.edadCambio}`, resultado: r.corazon.valor, final: true },
           { etiqueta: "Esencia", operacion: "sólo las vocales", resultado: r.esencia.valor },
           { etiqueta: "Ego", operacion: "sólo las consonantes", resultado: r.ego.valor },
-          { etiqueta: "Días de fuerza", operacion: `${String(r.valorNombre).split("").join("+")} = ${r.diasFuerza.primeraSuma}, y de ahí ${r.diasFuerza.base}`, resultado: r.diasFuerza.dias.join(" · ") },
+          { etiqueta: "Días de fuerza", operacion: cuentaDiasFuerza(r.valorNombre, r.diasFuerza.primeraSuma, r.diasFuerza.base), resultado: r.diasFuerza.dias.join(" · ") },
         ]}
-        nota="El valor del nombre sale del nombre solo; el número de corazón necesita además la fecha, porque le suma la edad de cambio. Los días de fuerza se leen del valor del nombre."
+        nota={`El valor del nombre sale del nombre solo, y es la esencia más el ego: ${r.esencia.valor} + ${r.ego.valor} = ${r.valorNombre}. De ahí salen los días de fuerza. El número de corazón necesita además la fecha, porque le suma la edad de cambio.`}
       />
 
       <article style={css("background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--pad-card-sm);")}>

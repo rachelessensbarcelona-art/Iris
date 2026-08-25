@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
-import { chipStyle, frase, titulo } from "@/lib/format";
+import { chipStyle, cuentaDiasFuerza, frase, titulo } from "@/lib/format";
 import { esVocal } from "@/lib/engine";
 import { TARJETA, PAD, PAD_SM, rotulo, TITULO, LECTURA, APOYO, NOTA, RAYA, FILA_TITULO } from "@/lib/ui";
 import { COL } from "@/lib/tree";
@@ -147,7 +147,7 @@ export default function SeccionEmpresa() {
               { etiqueta: "Esencia", operacion: "sólo las vocales", resultado: re.esencia.valor },
               { etiqueta: "Ego", operacion: "sólo las consonantes", resultado: re.ego.valor },
               { etiqueta: "Camino de origen", operacion: `(${re.valorNombre} − ${re.origen.calculo.sumaCifras}) ÷ 9 + 1`, resultado: re.origen.arcano },
-              { etiqueta: "Días de fuerza", operacion: `${re.valorNombre}, sumando cifras hasta una`, resultado: re.diasFuerza.base },
+              { etiqueta: "Días de fuerza", operacion: cuentaDiasFuerza(re.valorNombre, re.diasFuerza.primeraSuma, re.diasFuerza.base), resultado: re.diasFuerza.dias.join(" · ") },
             ]}
           />
         </div>

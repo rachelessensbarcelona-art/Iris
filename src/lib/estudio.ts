@@ -246,7 +246,10 @@ export function construyeCapitulos(r: Resultado): Capitulo[] {
         "p8.dias",
         "Fuerza",
         r.diasFuerza.dias.join(" · "),
-        "Van del más fuerte al menos fuerte. Aprovecha el día " + r.diasFuerza.dias[0] + " del mes para firmas y temas relevantes en tu vida; después, el resto de días que suman " + r.diasFuerza.base + "."
+        "Salen del valor de tu nombre, que es la esencia más el ego: " +
+          r.esencia.valor + " + " + r.ego.valor + " = " + r.valorNombre + ", y sumando sus cifras, " + r.diasFuerza.base +
+          ". Van del más fuerte al menos fuerte: aprovecha el día " + r.diasFuerza.dias[0] +
+          " del mes para firmas y temas relevantes en tu vida, y después el resto."
       ),
     ].filter(Boolean) as Bloque[],
   });

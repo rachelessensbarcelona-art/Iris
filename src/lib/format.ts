@@ -72,6 +72,16 @@ export function fechaLarga(dia: number, mes: number, anio: number): string {
 /** Cierra con punto lo que no lo trae. Los nombres y lemas de los apuntes
  *  vienen unos con punto final y otros sin él; sin normalizarlo, al pegarlos a
  *  otra frase salen «El Carro. la dirección» o «La profesión.. No son». */
+/**
+ * La cuenta de los días de fuerza, escrita como se dice en voz alta. Se
+ * enseña la suma cifra a cifra y, sólo si hizo falta bajar otra vez porque
+ * pasaba de 11, ese segundo paso.
+ */
+export function cuentaDiasFuerza(valorNombre: number, primeraSuma: number, base: number): string {
+  const suma = String(valorNombre).split("").join(" + ") + " = " + primeraSuma;
+  return primeraSuma === base ? suma : `${suma}, y como pasa de 11, ${primeraSuma} → ${base}`;
+}
+
 export function punto(t: string | undefined | null): string {
   const s = (t || "").trim();
   return !s || /[.!?…]$/.test(s) ? s : s + ".";

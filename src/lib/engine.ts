@@ -485,17 +485,33 @@ function turbulencias(f: Fecha, edadCambio: number): Turbulencias {
   return { lista: t, desde: edadCambio, hasta: edadCambio + 10 };
 }
 
+/**
+ * Los días de fuerza, según la guía de la ficha (paso 6):
+ *
+ *   «Se suma una a una las cifras del valor del nombre completo, en nuestro
+ *    caso 241. 2+4+1 = 7. Su principal día de fuerza es el 7, y después todos
+ *    los números del mes que sumen 7, es decir, el día 16 y el día 25.»
+ *
+ * Una sola pasada de suma, no una reducción hasta una cifra. La diferencia
+ * sólo se nota cuando esa primera suma da 10 u 11 —los dos únicos valores de
+ * dos cifras que algún día del mes puede sumar (19 y 28 suman 10; el 29 suma
+ * 11)—, y ahí es donde estaba el error: al reducir de más, un nombre de 235
+ * daba 10 → 1 y salían los días 1 y 10 en vez del 10, el 19 y el 28.
+ *
+ * Se sigue reduciendo mientras la suma pase de 11, porque a partir de ahí no
+ * hay ningún día del mes que la alcance y la lista se quedaría vacía. Por eso
+ * el 269 de la ficha resuelta (2+6+9 = 17) baja a 8 y da los días 8, 17 y 26,
+ * que es justo lo que hay escrito a mano en la hoja.
+ */
 function diasDeFuerza(totalNombre: number): { primeraSuma: number; base: number; dias: number[] } {
-  // En la ficha se anota primero la suma de las cifras del nombre (269 → 17) y
-  // de ahí salen los días. El número base tiene que quedar reducido a una sola
-  // cifra: con una única pasada, un nombre como 179 daba 17, y ningún día del
-  // mes suma 17 (el máximo es 29 → 11), así que la lista salía vacía y el
-  // estudio imprimía "el día undefined". Se guardan los dos para poder
-  // enseñar la cuenta como está escrita a mano.
   const primeraSuma = reduceOnce(totalNombre);
-  const base = reduceTo(totalNombre, 9);
-  const dias: number[] = [];
-  for (let d = 1; d <= 31; d++) if (sumDigits(d) === base) dias.push(d);
+  // 11 es la suma de cifras más alta que alcanza un día del mes (29 → 2+9).
+  let base = primeraSuma;
+  while (base > 11) base = reduceOnce(base);
+  // El propio número es el día principal; detrás van los demás que lo sumen.
+  const dias = [base];
+  for (let d = 1; d <= 31; d++) if (d !== base && sumDigits(d) === base) dias.push(d);
+  dias.sort((a, b) => a - b);
   return { primeraSuma, base, dias };
 }
 
