@@ -4,7 +4,7 @@ import { css } from "@/lib/css";
 import { useApp } from "@/lib/app-context";
 import { chipsDeFicha } from "@/lib/chips";
 import { chipStyle, cuentaDiasFuerza, frase, titulo } from "@/lib/format";
-import { esVocal } from "@/lib/engine";
+import { esCifra, esVocal } from "@/lib/engine";
 import { TARJETA, PAD, PAD_SM, rotulo, TITULO, LECTURA, APOYO, NOTA, RAYA, FILA_TITULO } from "@/lib/ui";
 import { COL } from "@/lib/tree";
 import Cifra from "../Cifra";
@@ -52,6 +52,7 @@ export default function SeccionEmpresa() {
             </div>
             <div style={css(APOYO + "margin-top:2px;")}>
               Esencia {re.esencia.valor} · Ego {re.ego.valor}
+              {re.nombre.cifras ? ` · Cifras ${re.nombre.cifras}` : ""}
             </div>
             <button
               onClick={() => setView("estudio")}
@@ -105,7 +106,9 @@ export default function SeccionEmpresa() {
           <section style={css(TARJETA + PAD_SM)}>
             <div style={css(FILA_TITULO + "margin-bottom:var(--s4);")}>
               <span style={css(TITULO)}>El nombre, letra a letra</span>
-              <span style={css(NOTA + "margin-left:auto;")}>vocales en dorado</span>
+              <span style={css(NOTA + "margin-left:auto;")}>
+                vocales en dorado{re.nombre.cifras ? ", cifras en morado" : ""}
+              </span>
             </div>
             <div style={css("display:flex;flex-wrap:wrap;gap:var(--s4);")}>
               {re.nombre.palabras.map((w, wi) => (
@@ -119,11 +122,11 @@ export default function SeccionEmpresa() {
                         transition={{ duration: 0.28, delay: li * 0.015 }}
                         style={css(
                           "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:26px;padding:5px 4px;border-radius:var(--r-xs);border:1px solid " +
-                            (esVocal(l.g) ? "var(--border-accent)" : "var(--border)") +
+                            (esCifra(l.g) ? "var(--purple)" : esVocal(l.g) ? "var(--border-accent)" : "var(--border)") +
                             ";background:" +
-                            (esVocal(l.g) ? "var(--gold-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
+                            (esCifra(l.g) ? "color-mix(in srgb, var(--purple) 12%, transparent)" : esVocal(l.g) ? "var(--gold-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
                             ";color:" +
-                            (esVocal(l.g) ? "var(--gold-deep)" : "var(--text-3)") +
+                            (esCifra(l.g) ? "var(--purple)" : esVocal(l.g) ? "var(--gold-deep)" : "var(--text-3)") +
                             ";"
                         )}
                       >
@@ -146,6 +149,9 @@ export default function SeccionEmpresa() {
               { etiqueta: "Valor del nombre", operacion: re.nombre.palabras.map((w) => w.total).join(" + "), resultado: re.valorNombre, final: true },
               { etiqueta: "Esencia", operacion: "sólo las vocales", resultado: re.esencia.valor },
               { etiqueta: "Ego", operacion: "sólo las consonantes", resultado: re.ego.valor },
+              ...(re.nombre.cifras
+                ? [{ etiqueta: "Cifras", operacion: "los números del nombre, por su valor", resultado: re.nombre.cifras }]
+                : []),
               { etiqueta: "Camino de origen", operacion: `(${re.valorNombre} − ${re.origen.calculo.sumaCifras}) ÷ 9 + 1`, resultado: re.origen.arcano },
               { etiqueta: "Días de fuerza", operacion: cuentaDiasFuerza(re.valorNombre, re.diasFuerza.primeraSuma, re.diasFuerza.base), resultado: re.diasFuerza.dias.join(" · ") },
             ]}

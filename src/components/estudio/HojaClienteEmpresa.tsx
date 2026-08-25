@@ -24,13 +24,14 @@ export default function HojaClienteEmpresa({ re, marca }: { re: ResultadoEmpresa
     { l: "Valor del nombre", v: re.valorNombre, p: "Cómo vibra la empresa" },
     { l: "Esencia", v: re.esencia.valor, p: "Lo que ha venido a ser" },
     { l: "Ego", v: re.ego.valor, p: "Cómo la ven" },
+    ...(re.nombre.cifras ? [{ l: "Cifras", v: re.nombre.cifras, p: "Los números del nombre" }] : []),
   ];
 
   const importante = [
     { l: "Cómo vibra", t: `El nombre suma ${re.valorNombre}: es el tono de fondo, lo que la empresa transmite antes de decir nada.` },
     {
       l: "Dentro y fuera",
-      t: `Esencia ${re.esencia.valor} y ego ${re.ego.valor}. Cuanto más se parecen, más se muestra la empresa como es; cuanto más se separan, más distancia hay entre lo que quiere ser y lo que aparenta.`,
+      t: `Esencia ${re.esencia.valor} y ego ${re.ego.valor}${re.nombre.cifras ? `, más ${re.nombre.cifras} de las cifras` : ""}. Cuanto más se parecen, más se muestra la empresa como es; cuanto más se separan, más distancia hay entre lo que quiere ser y lo que aparenta.`,
     },
     { l: "Hacia dónde", t: `El camino de origen es ${sinPunto(titulo(carta?.nombre))}: la dirección de fondo del proyecto.` },
     { l: "Cuándo mover", t: `Los días de fuerza son el ${re.diasFuerza.dias.join(", el ")}. Para firmar, abrir y presentar.` },
@@ -50,7 +51,7 @@ export default function HojaClienteEmpresa({ re, marca }: { re: ResultadoEmpresa
         <div style={css("margin-left:auto;text-align:right;font-size:10px;color:#7A7288;white-space:nowrap;")}>Estudio de empresa</div>
       </header>
 
-      <div style={css("display:grid;grid-template-columns:repeat(3,1fr);gap:9px;")}>
+      <div style={css("display:grid;grid-template-columns:repeat(" + cifras.length + ",1fr);gap:9px;")}>
         {cifras.map((x) => (
           <div key={x.l} style={css("border:1px solid rgba(154,127,50,.22);border-radius:9px;padding:9px 11px;background:rgba(201,168,76,.05);")}>
             <div style={css(ROTULO)}>{x.l}</div>

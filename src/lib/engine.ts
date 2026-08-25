@@ -41,10 +41,10 @@ function reduceTo(x: number, max: number): number {
   while (n > max && guard++ < 12) n = sumDigits(n);
   return n;
 }
-function normalizaNombre(s: string): string {
+function normalizaNombre(s: string, conCifras = false): string {
   return (s || "")
     .toUpperCase()
-    .replace(/[^A-ZÁÉÍÓÚÜÑÄÖ\s]/g, " ")
+    .replace(conCifras ? /[^A-ZÁÉÍÓÚÜÑÄÖ0-9\s]/g : /[^A-ZÁÉÍÓÚÜÑÄÖ\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -56,6 +56,17 @@ function letrasDe(palabra: string): Letra[] {
   const out: Letra[] = [];
   let i = 0;
   while (i < palabra.length) {
+    // Una tirada de cifras vale por sí misma: el 33 de un nombre comercial es
+    // treinta y tres, no un tres y otro tres. Sólo aparece si el nombre venía
+    // de una empresa; en el de una persona las cifras ya se han quitado antes.
+    if (palabra[i] >= "0" && palabra[i] <= "9") {
+      let j = i;
+      while (j < palabra.length && palabra[j] >= "0" && palabra[j] <= "9") j++;
+      const tirada = palabra.slice(i, j);
+      out.push({ g: tirada, v: parseInt(tirada, 10) });
+      i = j;
+      continue;
+    }
     const t3 = palabra.substr(i, 3),
       t2 = palabra.substr(i, 2),
       t1 = palabra.substr(i, 1);
@@ -77,6 +88,10 @@ function letrasDe(palabra: string): Letra[] {
 export function esVocal(g: string): boolean {
   return g.length === 1 && VOCALES.indexOf(g) >= 0;
 }
+/** Una cifra escrita en el nombre de una empresa. Ni vocal ni consonante. */
+export function esCifra(g: string): boolean {
+  return /^[0-9]+$/.test(g);
+}
 
 export type PalabraAnalizada = { palabra: string; letras: Letra[]; total: number };
 export type NombreAnalizado = {
@@ -85,12 +100,27 @@ export type NombreAnalizado = {
   total: number;
   esencia: number;
   ego: number;
+  /** Lo que aportan las cifras escritas en el nombre, si las hay. Las vocales
+   *  dan la esencia y las consonantes el ego; una cifra no es ninguna de las
+   *  dos, así que se cuenta aparte y el valor del nombre es la suma de tres:
+   *  esencia + ego + cifras. En un nombre sin números vale 0 y todo queda
+   *  exactamente como estaba. */
+  cifras: number;
   vocales: Letra[];
   consonantes: Letra[];
+  numeros: Letra[];
 };
 
-export function analizaNombre(nombreCompleto: string): NombreAnalizado {
-  const limpio = normalizaNombre(nombreCompleto);
+/**
+ * Desglosa un nombre en sus letras y suma su valor.
+ *
+ * `conCifras` sólo lo pide el estudio de empresa: un nombre comercial puede
+ * llevar números —«Sabiduría 33»— y esos números cuentan. En el nombre de una
+ * persona no los hay, y si alguien escribe uno es una errata, así que se
+ * siguen quitando como hasta ahora.
+ */
+export function analizaNombre(nombreCompleto: string, conCifras = false): NombreAnalizado {
+  const limpio = normalizaNombre(nombreCompleto, conCifras);
   const palabras = limpio ? limpio.split(" ") : [];
   const detalle: PalabraAnalizada[] = palabras.map((p) => {
     const ls = letrasDe(p);
@@ -99,15 +129,18 @@ export function analizaNombre(nombreCompleto: string): NombreAnalizado {
   const todas = detalle.reduce<Letra[]>((a, d) => a.concat(d.letras), []);
   const total = todas.reduce((a, b) => a + b.v, 0);
   const vocales = todas.filter((l) => esVocal(l.g));
-  const consonantes = todas.filter((l) => !esVocal(l.g));
+  const numeros = todas.filter((l) => esCifra(l.g));
+  const consonantes = todas.filter((l) => !esVocal(l.g) && !esCifra(l.g));
   return {
     texto: limpio,
     palabras: detalle,
     total,
     esencia: vocales.reduce((a, b) => a + b.v, 0),
     ego: consonantes.reduce((a, b) => a + b.v, 0),
+    cifras: numeros.reduce((a, b) => a + b.v, 0),
     vocales,
     consonantes,
+    numeros,
   };
 }
 
@@ -615,7 +648,7 @@ export type ResultadoEmpresa = {
 };
 
 export function calculaEmpresa(entrada: { nombre: string; anioUniversal: number }): ResultadoEmpresa {
-  const nombre = analizaNombre(entrada.nombre);
+  const nombre = analizaNombre(entrada.nombre, true);
   const valorNombre = nombre.total;
   const origen = arcanoDesde(valorNombre);
   return {

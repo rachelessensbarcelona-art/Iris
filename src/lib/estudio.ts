@@ -554,6 +554,7 @@ export function construyeCapitulosEmpresa(re: ResultadoEmpresa): Capitulo[] {
           { label: "Valor del nombre", valor: re.valorNombre, pie: "Cómo vibra la empresa entera" },
           { label: "Esencia", valor: re.esencia.valor, pie: "Lo que ha venido a ser, en las vocales" },
           { label: "Ego", valor: re.ego.valor, pie: "Cómo la ven, en las consonantes" },
+          ...(re.nombre.cifras ? [{ label: "Cifras", valor: re.nombre.cifras, pie: "Los números que lleva el nombre" }] : []),
           { label: "Camino de origen", valor: re.origen.arcano, pie: titulo(re.origen.carta?.nombre || "") },
         ],
       },
@@ -562,7 +563,11 @@ export function construyeCapitulosEmpresa(re: ResultadoEmpresa): Capitulo[] {
         "e1.b",
         `Se suma el valor de cada letra: ${re.nombre.palabras.map((w) => `${w.palabra} vale ${w.total}`).join("; ")}${
           re.nombre.palabras.length > 1 ? `, y en total ${re.valorNombre}` : ""
-        }. Las vocales aparte dan la esencia, ${re.esencia.valor}; las consonantes, el ego, ${re.ego.valor}.`
+        }. Las vocales aparte dan la esencia, ${re.esencia.valor}; las consonantes, el ego, ${re.ego.valor}.${
+          re.nombre.cifras
+            ? ` Y si el nombre lleva números, cuentan por lo que valen: aquí suman ${re.nombre.cifras}. Un número no es vocal ni consonante, así que va aparte, y el valor del nombre es la suma de los tres: ${re.esencia.valor} + ${re.ego.valor} + ${re.nombre.cifras} = ${re.valorNombre}.`
+            : ""
+        }`
       ),
     ],
   });

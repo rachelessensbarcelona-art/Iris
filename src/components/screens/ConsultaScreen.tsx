@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { css } from "@/lib/css";
 import { botonPrincipal } from "@/lib/ui";
 import { useApp, valida } from "@/lib/app-context";
-import { analizaNombre, esVocal } from "@/lib/engine";
+import { analizaNombre, esCifra, esVocal } from "@/lib/engine";
 import Particulas from "../Particulas";
 
 function saludo(): string {
@@ -22,8 +22,10 @@ export default function ConsultaScreen() {
   const { f, set, calcular, hist, abrir, borrar } = useApp();
 
   const empresa = f.tipo === "empresa";
-  // De una empresa se lee el nombre comercial entero; no tiene apellidos.
-  const n = analizaNombre((empresa ? [f.nombre] : [f.nombre, f.ap1, f.ap2]).filter(Boolean).join(" "));
+  // De una empresa se lee el nombre comercial entero; no tiene apellidos. Y si
+  // lleva números —«Sabiduría 33»— también cuentan, cosa que en el nombre de
+  // una persona no pasa.
+  const n = analizaNombre((empresa ? [f.nombre] : [f.nombre, f.ap1, f.ap2]).filter(Boolean).join(" "), empresa);
   const err = valida(f);
   const listo = !err;
 
@@ -245,11 +247,11 @@ botonPrincipal(listo) + "width:100%;margin-top:var(--s5);"
                                 "px;padding:" +
                                 fichas.pad +
                                 ";border-radius:var(--r-xs);border:1px solid " +
-                                (esVocal(l.g) ? "var(--border-accent)" : "var(--border)") +
+                                (esCifra(l.g) ? "var(--purple)" : esVocal(l.g) ? "var(--border-accent)" : "var(--border)") +
                                 ";background:" +
-                                (esVocal(l.g) ? "var(--gold-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
+                                (esCifra(l.g) ? "color-mix(in srgb, var(--purple) 12%, transparent)" : esVocal(l.g) ? "var(--gold-soft)" : "color-mix(in srgb, var(--text) 4%, transparent)") +
                                 ";color:" +
-                                (esVocal(l.g) ? "var(--gold-deep)" : "var(--text-3)") +
+                                (esCifra(l.g) ? "var(--purple)" : esVocal(l.g) ? "var(--gold-deep)" : "var(--text-3)") +
                                 ";"
                             )}
                           >
@@ -273,6 +275,7 @@ botonPrincipal(listo) + "width:100%;margin-top:var(--s5);"
                 {[
                   { l: "Esencia", v: n.esencia },
                   { l: "Ego", v: n.ego },
+                  ...(n.cifras ? [{ l: "Cifras", v: n.cifras }] : []),
                 ].map((x) => (
                   <div key={x.l} style={css("display:flex;flex-direction:column;gap:2px;")}>
                     <span style={css("font-size:var(--t-mini);font-weight:590;color:var(--text-4);")}>{x.l}</span>

@@ -188,7 +188,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: hid,
       nombre: partes.filter(Boolean).join(" "),
       fecha: empresa ? "" : `${f.dia}/${f.mes}/${f.anio}`,
-      corazon: empresa ? analizaNombre(f.nombre).total : calcula(entradaDe(f, anioUniversal)).corazon.valor,
+      corazon: empresa ? analizaNombre(f.nombre, true).total : calcula(entradaDe(f, anioUniversal)).corazon.valor,
       f: empresa ? { tipo: "empresa", nombre: f.nombre, ap1: "", ap2: "", dia: "", mes: "", anio: "", genero: "n" } : { ...f },
     };
     setHist((s) => {
