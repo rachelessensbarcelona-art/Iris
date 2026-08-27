@@ -81,8 +81,8 @@ export default function HojaCliente({ r, marca }: { r: Resultado; marca: string 
       </header>
 
       <p style={css(CUERPO)}>
-        Esto es tu estudio en una hoja. Cada apartado te dice primero qué significa y después qué sale en tu caso. No hace falta
-        saber nada de Kábala para leerlo: el documento largo lo desarrolla todo con calma, y esto es lo que conviene tener a mano.
+        Esto es tu estudio en una hoja. Cada apartado te dice primero qué significa y después qué sale en tu caso. El documento
+        largo lo desarrolla todo con calma; esto es lo que conviene tener a mano.
       </p>
 
       <div style={css("display:grid;grid-template-columns:repeat(4,1fr);gap:8px;")}>
