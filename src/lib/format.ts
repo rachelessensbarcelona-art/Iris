@@ -110,6 +110,31 @@ export function sinClavesEscuela(t: string): string {
     .trim();
 }
 
+/**
+ * Las primeras frases de un texto, enteras, hasta llenar el hueco que se le
+ * da. Nunca corta a mitad de frase ni deja puntos suspensivos: para la hoja
+ * del cliente hacía falta poder decir qué significa cada cosa en una o dos
+ * líneas, y recortar por número de caracteres dejaba frases cojas.
+ *
+ * Si la primera frase ya se pasa del hueco, se devuelve igualmente: más vale
+ * una línea de más que una idea a medias.
+ */
+export function primerasFrases(t: string | undefined | null, hueco: number): string {
+  const limpio = sinClavesEscuela(t || "").replace(/\s+/g, " ").trim();
+  if (!limpio) return "";
+  // Se parte por punto, cierre de interrogación o de exclamación seguidos de
+  // espacio y mayúscula: así no se rompe en «S.L.» ni en «7 leyes, 7 días».
+  const frases = limpio.match(/[^.!?]+[.!?]+(?=\s|$)|[^.!?]+$/g) || [limpio];
+  let out = "";
+  for (const f of frases) {
+    const cand = (out + " " + f.trim()).trim();
+    if (out && cand.length > hueco) break;
+    out = cand;
+    if (out.length >= hueco) break;
+  }
+  return cierraFrase(out);
+}
+
 /** Cierra con punto lo que no lo trae. Los nombres y lemas de los apuntes
  *  vienen unos con punto final y otros sin él; sin normalizarlo, al pegarlos a
  *  otra frase salen «El Carro. la dirección» o «La profesión.. No son». */
