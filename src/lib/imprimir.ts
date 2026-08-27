@@ -38,3 +38,14 @@ export function imprimir(): boolean {
  * queda la ruta manual, así que conviene tenerla escrita en pantalla.
  */
 export const AYUDA_IMPRIMIR = "Si no se abre el diálogo, usa Compartir → Imprimir y elige «Guardar en Archivos» para tener el PDF.";
+
+/**
+ * La dirección web y la hora que salen arriba y abajo del PDF no las pone el
+ * documento: las añade el navegador, y sólo se quitan desde su propio diálogo.
+ * No hay forma de apagarlas desde la página — se probó dejar la hoja sin
+ * márgenes, que es lo que las suprime, y entonces el texto sale pegado al
+ * borde en veinticinco de cada veintiséis páginas—. Se desmarca una vez y el
+ * navegador lo recuerda para siempre.
+ */
+export const AYUDA_SIN_CABECERAS =
+  "Para que no salgan la dirección web ni la hora: en el diálogo, abre «Más ajustes» y desmarca «Encabezados y pies de página». Sólo hay que hacerlo una vez.";

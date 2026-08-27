@@ -134,7 +134,12 @@ export function sinPunto(t: string | undefined | null): string {
 
 export function cierraFrase(t: string | undefined | null): string {
   const s = (t || "").trim();
-  if (!s || /[.!?…»"')\]]$/.test(s)) return s;
+  if (!s || /[.!?»"')\]]$/.test(s)) return s;
+  // Nunca se cierra con puntos suspensivos: en un documento que se entrega,
+  // un texto acabado en «…» parece un fallo. Si la frase quedó a medias se
+  // retrocede hasta el último punto; y si no hay ninguno, se deja tal cual y
+  // se le pone el punto final que le falta.
   const i = Math.max(s.lastIndexOf("."), s.lastIndexOf("!"), s.lastIndexOf("?"));
-  return i > 0 && i > s.length * 0.6 ? s.slice(0, i + 1) : s + "…";
+  if (i > 0 && i > s.length * 0.5) return s.slice(0, i + 1);
+  return s.replace(/[…\s,;:—–-]+$/, "") + ".";
 }

@@ -4,7 +4,7 @@ import { css } from "@/lib/css";
 import { BOTON_NORMAL, botonPrincipal } from "@/lib/ui";
 import { useApp } from "@/lib/app-context";
 import { construyeCapitulos, construyeCapitulosEmpresa } from "@/lib/estudio";
-import { imprimir, AYUDA_IMPRIMIR } from "@/lib/imprimir";
+import { imprimir, AYUDA_IMPRIMIR, AYUDA_SIN_CABECERAS } from "@/lib/imprimir";
 import { fechaLarga, titulo } from "@/lib/format";
 import BloqueView from "../estudio/BloqueView";
 import HojaCliente from "../estudio/HojaCliente";
@@ -76,6 +76,19 @@ export default function EstudioScreen() {
         </div>
         {/* En el iPad el diálogo no siempre se abre solo; la ruta manual
          * funciona siempre y conviene tenerla a la vista. */}
+        {/* Lo primero que pregunta cualquiera al exportar, así que va en la
+         * barra y no escondido en una ayuda. */}
+        <span
+          style={css(
+            "flex-basis:100%;display:inline-flex;align-items:flex-start;gap:7px;font-size:var(--t-mini);line-height:1.45;color:var(--gold);background:var(--gold-soft);border-radius:var(--r-sm);padding:7px 10px;"
+          )}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" style={{ flex: "none", marginTop: 1 }} aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 8h.01M11 12h1v4h1" />
+          </svg>
+          {AYUDA_SIN_CABECERAS}
+        </span>
         <span style={css("flex-basis:100%;font-size:var(--t-mini);color:var(--text-4);")}>{AYUDA_IMPRIMIR}</span>
       </div>
 

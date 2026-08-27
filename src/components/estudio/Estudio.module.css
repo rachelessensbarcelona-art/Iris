@@ -184,8 +184,13 @@
      se corte por donde se corte, y da igual desde qué equipo se exporte.
      --------------------------------------------------------------------- */
   @page {
-    size: letter;
-    margin: 15mm 17mm;
+    /* NO se fija el tamaño a propósito. Estaba puesto `size: letter`, y en
+       España se imprime en A4: la caja de la hoja salía más ancha que el
+       papel y el texto se cortaba por la derecha —margen derecho de 0 mm,
+       medido— además de estirar el documento de 33 a 38 páginas. Sin `size`,
+       la hoja es la que haya elegido la impresora y el contenido, que va a
+       ancho automático, se adapta a A4, a carta o a lo que sea. */
+    margin: 15mm 16mm;
   }
   .page {
     width: auto;
@@ -235,9 +240,12 @@
   .page [data-nocorte] {
     break-inside: avoid;
   }
-  .portada {
+  .portada,
+  /* La hoja del cliente es de una cara: ocupa el folio entero para que el pie
+     quede abajo y no a media página. */
+  .hoja {
     aspect-ratio: auto;
-    /* La hoja menos sus márgenes. */
-    min-height: calc(11in - 30mm);
+    /* La hoja menos sus márgenes, sea del tamaño que sea. */
+    min-height: calc(100vh - 32mm);
   }
 }

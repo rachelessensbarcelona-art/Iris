@@ -1,4 +1,4 @@
-import { chipStyle, recorta, sinClavesEscuela } from "./format";
+import { chipStyle, sinClavesEscuela } from "./format";
 import { ficha, type Ficha } from "./engine";
 
 export type Chip = { label: string; style: string; onClick: () => void };
@@ -36,12 +36,16 @@ export type RefItem = { label: string; color: string; texto: string; style: stri
 export function refItems(F: Ficha | null | undefined): RefItem[] {
   if (!F) return [];
   const items: RefItem[] = [];
+  // El texto va entero. Antes se recortaba a 280 caracteres y el documento se
+  // llenaba de párrafos acabados en «…», que en algo que se entrega parece un
+  // error. El documento no tiene un número fijo de páginas: crece lo que haga
+  // falta, así que no hay motivo para cortar.
   const lee = (g: Ficha | null): string =>
     g
       ? g.enDiccionario
-        ? g.titulo + " " + recorta(g.texto, 280)
+        ? g.titulo + " " + g.texto
         : g.partes.length
-          ? g.partes.map((p) => p.n + ". " + p.titulo + " " + recorta(p.texto, 150)).join(" — ")
+          ? g.partes.map((p) => p.n + ". " + p.titulo + " " + p.texto).join(" — ")
           : "Se lee dividiéndolo de dos en dos."
       : "";
   const add = (G: Ficha, pre: string) => {
