@@ -116,8 +116,10 @@ export function sinClavesEscuela(t: string): string {
  * del cliente hacía falta poder decir qué significa cada cosa en una o dos
  * líneas, y recortar por número de caracteres dejaba frases cojas.
  *
- * Si la primera frase ya se pasa del hueco, se devuelve igualmente: más vale
- * una línea de más que una idea a medias.
+ * Si la primera frase ya se pasa mucho del hueco —los apuntes tienen frases de
+ * cuatro líneas—, se corta por la última coma que quepa y se cierra con punto.
+ * Queda una oración entera y legible, y nunca unos puntos suspensivos: en algo
+ * que se entrega, un texto acabado en «…» parece un error.
  */
 export function primerasFrases(t: string | undefined | null, hueco: number): string {
   const limpio = sinClavesEscuela(t || "").replace(/\s+/g, " ").trim();
@@ -131,6 +133,11 @@ export function primerasFrases(t: string | undefined | null, hueco: number): str
     if (out && cand.length > hueco) break;
     out = cand;
     if (out.length >= hueco) break;
+  }
+  if (out.length > hueco * 1.3) {
+    const corte = out.slice(0, hueco);
+    const coma = Math.max(corte.lastIndexOf(", "), corte.lastIndexOf("; "), corte.lastIndexOf(" — "));
+    if (coma > hueco * 0.45) out = out.slice(0, coma);
   }
   return cierraFrase(out);
 }
