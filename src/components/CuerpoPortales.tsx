@@ -2,7 +2,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { css } from "@/lib/css";
 import type { Resultado } from "@/lib/engine";
-import { CONOS, CONO_APEX, CONO_BOCA, CONO_CORONA, CONO_RAIZ, EJE_CUERPO, EJE_CURVO, PORTALES_CUERPO, RETICULA, SILUETA_PERFIL } from "@/lib/cuerpo";
+import { CONOS, CONO_APEX, CONO_BOCA, CONO_CORONA, CONO_RAIZ, EJE_CUERPO, EJE_CURVO, ESPEJO_CUERPO, PORTALES_CUERPO, RETICULA, SILUETA_PERFIL } from "@/lib/cuerpo";
 
 const FUENTE = "-apple-system, BlinkMacSystemFont, sans-serif";
 const GRIS = "#C6C4CB";
@@ -26,6 +26,8 @@ const VISTA = "-52 -78 404 626";
  *   · un subrayado verde en los portales que son maestría.
  *
  * Los números van sueltos sobre la figura, sin pastilla, como en la ficha.
+ * La silueta se pinta reflejada (ESPEJO_CUERPO) para que mire a la izquierda,
+ * hacia la columna del 3, 4, 5 y 6.
  * Lo único que cambia respecto al papel es hacia dónde sale el recuadro: en
  * la ficha va encima, y aquí hacia fuera, porque en pantalla las dos columnas
  * quedan más juntas y encima chocaba con el portal de arriba.
@@ -97,12 +99,17 @@ export default function CuerpoPortales({ r }: { r: Resultado }) {
       <motion.path d={CONO_CORONA} fill="url(#es33-corona)" style={{ transformBox: "fill-box", transformOrigin: "bottom center" }} {...late(2)} />
 
       <motion.g mask="url(#es33-pie)" initial={quieto ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
-        <path d={SILUETA_PERFIL} fill={GRIS} />
-        <g clipPath="url(#es33-recorte-cuerpo)" stroke="#fff" strokeLinecap="round" fill="none" strokeOpacity={0.92} strokeWidth={2.2}>
-          <path d={EJE_CURVO} />
-          {RETICULA.map((l) => (
-            <line key={l.y} x1={l.x1 - 4} y1={l.y} x2={l.x2 + 4} y2={l.y} />
-          ))}
+        {/* El espejo va aquí dentro y no en el grupo enmascarado: así el
+         * recorte de la retícula se refleja con la silueta y el degradado del
+         * pie sigue leyéndose en las coordenadas del lienzo. */}
+        <g transform={ESPEJO_CUERPO}>
+          <path d={SILUETA_PERFIL} fill={GRIS} />
+          <g clipPath="url(#es33-recorte-cuerpo)" stroke="#fff" strokeLinecap="round" fill="none" strokeOpacity={0.92} strokeWidth={2.2}>
+            <path d={EJE_CURVO} />
+            {RETICULA.map((l) => (
+              <line key={l.y} x1={l.x1 - 4} y1={l.y} x2={l.x2 + 4} y2={l.y} />
+            ))}
+          </g>
         </g>
       </motion.g>
       <motion.path d={CONO_RAIZ} fill="url(#es33-raiz)" style={{ transformBox: "fill-box", transformOrigin: "top center" }} {...late(4)} />
